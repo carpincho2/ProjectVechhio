@@ -1,0 +1,39 @@
+:root{
+    --fondo:#0F161E;
+    --letra:#ffff;
+    --boton:#1B6ECF;
+    --fondoheaderboton:#2E3E4E;
+
+}
+body{
+    background-color: var(--fondo);
+}
+.logo{
+    width: 60px;
+    height: 60px;
+    margin-right: 330px;
+}
+.header{
+    display: flex;
+    gap: 20px;
+    border-bottom:  1px solid var(--letra);
+    margin-top: 0;
+}
+.header a{
+    text-decoration: none;
+    color: var(--letra);
+}
+
+.Login{
+ background-color: var(--fondoheaderboton);
+ height: 25px;
+ padding: 9px;
+ border-radius: 10px;
+}
+
+.register{
+    background-color: var(--fondoheaderboton);
+    height: 25px;
+    padding: 9px;
+    border-radius: 10px;
+   }
