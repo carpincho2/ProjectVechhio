@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>dealership</title>
+</head>
+<body>
+    <header class="header">
+        <div >
+            <img src="logo.png" alt="" class="logo">
+        </div>
+        <div class="new">
+            <a href="new.php">New</a>
+        </div>
+        <div class="used">
+            <a href="used.php">Used</a>
+        </div>
+        <div class="allvehicles">
+            <a href="allvehicles.php">All Vehicles</a>
+        </div>
+        <div class="certified">
+            <a href="certified.php">Certified</a>
+        </div>
+        <div class="finance">
+            <a href="finance.php">Finance</a>
+        </div>
+        <div class="service">
+            <a href="service.php">Service</a>
+        </div>
+        <div class="aboutUs">
+            <a href="aboutUs.php">About Us</a>
+        </div>
+        <div class="Login">
+            <a href="login.php">login</a>
+        </div>
+        <div class="register">
+            <a href="register.php">Register</a>
+        </div>
+    </header>
+        <h2 class="section-subtitle">Marcas</h2>
+    <section class="hero-banner">
+         <div class="slider-container">
+                <img class="slide active" src="logos/a-lexus-logo.webp" alt="Slide 1">
+                <img class="slide" src="logos/mercedes.webp" alt="Slide 2">
+                <img class="slide" src="logos/Fiat-Logo-1968-720x405.webp" alt="Slide 3">
+                <img class="slide" src="logos/ford.jpg" alt="Slide 4">
+                <img class="slide" src="logos/honda-1596081_1280.webp" alt="Slide 5">
+                <img class="slide" src="logos/MClaren.webp" alt="Slide 6">
+                <img class="slide" src="logos/peugeot.webp" alt="Slide 7">
+                <img class="slide" src="logos/toyota.png" alt="Slide 8">
+                <div class="slider-controls">
+      <button onclick="cambiarSlide(-1)">&#10094;</button>
+      <button onclick="cambiarSlide(1)">&#10095;</button>
+    </div>
+  </div>
+  <script>
+    let indice = 0;
+    const slides = document.querySelectorAll('.slide');
+
+    function mostrarSlide(i) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[i].classList.add('active');
+    }
+
+    function cambiarSlide(direccion) {
+      indice += direccion;
+      if (indice < 0) indice = slides.length - 1;
+      if (indice >= slides.length) indice = 0;
+      mostrarSlide(indice);
+    }
+  </script>
+        <div class="main-banner">
+            <img src="banner.png" alt="" class="banner-image">
+        </div>
+        <div class="direcciones">
+  <h2>Ubicaciones</h2>
+  <p>Avenida Siempreviva 742, Springfield</p>
+  <p>Av. Corrientes 1234, Buenos Aires</p>
+  <p>Av. Brasil 999, São Paulo</p>
+  <p>Shibuya Crossing 1-2-3, Tokio</p>
+  <p>5th Avenue 789, New York</p>
+</div>
+    </section>
+    <h2 class="titlevehicles">Vehículos Destacados</h2>
+     <section class="featurevehicles">
+        <div class="carbox">
+            <img src="logos/lexus.jpg" alt="Lexus NX" class="car">
+            <h2 class="section-subtitlecar">NX 350h Luxury</h2>
+            <p class="description">La nueva NX 350h incorpora un motor naftero ciclo Atkinson de 2,5 litros y 16 válvulas. La potencia máxima combinada resultante del motor naftero y el motor eléctrico es de 242 CV, un 23% superior a la generación anterior. La transmisión de la NX 350h es híbrida automática (e-CVT) continuamente variable y controlada electrónicamente.</p>
+        </div>
+        <div class="carbox">
+            <img src="logos/43e90958-0dbb-4164-8f59-2a8851ef0256.jpg" alt="Ford Mustang" class="car">
+            <h2 class="section-subtitlecar">Mustang GT</h2>
+            <p class="description"> V8 de 5.0L con hasta 486 CV, pura potencia americana con diseño moderno, ideal para hacer rugir el asfalto.</p>
+        </div>
+        <div class="carbox">
+            <img src="logos/208.jpg" alt="Peugeot 208" class="car">
+            <h2 class="section-subtitlecar">Peugeot 208</h2>
+            <p class="description">hatch urbano con estética deportiva, gran eficiencia y tecnología i-Cockpit para una conducción ágil y conectada.</p>
+        </div>
+    </section>
+
+    <section class="contact us"></section>
+</body>
+</html>
