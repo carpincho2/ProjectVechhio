@@ -124,6 +124,7 @@ body{
     border-radius: 10px;
     width: fit-content;
     margin-left: 40px;
+    margin-right: 10px;
 }
 .direcciones p {
   margin: 5px 0;
@@ -141,8 +142,8 @@ body{
     margin: 20px 0;
 }
 .carbox {
-    width: 500px;
-    height: 540px;
+    width: 25%;
+    height: 25%;
     margin: 0 10px;
 }
 .carbox img {
@@ -158,3 +159,120 @@ body{
     color: var(--letra);
     font-size: 24px;
 }
+
+.contactUs {
+    background-color: var(--fondo);
+    padding: 40px 20px;
+    max-width: 500px;
+    margin-top: 100px;
+    border-radius: 8px;
+  }
+  
+  .contactUs h2 {
+    color: var(--letra);
+    margin-bottom: 10px;
+  }
+  
+  .contactUs p {
+    color: var(--letra);
+    margin-bottom: 20px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  form label {
+    color: var(--letra);
+    font-weight: bold;
+  }
+  
+  form input,
+  form textarea {
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: #2E3E4E;
+    color: white;
+    font-size: 16px;
+  }
+  
+  form input::placeholder,
+  form textarea::placeholder {
+    color: #ccc;
+  }
+  
+  form textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  .boton {
+    background-color: var(--boton);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    width: fit-content;
+  }
+  
+  .boton:hover {
+    background-color: #155bab;
+  }
+  
+  .title{
+    color: var(--letra);
+  }
+
+  .footer {
+    background-color: #1c2632;
+    color: #ccc;
+    padding: 30px 20px;
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 0;
+  }
+  
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 20px;
+  }
+  
+  .footer-links a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .footer-icons{
+    margin-bottom: 15px;
+  }
+  
+  .footer-icons i {
+    font-size: 20px;
+    color: #ccc;
+    margin: 0 10px;
+    transition: color 0.3s;
+  }
+  
+  .footer-icons i:hover {
+    color: white;
+  }
+  
+  
+  .footer-icons img:hover {
+    filter: brightness(1.2);
+  }
+  
+  .footer-copy {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 0;
+  }
