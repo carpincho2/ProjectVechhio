@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <script src="modulos.js" defer></script>
     <title>dealership</title>
 </head>
 <body>
     <header class="header">
         <div >
-           <a href="index.html"><img src="logo.png" alt="" class="logo"></a>
+            <a href="index.html"><img src="logo.png" alt="" class="logo"></a>
         </div>
         <div class="vehicles">
             <a href="vehicles.html">Vehicles</a>
@@ -37,7 +37,7 @@
     </header>
         <h2 class="section-subtitle">Marcas</h2>
     <section class="hero-banner">
-         <div class="slider-container">
+        <div class="slider-container">
                 <img class="slide active" src="logos/a-lexus-logo.webp" alt="Slide 1">
                 <img class="slide" src="logos/mercedes.webp" alt="Slide 2">
                 <img class="slide" src="logos/Fiat-Logo-1968-720x405.webp" alt="Slide 3">
@@ -47,40 +47,26 @@
                 <img class="slide" src="logos/peugeot.webp" alt="Slide 7">
                 <img class="slide" src="logos/toyota.png" alt="Slide 8">
                 <div class="slider-controls">
-      <button onclick="cambiarSlide(-1)">&#10094;</button>
-      <button onclick="cambiarSlide(1)">&#10095;</button>
+                <button onclick="cambiarSlide(-1)">&#10094;</button>
+                <button onclick="cambiarSlide(1)">&#10095;</button>
     </div>
-  </div>
-  <script>
-    let indice = 0;
-    const slides = document.querySelectorAll('.slide');
-
-    function mostrarSlide(i) {
-      slides.forEach(slide => slide.classList.remove('active'));
-      slides[i].classList.add('active');
-    }
-
-    function cambiarSlide(direccion) {
-      indice += direccion;
-      if (indice < 0) indice = slides.length - 1;
-      if (indice >= slides.length) indice = 0;
-      mostrarSlide(indice);
-    }
-  </script>
-        <div class="main-banner">
+    </div>
+    <div class="main-banner">
             <img src="banner.png" alt="" class="banner-image">
-        </div>
-        <div class="direcciones">
-  <h2>Ubicaciones</h2>
-  <p>Avenida Siempreviva 742, Springfield</p>
-  <p>Av. Corrientes 1234, Buenos Aires</p>
-  <p>Av. Brasil 999, São Paulo</p>
-  <p>Shibuya Crossing 1-2-3, Tokio</p>
-  <p>5th Avenue 789, New York</p>
-</div>
+    </div>
+    <div class="direcciones">
+                <h2>Ubicaciones</h2>
+                <p>Avenida Siempreviva 742, Springfield</p>
+                <p>Av. Corrientes 1234, Buenos Aires</p>
+                <p>Av. Brasil 999, São Paulo</p>
+                <p>Shibuya Crossing 1-2-3, Tokio</p>
+                <p>5th Avenue 789, New York</p>
+    </div>
     </section>
-    <h2 class="titlevehicles">Vehículos Destacados</h2>
-     <section class="featurevehicles">
+        <h2 class="titlevehicles">
+            Vehículos Destacados
+        </h2>
+    <section class="featurevehicles">
         <div class="carbox">
             <img src="logos/lexus.jpg" alt="Lexus NX" class="car">
             <h2 class="section-subtitlecar">NX 350h Luxury</h2>
@@ -103,27 +89,24 @@
         <form action="#" method="post">
             <label for="nombre">Nombre:</label>
             <input type="text" id=  "nombre" name="nombre" placeholder="Your Name">
-          
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" placeholder="Your Email">
-          
             <label for="mensaje">Mensaje:</label>
             <textarea id="mensaje" name="mensaje"></textarea>
-          
             <button type="submit" class="boton">Enviar</button>
-          </form>
+        </form>
     </section>
 
     <footer class="footer">
             <div class="footer-links">
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
             </div>
             <div class="footer-icons">
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-whatsapp"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
-              </div>              
+            </div>              
             <p class="footer-copy">© 2024 AutoHaus. All rights reserved.</p>
     </footer>
 </body>
