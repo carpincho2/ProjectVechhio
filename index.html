@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="modulos.js" defer></script>
     <title>dealership</title>
@@ -22,8 +23,16 @@
         <div class="finance">
             <a href="finance.html">Finance</a>
         </div>
-        <div class="service">
-            <a href="service.html">Service</a>
+        <div class="vehicles menu-container">
+            <a href="service.html" class="menu-btn">service</a>
+                <div class="desplegable">
+                    <ul>
+                        <li><a href="#">Sedán</a></li>
+                        <li><a href="#">SUV</a></li>
+                        <li><a href="#">Hatchback</a></li>
+                        <li><a href="#">Deportivos</a></li>
+                    </ul>
+                </div>
         </div>
         <div class="aboutUs">
             <a href="aboutUs.html">About Us</a>
@@ -86,7 +95,7 @@
 
     <section class="contactUs">
         <h2 class="title">Conctact us</h2>
-        <form action="#" method="post">
+        <form action="#" method="post" class="formulario">
             <label for="nombre">Nombre:</label>
             <input type="text" id=  "nombre" name="nombre" placeholder="Your Name">
             <label for="email">Email:</label>
@@ -107,7 +116,13 @@
                 <a href="#"><i class="fab fa-whatsapp"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
             </div>              
-            <p class="footer-copy">© 2024 AutoHaus. All rights reserved.</p>
+            <p class="footer-copy">© 2024 CarPane. All rights reserved.</p>
     </footer>
+<script>
+    // wait for the DOM to load before running the script
+    document.addEventListener('DOMContentLoaded', function() {
+        alert('Welcome to CarPane! Explore our latest vehicles and offers.');
+    });
+</script>
 </body>
 </html>
