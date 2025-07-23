@@ -10,6 +10,7 @@
     padding: 0;
     box-sizing: border-box;
     transition: all 0.2s ease-in-out;
+    font-family: 'Inter', sans-serif;
 }
 
 html, body {
@@ -18,7 +19,7 @@ html, body {
 }
 body{
     background-color: var(--fondo);
-    font-family: 'Inter', sans-serif;
+  
 }
 .logo{
     width: 80px;
@@ -43,7 +44,6 @@ body{
     color: var(--letra);
     margin-bottom: 2px;
     font-weight: bold;
-    font-family:Arial, Helvetica, sans-serif;
 }
 .menu-container {
   position: relative;
@@ -82,7 +82,7 @@ body{
 }
 
 .register{
-    margin-right: 20px;
+    margin-right: 10px;
 }
 .Login,
 .register {
@@ -104,24 +104,24 @@ body{
     text-align: left;
 }
 .hero-banner {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-   border-bottom: 1px solid var(--boton);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--boton);
 }
 .hero-banner::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
-  z-index: 1;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
+    z-index: 1;
 }
 .hero-banner h1, .hero-banner p {
-  position: relative;
-  z-index: 2;
+    position: relative;
+    z-index: 2;
 }
 
 
@@ -203,12 +203,17 @@ body{
     border-bottom: 1px solid var(--boton);
     padding-bottom: 20px;
 }
+
 .carbox {
     width: 25%;
     height: 25%;
     margin: 0 10px;
 transition: transform 0.3s ease;
 box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+border-radius: 10px;
+background-color: rgba(99, 102, 241, 0.15);
+backdrop-filter: blur(8px);
+
 }
 
 .carbox img {
@@ -239,55 +244,42 @@ box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
 .formulario {
     max-width: 600px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
-  .contactUs h2 {
+.contactUs h2 {
     color: var(--letra);
     margin-bottom: 10px;
-  }
-  
-  .contactUs p {
+}  
+.contactUs p {
     color: var(--letra);
     margin-bottom: 20px;
-  }
-  
-  form {
+}
+form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-  }
-  
-  form label {
+    gap: 15px;  
+}  
+form label {
     color: var(--letra);
     font-weight: bold;
-  }
-  
-  form input,
-  form textarea {
+}  
+form input,form textarea {
     padding: 12px;
     border-radius: 6px;
     border: none;
     background-color: #2E3E4E;
     color: white;
     font-size: 16px;
-    
-  }
-  
-  form input::placeholder,
-  form textarea::placeholder {
+}  
+form input::placeholder,form textarea::placeholder {
     color: #ccc;
-  }
-  
-  form textarea {
+}  
+form textarea {
     resize: vertical;
     field-sizing: content;
     resize: none;
     min-height: 60px;
-  }
-
-
-
-  .boton {
+}
+.boton {
     background-color: var(--boton);
     color: var(--letra);
     padding: 12px;
@@ -297,60 +289,50 @@ box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     font-weight: bold;
     transition: background-color 0.3s;
     width: fit-content;
-  }
-  
-  .boton:hover {
+} 
+.boton:hover {
     background-color: #155bab;
-  }
-  
-  .title{
+}
+.title{
     color: var(--letra);
-  }
+}
 
-  .footer {
+.footer {
     background-color:var(--fondo);
     color: #ccc;
     padding: 30px 20px;
     text-align: center;
     margin-top: 80px;
     margin-bottom: 0;
-  }
-  
-  .footer-links {
+}  
+.footer-links {
     display: flex;
     justify-content: center;
     gap: 40px;
     margin-bottom: 20px;
-  }
-  
-  .footer-links a {
+} 
+.footer-links a {
     color: #ccc;
     text-decoration: none;
     font-size: 14px;
-  }
-
-  .footer-icons{
+}
+.footer-icons{
     margin-bottom: 15px;
-  }
-  
-  .footer-icons i {
+}
+.footer-icons i {
     font-size: 20px;
     color: #ccc;
     margin: 0 10px;
     transition: color 0.3s;
-  }
-  
-  .footer-icons i:hover {
+}
+.footer-icons i:hover {
     color: white;
-  }
-  
-  
-  .footer-icons img:hover {
+}
+.footer-icons img:hover {
     filter: brightness(1.2);
-  }
-  
-  .footer-copy {
+} 
+.footer-copy {
     font-size: 12px;
     color: #777;
     margin-bottom: 0;
-  }
+}
