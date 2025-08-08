@@ -1,0 +1,26 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.env
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+
+# Database
+*.sqlite
+*.db
+
+# Backup files
+*.bak
+
+# Gemini CLI specific files
+gemini.md
+
+# Local Node.js installation files (if applicable)
+nodejs/
