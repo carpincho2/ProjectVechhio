@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
 const cors = require('cors');
-const sequelize = require('./backend/config/database.js');
+const { sequelize } = require('./backend/models');
 
 // Importar rutas
 const usuariosRoutes = require('./backend/routes/usuarios');
@@ -57,9 +57,11 @@ app.use(errorHandler);
 
 async function startServer() {
   try {
-    await sequelize.authenticate()
-    await sequelize.sync({ alter: true })
-    console.log('Base de datos conectada')
+    if (process.env.NODE_ENV !== 'test') { // Only sync if not in test environment
+      await sequelize.authenticate()
+      await sequelize.sync({ alter: true })
+      console.log('Base de datos conectada')
+    }
   } catch (error) {
     console.error('Error al conectar la base de datos:', error)
   }
@@ -70,3 +72,4 @@ async function startServer() {
 }
 
 startServer()
+

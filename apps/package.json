@@ -4,16 +4,36 @@
   "description": "Servidor Express portable",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest"
+  },
+  "jest": {
+    "rootDir": ".",
+    "testMatch": [
+      "<rootDir>/backend/tests/unit/**/*.test.js",
+      "<rootDir>/backend/tests/integration/**/*.test.js"
+    ],
+    "modulePaths": [
+      "<rootDir>"
+    ],
+    "testTimeout": 120000
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
-    "express": "^4.18.2",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.1",
     "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.3",
     "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }
