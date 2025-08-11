@@ -1,11 +1,16 @@
-require('dotenv').config();
+require('dotenv').config({ path: '../../.env' });
+const { Sequelize } = require('sequelize');
 
-module.exports = {
-  username: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || '',
-  database: process.env.DB_NAME || 'dealership',
-  host: process.env.DB_HOST || 'localhost',
-  dialect: process.env.DB_DIALECT || 'mysql',
-  storage: process.env.DB_STORAGE || './backend/dealership.sqlite',
-  logging: false,
-};
+const isProduction = process.env.NODE_ENV === 'production';
+
+const sequelize = isProduction
+  ? new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+      host: process.env.DB_HOST,
+      dialect: 'mysql',
+    })
+  : new Sequelize({
+      dialect: 'sqlite',
+      storage: './dev-database.sqlite',
+    });
+
+module.exports = sequelize;
