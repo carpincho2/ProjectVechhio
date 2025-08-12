@@ -1,0 +1,82 @@
+:root {
+  /* Colores del diseño original */
+  --fondo: #1e1e2f;
+  --letra: #f0f0f0;
+  --boton: #6366f1;
+  --fondoheaderboton: #2E3E4E;
+  --hoverboton: #4f46e5;
+  
+  /* Sombras */
+  --shadow-navbar: 0 8px 20px rgba(0,0,0,0.5);
+  
+  /* Transiciones */
+  --transition-speed: 0.2s;
+}
+
+.navbar {
+  background-color: var(--fondo);
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow-navbar);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  border-bottom: 1px solid var(--boton);
+  height: 80px;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nav-logo {
+  color: var(--letra);
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: color var(--transition-speed) ease;
+}
+
+.nav-logo:hover {
+  color: var(--boton);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-link {
+  color: var(--letra);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background-color: var(--fondoheaderboton);
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
+}
+
+.nav-link:hover {
+  background-color: var(--boton);
+  color: var(--letra);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+}
