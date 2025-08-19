@@ -5,7 +5,7 @@ exports.register = async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.create({ username, password });
-    res.status(201).json({ message: 'User created successfully', userId: user.id });
+    res.status(201).json({ message: 'User created successfully fast', userId: user.id });
   } catch (error) {
     res.status(400).json({ error: 'Error creating user', details: error });
   }

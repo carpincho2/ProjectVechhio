@@ -1,0 +1,45 @@
+:root{
+    --fondo:#1e1e2f;
+    --letra:#f0f0f0;
+    --boton:#6366f1;
+    --fondoheaderboton:#2E3E4E;
+
+}
+.text {
+    color: var(--letra);
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 16px 0;
+    text-align: justify;
+}
+
+a {
+    color: var(--boton);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    &:hover {
+        color: darken(var(--boton), 10%);
+    }
+    font-size: 16px;
+}
+
+.hero-banner {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    margin-top: 80px;
+}
+.banner-image2{
+    width: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.section-subtitle2{
+    font-size: 24px;
+    color: var(--letra);
+    margin: 20px 0;
+    text-align: center;
+}

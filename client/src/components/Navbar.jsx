@@ -4,19 +4,34 @@ import './Navbar.css';  // Agregaremos estilos específicos para el navbar
 
 function Navbar() {
   return (
-    <nav className="navbar">
-      <div className="nav-container">
-        <Link to="/" className="nav-logo">
-          Concesionaria
+    <header className="header">
+      <div>
+        <Link to="/">
+          <img src="/logo.png" alt="" className="logo" />
         </Link>
-        <div className="nav-links">
-          <Link to="/" className="nav-link">Inicio</Link>
-          <Link to="/login" className="nav-link">Login</Link>
-          <Link to="/register" className="nav-link">Registro</Link>
-          <Link to="/vehicles" className="nav-link">Vehículos</Link>
-        </div>
       </div>
-    </nav>
+      <div className="vehicles">
+        <Link to="/vehicles">Vehicles</Link>
+      </div>
+      <div className="certified">
+        <Link to="/certified">Certified</Link>
+      </div>
+      <div className="finance">
+        <Link to="/finance">Finance</Link>
+      </div>
+      <div className="service">
+        <Link to="/service">Service</Link>
+      </div>
+      <div className="aboutUs">
+        <Link to="/about-us">About Us</Link>
+      </div>
+      <div className="Login">
+        <Link to="/login">Login</Link>
+      </div>
+      <div className="register">
+        <Link to="/register">Register</Link>
+      </div>
+    </header>
   );
 }
 
