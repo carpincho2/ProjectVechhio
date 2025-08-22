@@ -35,7 +35,7 @@ REM Abrir navegador después de 3 segundos
 start "" /min cmd /c "timeout /t 3 >nul && start http://localhost:3000"
 
 REM Ejecutar servidor usando ruta completa
-"%~dp0../nodejs/node.exe" ../apps/server.js
+"%~dp0../nodejs/node.exe" ../backend/server.js
 
 echo.
 echo [i] Servidor detenido
