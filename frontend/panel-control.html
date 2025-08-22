@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="loginregisterstyle.css">
+    <link rel="stylesheet" href="panel-control.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#vehicles">Gestión de Vehículos</a></li>
+            <li><a href="#services">Gestión de Servicios</a></li>
+            <li><a href="#finances">Gestión de Finanzas</a></li>
+            <li><a href="/logout">Cerrar Sesión</a></li>
+        </ul>
+    </div>
+    <div class="main-container">
+        <div class="header">
+            <h1>Bienvenido, Administrador</h1>
+            <div>
+                <!-- Aquí podrías poner el nombre del usuario logueado o un menú de usuario -->
+                <a href="/logout" style="color: #e74c3c; text-decoration: none; font-weight: bold;">Cerrar Sesión</a>
+            </div>
+        </div>
+        <div class="main-content">
+            <h1 id="dashboard">Resumen del Panel</h1>
+            <p>Aquí tienes una vista rápida de las estadísticas y acciones principales.</p>
+
+            <div class="card-container">
+                <div class="card">
+                    <h3>Estadísticas Rápidas</h3>
+                    <p>Número de vehículos: <strong>[Cargar desde DB]</strong></p>
+                    <p>Servicios pendientes: <strong>[Cargar desde DB]</strong></p>
+                    <p>Solicitudes de financiación: <strong>[Cargar desde DB]</strong></p>
+                </div>
+                <div class="card">
+                    <h3>Acciones Rápidas</h3>
+                    <p><a href="#vehicles">Añadir nuevo vehículo</a></p>
+                    <p><a href="#services">Programar nuevo servicio</a></p>
+                    <p><a href="#finances">Revisar solicitudes de financiación</a></p>
+                </div>
+            </div>
+
+            <h1 id="vehicles" style="margin-top: 40px;">Gestión de Vehículos</h1>
+            <p>Aquí se mostrará la tabla de vehículos y formularios para añadir/editar.</p>
+
+            <h1 id="services" style="margin-top: 40px;">Gestión de Servicios</h1>
+            <p>Aquí se mostrará la tabla de servicios y formularios para añadir/editar.</p>
+
+            <h1 id="finances" style="margin-top: 40px;">Gestión de Finanzas</h1>
+            <p>Aquí se mostrará la tabla de solicitudes de financiación y formularios para añadir/editar.</p>
+
+        </div>
+    </div>
+</body>
+</html>

@@ -356,7 +356,7 @@ form textarea {
 
 /* Texto de bienvenida */
 .welcome-text {
-    color: #333;
+    color: var(--boton);
     font-weight: 600;
     margin-right: 10px;
 }

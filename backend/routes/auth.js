@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const User = require('../models/User'); // Asegurate de tener este modelo
+const { User, Sequelize } = require('../models'); // Importa User y Sequelize (que contiene Op)
 const router = express.Router();
 
 // Login
@@ -11,7 +11,7 @@ router.post('/login', async (req, res) => {
         // 1. Buscar usuario por username o email
         const user = await User.findOne({
             where: {
-                [Op.or]: [{ username: username }, { email: username }]
+                [Sequelize.Op.or]: [{ username: username }, { email: username }]
             }
         });
 
@@ -35,8 +35,12 @@ router.post('/login', async (req, res) => {
             loggedIn: true
         };
 
-        // 5. Redirigir al home
-        res.redirect('/');
+        // 5. Redirigir según el rol
+        if (req.session.user.role === 'admin') {
+            res.redirect('/panel-control');
+        } else {
+            res.redirect('/');
+        }
 
     } catch (error) {
         console.error('Error en login:', error);
@@ -57,7 +61,7 @@ router.post('/register', async (req, res) => {
         // Verificar si el usuario ya existe
         const existingUser = await User.findOne({
             where: {
-                [Op.or]: [{ username: username }, { email: email }]
+                [Sequelize.Op.or]: [{ username: username }, { email: email }]
             }
         });
 
@@ -86,7 +90,12 @@ router.post('/register', async (req, res) => {
             loggedIn: true
         };
 
-        res.redirect('/');
+        // Redirigir según el rol después del registro
+        if (newUser.role === 'admin') { // Assuming newUser.role is set during creation
+            res.redirect('/panel-control');
+        } else {
+            res.redirect('/');
+        }
 
     } catch (error) {
         console.error('Error en registro:', error);

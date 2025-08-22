@@ -11,4 +11,15 @@ function authMiddleware(req, res, next) {
   });
 }
 
-module.exports = authMiddleware;
+function isAdmin(req, res, next) {
+  // authMiddleware debe ejecutarse antes para que req.user esté disponible
+  authMiddleware(req, res, () => {
+    if (req.user && req.user.role === 'admin') {
+      next();
+    } else {
+      res.status(403).json({ error: 'Acceso denegado: Se requiere rol de administrador' });
+    }
+  });
+}
+
+module.exports = { authMiddleware, isAdmin };

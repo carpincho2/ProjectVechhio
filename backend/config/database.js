@@ -1,30 +1,14 @@
-const { Sequelize } = require('sequelize');
 const path = require('path');
 
-const sequelize = new Sequelize({
+// Exporta solo el objeto de configuración.
+// La instancia de Sequelize se creará en models/index.js
+module.exports = {
     dialect: 'sqlite',
-    storage: path.join(__dirname, '../database/consecionaria.db'),
-    logging: console.log, // Para ver las queries en consola
+    // La ruta real a la base de datos se construirá en models/index.js
+    // storage: path.join(__dirname, '../../database/consecionaria.db'),
+    logging: false, // Se puede activar para debug: console.log
     define: {
         timestamps: true,
         underscored: true
     }
-});
-
-// Importar modelos
-const User = require('../models/User');
-
-// Sincronizar base de datos
-const syncDatabase = async () => {
-    try {
-        await sequelize.authenticate();
-        console.log('✅ Base de datos conectada');
-        
-        await sequelize.sync({ force: false }); // force: true resetea la DB
-        console.log('✅ Modelos sincronizados');
-    } catch (error) {
-        console.error('❌ Error de base de datos:', error);
-    }
 };
-
-module.exports = { sequelize, syncDatabase };
