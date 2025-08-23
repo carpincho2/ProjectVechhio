@@ -32,6 +32,14 @@ module.exports = (sequelize, DataTypes) => {
         status: { // Estado (ej: "disponible", "vendido", "reservado")
             type: DataTypes.STRING,
             defaultValue: 'available'
+        },
+        condition: { // Condición (ej: "Nuevo", "Usado")
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        image: { // URL de la imagen
+            type: DataTypes.STRING,
+            allowNull: true
         }
     }, {
         timestamps: true,

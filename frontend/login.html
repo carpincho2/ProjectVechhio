@@ -13,8 +13,8 @@
     <form id="loginForm" action="/api/auth/login" method="POST">
         <h2>Iniciar Sesión</h2>
 
-        <div id="errorMessage" class="error-message" style="display: none;"></div>
-        <div id="successMessage" class="success-message" style="display: none;"></div>
+        <div id="errorMessage" class="error-message" ></div>
+        <div id="successMessage" class="success-message" ></div>
 
         <label for="username">Usuario o correo electrónico</label>
         <input type="text" id="username" name="username" required class="input" autocomplete="username">
@@ -24,43 +24,11 @@
         
         <button type="submit">Entrar</button>
         
-        <div class="register-link" style="text-align: center; margin-top: 1rem;">
+        <div class="register-link" >
             ¿No tienes una cuenta? <a href="/register.html">Regístrate aquí</a>
         </div>
     </form>
 
-    <script>
-        // El script se mantiene para la funcionalidad de mensajes y validación
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const error = urlParams.get('error');
-            const success = urlParams.get('success');
-            
-            const errorMessage = document.getElementById('errorMessage');
-            const successMessage = document.getElementById('successMessage');
-            
-            if (error) {
-                errorMessage.textContent = decodeURIComponent(error);
-                errorMessage.style.display = 'block';
-            }
-            
-            if (success) {
-                successMessage.textContent = decodeURIComponent(success);
-                successMessage.style.display = 'block';
-            }
-            
-            const loginForm = document.getElementById('loginForm');
-            loginForm.addEventListener('submit', function(e) {
-                const username = document.getElementById('username').value.trim();
-                const password = document.getElementById('password').value;
-                
-                if (!username || !password) {
-                    e.preventDefault();
-                    errorMessage.textContent = 'Por favor, completa todos los campos.';
-                    errorMessage.style.display = 'block';
-                }
-            });
-        });
-    </script>
+    <script src="login.js" defer></script>
 </body>
 </html>

@@ -116,6 +116,7 @@ body{
     height: 100%;
     object-fit: cover;
     border-radius: 0;
+     object-position: top;
 }
 .titlevehicles {
     color: var(--letra);
@@ -383,9 +384,16 @@ form textarea {
     flex-wrap: wrap;
 }
 
+.hidden {
+    display: none !important;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
 @media (max-width: 768px) {
     .carbox {
         max-width: 90%;
     }
 }
-

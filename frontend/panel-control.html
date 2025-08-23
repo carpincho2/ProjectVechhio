@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="loginregisterstyle.css">
     <link rel="stylesheet" href="panel-control.css">
+    <script src="panel-control.js" defer></script>
 </head>
 <body>
     <div class="sidebar">
@@ -21,10 +22,10 @@
     </div>
     <div class="main-container">
         <div class="header">
-            <h1>Bienvenido, Administrador</h1>
+            
             <div>
                 <!-- Aquí podrías poner el nombre del usuario logueado o un menú de usuario -->
-                <a href="/logout" style="color: #e74c3c; text-decoration: none; font-weight: bold;">Cerrar Sesión</a>
+                <a href="/logout" class="logout-link">Cerrar Sesión</a>
             </div>
         </div>
         <div class="main-content">
@@ -46,14 +47,84 @@
                 </div>
             </div>
 
-            <h1 id="vehicles" style="margin-top: 40px;">Gestión de Vehículos</h1>
-            <p>Aquí se mostrará la tabla de vehículos y formularios para añadir/editar.</p>
+            <h1 id="vehicles" class="section-title">Gestión de Vehículos</h1>
+            <div id="vehicles-content">
+                <h2>Añadir Nuevo Vehículo</h2>
+                <form id="add-vehicle-form">
+                    <input type="text" name="brand" placeholder="Marca" required>
+                    <input type="text" name="model" placeholder="Modelo" required>
+                    <input type="number" name="year" placeholder="Año" required>
+                    <input type="number" name="price" placeholder="Precio" required>
+                    <select name="condition" required>
+                        <option value="" disabled selected>Condición</option>
+                        <option value="Nuevo">Nuevo</option>
+                        <option value="Usado">Usado</option>
+                    </select>
+                    <input type="number" name="mileage" placeholder="Kilometraje">
+                    <input type="file" name="image" accept="image/*">
+                    <textarea name="description" placeholder="Descripción"></textarea>
+                    <button type="submit">Añadir Vehículo</button>
+                </form>
 
-            <h1 id="services" style="margin-top: 40px;">Gestión de Servicios</h1>
-            <p>Aquí se mostrará la tabla de servicios y formularios para añadir/editar.</p>
+                <h2>Listado de Vehículos</h2>
+                <table id="vehicles-table">
+                    <thead>
+                        <tr>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Año</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las filas de vehículos se insertarán aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
 
-            <h1 id="finances" style="margin-top: 40px;">Gestión de Finanzas</h1>
-            <p>Aquí se mostrará la tabla de solicitudes de financiación y formularios para añadir/editar.</p>
+            <h1 id="services" class="section-title">Gestión de Servicios</h1>
+                        <div id="services-content">
+                <h2>Añadir Nuevo Servicio</h2>
+                <form id="add-service-form">
+                    <input type="text" name="service-name" placeholder="Nombre del Servicio" required>
+                    <textarea name="service-description" placeholder="Descripción del Servicio"></textarea>
+                    <button type="submit">Añadir Servicio</button>
+                </form>
+
+                <h2>Listado de Servicios</h2>
+                <table id="services-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Servicio</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las filas de servicios se insertarán aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <h1 id="finances" class="section-title">Gestión de Finanzas</h1>
+                        <div id="finances-content">
+                <h2>Listado de Solicitudes de Financiación</h2>
+                <table id="finances-table">
+                    <thead>
+                        <tr>
+                            <th>ID de Solicitud</th>
+                            <th>Nombre del Cliente</th>
+                            <th>Vehículo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las filas de finanzas se insertarán aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </div>

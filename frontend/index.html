@@ -40,7 +40,7 @@
             </div>
             
             <!-- Usuario logueado -->
-            <div id="user-section" style="display: none;">
+            <div id="user-section" class="hidden">
                 <span class="welcome-text">Hi, <span id="user-name"></span></span>
                 <a href="/profile.html" class="auth-link">Profile</a>
                 <a href="/api/auth/logout" class="auth-link logout-btn">Logout</a>
@@ -48,7 +48,7 @@
         </div>
     </header>
     <div class="main-banner">
-            <img src="banner.png" alt="" class="banner-image">
+            <img src="logos/carpane2.png" alt="" class="banner-image">
     </div>
     <div class="direcciones">
                 <h2>Ubicaciones</h2>
@@ -107,40 +107,6 @@
     </footer>
     <!-- js  -->
     
-<script>
-    async function checkLogin() {
-    try {
-        const response = await fetch('/api/auth/check');
-        
-        if (!response.ok) return;
-        
-        const data = await response.json();
-        const loginSection = document.getElementById('login-section');
-        const userSection = document.getElementById('user-section');
-        const userName = document.getElementById('user-name');
-        
-        if (data.loggedIn && data.user) {
-            // Usuario LOGUEADO
-            loginSection.style.display = 'none';
-            userSection.style.display = 'flex';
-            // Usar email si no hay username
-            userName.textContent = data.user.username || data.user.email || 'User';
-        } else {
-            // Usuario NO logueado
-            loginSection.style.display = 'flex';
-            userSection.style.display = 'none';
-        }
-    } catch (error) {
-        console.log('Session check skipped');
-        // Mantener login visible por defecto
-        document.getElementById('login-section').style.display = 'flex';
-    }
-}
 
-// Ejecutar al cargar la página
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(checkLogin, 100); // Pequeño delay para asegurar
-});
-</script>
 </body>
 </html>
