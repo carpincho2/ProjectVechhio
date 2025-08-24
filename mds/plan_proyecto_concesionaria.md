@@ -16,6 +16,7 @@
 - Configurar `/backend/config/database.js` para usar SQLite.  
 
 ✅ Resultado: backend inicial + conexión a DB lista.
+**Estado Actual**: ✅ **COMPLETADA**.
 
 ---
 
@@ -28,6 +29,7 @@
 - Probar con `sequelize.sync()` que se creen las tablas en `dealership.sqlite`.  
 
 ✅ Resultado: base de datos funcionando.
+**Estado Actual**: ✅ **COMPLETADA**.
 
 ---
 
@@ -41,6 +43,8 @@
   - Guardar token en `localStorage`.  
 
 ✅ Resultado: sistema de login y registro.
+**Estado Actual**: ✅ **COMPLETADA**.
+*   **Implementación**: El backend ha sido refactorizado para usar tokens JWT para la autenticación y el frontend ha sido actualizado para enviar credenciales vía `fetch`, recibir y almacenar el token JWT en `localStorage`, y enviar el token en las cabeceras de las solicitudes autenticadas. Se ha eliminado la lógica de sesión del backend.
 
 ---
 
@@ -55,6 +59,9 @@
   - Filtros dinámicos (marca, precio, año).  
 
 ✅ Resultado: catálogo dinámico de autos.
+**Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
+*   **Backend**: `POST`, `GET` (sin filtros), `PUT` implementados. **PENDIENTE**: `DELETE /vehicles/:id` no implementado. **PENDIENTE**: `GET /vehicles` no implementa filtros.
+*   **Frontend**: `vehicles.html` es una página estática. **PENDIENTE**: No hay JavaScript del lado del cliente para cargar dinámicamente la lista o aplicar filtros en esta página. (La gestión dinámica existe en el panel de administración).
 
 ---
 
@@ -67,6 +74,9 @@
   - `finance.html`: simulador de cuotas + guardar solicitud.  
 
 ✅ Resultado: turnos y financiación conectados al backend.
+**Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
+*   **Backend**: APIs para `POST`/`GET` de servicios y finanzas implementadas.
+*   **Frontend**: `service.html` y `finance.html` son páginas estáticas. **PENDIENTE**: Sus formularios no están conectados al backend mediante JavaScript. (La gestión dinámica existe en el panel de administración).
 
 ---
 
@@ -76,6 +86,10 @@
 - Validaciones con JS en el frontend.  
 
 ✅ Resultado: sistema integrado completo.
+**Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
+*   **Admin Panel**: El panel administrativo está bien desarrollado y cumple con la gestión para el rol de administrador.
+*   **Usuarios Logueados (Datos Propios)**: **PENDIENTE**. No se observa una funcionalidad explícita en el frontend para que usuarios normales vean sus propios turnos o solicitudes. `profile.html` está vacío.
+*   **Validaciones JS en Frontend**: **PENDIENTE**. Validaciones básicas existen, pero validaciones JavaScript más extensas para todos los formularios podrían estar ausentes.
 
 ---
 
@@ -85,6 +99,8 @@
 - Modo oscuro/claro en frontend.  
 
 ✅ Resultado: detalles que sorprenden al profe.
+**Estado Actual**: ❌ **PENDIENTE**.
+*   Ninguna de estas funcionalidades extra ha sido implementada.
 
 ---
 
@@ -97,3 +113,11 @@
   - Solicitudes de financiación.  
 - Extras opcionales para sumar puntos.
 
+**Estado Actual de la Entrega Final**:
+*   **Web portable**: ✅ **COMPLETADA**. La estructura con `nodejs/` y los scripts `scripsts/` sugieren portabilidad.
+*   **Funcionalidades principales**:
+    *   **Registro/login**: ✅ **COMPLETADA** (con desviación a sesiones).
+    *   **Catálogo de autos**: ⚠️ **PARCIALMENTE COMPLETADA**. Backend casi completo, frontend público estático.
+    *   **Turnos de taller**: ⚠️ **PARCIALMENTE COMPLETADA**. Backend completo, frontend público estático.
+    *   **Solicitudes de financiación**: ⚠️ **PARCIALMENTE COMPLETADA**. Backend completo, frontend público estático.
+*   **Extras opcionales**: ❌ **PENDIENTE**.

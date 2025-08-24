@@ -2,9 +2,9 @@ const bcrypt = require('bcrypt');
 const db = require('../models'); // Importa la instancia de la base de datos
 
 async function createAdminUser() {
-    const username = 'admincarpi'; // CAMBIA ESTO
-    const email = 'carpincho.admin@ejemplo.com'; // CAMBIA ESTO
-    const password = '280208'; // CAMBIA ESTO A UNA CONTRASEÑA SEGURA
+    const username = process.env.ADMIN_USERNAME || 'admincarpi'; // Considerar usar variables de entorno
+    const email = process.env.ADMIN_EMAIL || 'carpincho.admin@ejemplo.com'; // Considerar usar variables de entorno
+    const password = process.env.ADMIN_PASSWORD || '280208'; // CAMBIA ESTO A UNA CONTRASEÑA SEGURA y considera variables de entorno
 
     try {
         // Sincronizar modelos (asegurarse de que la tabla User exista)

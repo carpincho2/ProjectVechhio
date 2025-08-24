@@ -11,6 +11,7 @@ const authRoutes = require('./routes/auth');
 const financeRoutes = require('./routes/finances'); // Descomentar cuando se implementen
 const serviceRoutes = require('./routes/service');   // Descomentar cuando se implementen
 const vehicleRoutes = require('./routes/vehicles'); // Descomentar cuando se implementen
+const profileRoutes = require('./routes/profile');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,9 +42,10 @@ app.use((req, res, next) => {
 
 // --- Rutas de la API ---
 app.use('/api/auth', authRoutes);
-app.use('/api/finances', financeRoutes); // Descomentar cuando se implementen
-app.use('/api/services', serviceRoutes);   // Descomentar cuando se implementen
-app.use('/api/vehicles', vehicleRoutes); // Descomentar cuando se implementen
+app.use('/api/finances', financeRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/profile', profileRoutes);
 
 app.get('/panel-control', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/panel-control.html'));

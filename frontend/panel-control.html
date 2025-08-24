@@ -4,129 +4,227 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control - Admin</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="loginregisterstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="panel-control.css">
-    <script src="panel-control.js" defer></script>
 </head>
 <body>
     <div class="sidebar">
-        <h2>Admin Panel</h2>
+        <h2><i class="fas fa-cogs"></i> Admin Panel</h2>
         <ul>
-            <li><a href="#dashboard">Dashboard</a></li>
-            <li><a href="#vehicles">Gestión de Vehículos</a></li>
-            <li><a href="#services">Gestión de Servicios</a></li>
-            <li><a href="#finances">Gestión de Finanzas</a></li>
-            <li><a href="/logout">Cerrar Sesión</a></li>
+            <li><a href="#dashboard" class="nav-link active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="#vehicles" class="nav-link"><i class="fas fa-car"></i> Gestión de Vehículos</a></li>
+            <li><a href="#services" class="nav-link"><i class="fas fa-tools"></i> Gestión de Servicios</a></li>
+            <li><a href="#finances" class="nav-link"><i class="fas fa-chart-line"></i> Gestión de Finanzas</a></li>
+            <li><a href="#profile" class="nav-link"><i class="fas fa-user"></i> Mi Perfil</a></li>
+            <li><a href="/logout" class="logout-link"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
         </ul>
     </div>
     <div class="main-container">
         <div class="header">
-            
-            <div>
-                <!-- Aquí podrías poner el nombre del usuario logueado o un menú de usuario -->
-                <a href="/logout" class="logout-link">Cerrar Sesión</a>
+            <div class="user-info">
+                <a href="/logout" class="logout-link"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
             </div>
         </div>
         <div class="main-content">
-            <h1 id="dashboard">Resumen del Panel</h1>
-            <p>Aquí tienes una vista rápida de las estadísticas y acciones principales.</p>
+            <!-- Sección Dashboard -->
+            <div id="dashboard" class="section active">
+                <h1><i class="fas fa-tachometer-alt"></i> Resumen del Panel</h1>
+                <p>Aquí tienes una vista rápida de las estadísticas y acciones principales.</p>
 
-            <div class="card-container">
-                <div class="card">
-                    <h3>Estadísticas Rápidas</h3>
-                    <p>Número de vehículos: <strong>[Cargar desde DB]</strong></p>
-                    <p>Servicios pendientes: <strong>[Cargar desde DB]</strong></p>
-                    <p>Solicitudes de financiación: <strong>[Cargar desde DB]</strong></p>
+                <div class="card-container">
+                    <div class="card">
+                        <h3><i class="fas fa-car"></i> Estadísticas de Vehículos</h3>
+                        <p>Total de vehículos: <span class="stat-value">12</span></p>
+                        <p>Vehículos nuevos: <span class="stat-value">8</span></p>
+                        <p>Vehículos usados: <span class="stat-value">4</span></p>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-tools"></i> Estadísticas de Servicios</h3>
+                        <p>Servicios programados: <span class="stat-value">5</span></p>
+                        <p>Servicios completados: <span class="stat-value">12</span></p>
+                        <p>Servicios pendientes: <span class="stat-value">3</span></p>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-chart-line"></i> Estadísticas Financieras</h3>
+                        <p>Ingresos mensuales: <span class="stat-value">$24,500</span></p>
+                        <p>Solicitudes financiación: <span class="stat-value">7</span></p>
+                        <p>Aprobadas: <span class="stat-value">5</span></p>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>Acciones Rápidas</h3>
-                    <p><a href="#vehicles">Añadir nuevo vehículo</a></p>
-                    <p><a href="#services">Programar nuevo servicio</a></p>
-                    <p><a href="#finances">Revisar solicitudes de financiación</a></p>
+
+                <h2>Acciones Rápidas</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h3><i class="fas fa-plus-circle"></i> Añadir Nuevo Vehículo</h3>
+                        <p>Agregar un nuevo vehículo al inventario.</p>
+                        <a href="#vehicles" class="nav-link"><i class="fas fa-arrow-right"></i> Ir a Gestión de Vehículos</a>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-calendar-plus"></i> Programar Servicio</h3>
+                        <p>Programar un nuevo servicio de mantenimiento.</p>
+                        <a href="#services" class="nav-link"><i class="fas fa-arrow-right"></i> Ir a Gestión de Servicios</a>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-file-invoice-dollar"></i> Revisar Financiación</h3>
+                        <p>Revisar solicitudes de financiación pendientes.</p>
+                        <a href="#finances" class="nav-link"><i class="fas fa-arrow-right"></i> Ir a Gestión de Finanzas</a>
+                    </div>
                 </div>
             </div>
 
-            <h1 id="vehicles" class="section-title">Gestión de Vehículos</h1>
-            <div id="vehicles-content">
-                <h2>Añadir Nuevo Vehículo</h2>
-                <form id="add-vehicle-form">
-                    <input type="text" name="brand" placeholder="Marca" required>
-                    <input type="text" name="model" placeholder="Modelo" required>
-                    <input type="number" name="year" placeholder="Año" required>
-                    <input type="number" name="price" placeholder="Precio" required>
-                    <select name="condition" required>
-                        <option value="" disabled selected>Condición</option>
-                        <option value="Nuevo">Nuevo</option>
-                        <option value="Usado">Usado</option>
-                    </select>
-                    <input type="number" name="mileage" placeholder="Kilometraje">
-                    <input type="file" name="image" accept="image/*">
-                    <textarea name="description" placeholder="Descripción"></textarea>
-                    <button type="submit">Añadir Vehículo</button>
-                </form>
+            <!-- Sección Vehículos -->
+            <div id="vehicles" class="section">
+                <h1><i class="fas fa-car"></i> Gestión de Vehículos</h1>
+                <div>
+                    <h2>Añadir Nuevo Vehículo</h2>
+                    <form id="add-vehicle-form">
+                        <div class="form-group">
+                            <label for="brand">Marca:</label>
+                            <input type="text" id="brand" name="brand" placeholder="Marca" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="model">Modelo:</label>
+                            <input type="text" id="model" name="model" placeholder="Modelo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Año:</label>
+                            <input type="number" id="year" name="year" placeholder="Año" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Precio:</label>
+                            <input type="number" id="price" name="price" placeholder="Precio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="condition">Condición:</label>
+                            <select id="condition" name="condition" required>
+                                <option value="" disabled selected>Seleccionar condición</option>
+                                <option value="Nuevo">Nuevo</option>
+                                <option value="Usado">Usado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Imagen:</label>
+                            <input type="file" id="image" name="image" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descripción:</label>
+                            <textarea id="description" name="description" placeholder="Descripción"></textarea>
+                        </div>
+                        <button type="submit"><i class="fas fa-plus"></i> Añadir Vehículo</button>
+                    </form>
 
-                <h2>Listado de Vehículos</h2>
-                <table id="vehicles-table">
-                    <thead>
-                        <tr>
-                            <th>Marca</th>
-                            <th>Modelo</th>
-                            <th>Año</th>
-                            <th>Precio</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Las filas de vehículos se insertarán aquí dinámicamente -->
-                    </tbody>
-                </table>
+                    <h2>Listado de Vehículos</h2>
+                    <table id="vehicles-table">
+                        <thead>
+                            <tr>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Año</th>
+                                <th>Precio</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Las filas de vehículos se insertarán aquí dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <h1 id="services" class="section-title">Gestión de Servicios</h1>
-                        <div id="services-content">
-                <h2>Añadir Nuevo Servicio</h2>
-                <form id="add-service-form">
-                    <input type="text" name="service-name" placeholder="Nombre del Servicio" required>
-                    <textarea name="service-description" placeholder="Descripción del Servicio"></textarea>
-                    <button type="submit">Añadir Servicio</button>
-                </form>
+            <!-- Sección Servicios -->
+            <div id="services" class="section">
+                <h1><i class="fas fa-tools"></i> Gestión de Servicios</h1>
+                <div>
+                    
 
-                <h2>Listado de Servicios</h2>
-                <table id="services-table">
-                    <thead>
-                        <tr>
-                            <th>Nombre del Servicio</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Las filas de servicios se insertarán aquí dinámicamente -->
-                    </tbody>
-                </table>
+                    <h2>Listado de Servicios</h2>
+                    <table id="services-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Servicio</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cambio de Aceite</td>
+                                <td>Servicio completo de cambio de aceite y filtro</td>
+                                <td class="table-actions">
+                                    <button class="btn btn-view" data-id="${service.id}"><i class="fas fa-eye"></i></button>
+                                    <button class="btn btn-edit" data-id="${service.id}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-delete" data-id="${service.id}"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Revisión General</td>
+                                <td>Revisión completa del vehículo</td>
+                                <td class="table-actions">
+                                    <button class="btn btn-view" data-id="${service.id}"><i class="fas fa-eye"></i></button>
+                                    <button class="btn btn-edit" data-id="${service.id}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-delete" data-id="${service.id}"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <h1 id="finances" class="section-title">Gestión de Finanzas</h1>
-                        <div id="finances-content">
-                <h2>Listado de Solicitudes de Financiación</h2>
-                <table id="finances-table">
-                    <thead>
-                        <tr>
-                            <th>ID de Solicitud</th>
-                            <th>Nombre del Cliente</th>
-                            <th>Vehículo</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Las filas de finanzas se insertarán aquí dinámicamente -->
-                    </tbody>
-                </table>
+            <!-- Sección Finanzas -->
+            <div id="finances" class="section">
+                <h1><i class="fas fa-chart-line"></i> Gestión de Finanzas</h1>
+                <div>
+                    <h2>Listado de Solicitudes de Financiación</h2>
+                    <table id="finances-table">
+                        <thead>
+                            <tr>
+                                <th>ID de Solicitud</th>
+                                <th>Nombre del Cliente</th>
+                                <th>Vehículo</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#FIN-001</td>
+                                <td>Juan Pérez</td>
+                                <td>Toyota Corolla 2022</td>
+                                <td><span class="status-pending">Pendiente</span></td>
+                                <td class="table-actions">
+                                    <button class="btn btn-view" data-id="${finance.id}"><i class="fas fa-eye"></i></button>
+                                    <button class="btn btn-edit" data-id="${finance.id}"><i class="fas fa-check"></i> Aprobar</button>
+                                    <button class="btn btn-delete" data-id="${finance.id}"><i class="fas fa-times"></i> Rechazar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#FIN-002</td>
+                                <td>María García</td>
+                                <td>Honda Civic 2021</td>
+                                <td><span class="status-approved">Aprobada</span></td>
+                                <td class="table-actions">
+                                    <button class="btn btn-view" data-id="${finance.id}"><i class="fas fa-eye"></i></button>
+                                    <button class="btn btn-edit" data-id="${finance.id}"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
+            <!-- Sección Mi Perfil -->
+            <div id="profile" class="section">
+                <h1><i class="fas fa-user"></i> Mi Perfil</h1>
+                <p>Aquí puedes ver y editar la información de tu perfil.</p>
+            </div>
         </div>
     </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Operación realizada con éxito</span>
+    </div>
+
+    <script src="panel-control.js"></script>
 </body>
 </html>

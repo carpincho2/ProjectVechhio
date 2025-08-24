@@ -40,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
         image: { // URL de la imagen
             type: DataTypes.STRING,
             allowNull: true
+        },
+        description: { // Descripción del vehículo
+            type: DataTypes.TEXT,
+            allowNull: true
         }
     }, {
         timestamps: true,

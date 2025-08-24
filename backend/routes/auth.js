@@ -1,7 +1,15 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken'); // Importar jsonwebtoken
 const { User, Sequelize } = require('../models'); // Importa User y Sequelize (que contiene Op)
 const router = express.Router();
+const { verifyJWT } = require('../middlewares/authmiddleware'); // Importar verifyJWT
+
+// Asegúrate de que JWT_SECRET esté definido en tus variables de entorno
+if (!process.env.JWT_SECRET) {
+    console.error('FATAL ERROR: JWT_SECRET no está definido. Por favor, configúralo en tu archivo .env');
+    process.exit(1);
+}
 
 // Login
 router.post('/login', async (req, res) => {
@@ -17,45 +25,49 @@ router.post('/login', async (req, res) => {
 
         // 2. Verificar si el usuario existe
         if (!user) {
-            return res.redirect('/login.html?error=Usuario o contraseña incorrectos');
+
+            return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
         }
 
         // 3. Verificar contraseña
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
-            return res.redirect('/login.html?error=Usuario o contraseña incorrectos');
+            return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
         }
 
-        // 4. Crear sesión
-        req.session.user = {
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            role: user.role,
-            loggedIn: true
-        };
+        // 4. Generar token JWT
+        const token = jwt.sign(
+            { id: user.id, username: user.username, email: user.email, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' } // Token expira en 1 hora
+        );
 
-        // 5. Redirigir según el rol
-        if (req.session.user.role === 'admin') {
-            res.redirect('/panel-control');
-        } else {
-            res.redirect('/');
-        }
+        // 5. Enviar token en la respuesta
+        res.json({
+            message: 'Login exitoso',
+            token: token,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role
+            }
+        });
 
     } catch (error) {
         console.error('Error en login:', error);
-        res.redirect('/login.html?error=Error interno del servidor');
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 
-// Register (ya lo tenés, pero lo mejoramos)
+// Register
 router.post('/register', async (req, res) => {
     try {
         const { username, email, password, confirm } = req.body;
 
         // Validaciones
         if (password !== confirm) {
-            return res.redirect('/register.html?error=Las contraseñas no coinciden');
+            return res.status(400).json({ error: 'Las contraseñas no coinciden' });
         }
 
         // Verificar si el usuario ya existe
@@ -66,7 +78,7 @@ router.post('/register', async (req, res) => {
         });
 
         if (existingUser) {
-            return res.redirect('/register.html?error=El usuario o email ya existe');
+            return res.status(409).json({ error: 'El usuario o email ya existe' });
         }
 
         // Hash de la contraseña
@@ -81,48 +93,50 @@ router.post('/register', async (req, res) => {
             role: 'user'
         });
 
-        // Crear sesión
-        req.session.user = {
-            id: newUser.id,
-            username: newUser.username,
-            email: newUser.email,
-            role: newUser.role,
-            loggedIn: true
-        };
+        // Generar token JWT para el nuevo usuario
+        const token = jwt.sign(
+            { id: newUser.id, username: newUser.username, email: newUser.email, role: newUser.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' } // Token expira en 1 hora
+        );
 
-        // Redirigir según el rol después del registro
-        if (newUser.role === 'admin') { // Assuming newUser.role is set during creation
-            res.redirect('/panel-control');
-        } else {
-            res.redirect('/');
-        }
+        // Enviar token en la respuesta
+        res.status(201).json({
+            message: 'Registro exitoso',
+            token: token,
+            user: {
+                id: newUser.id,
+                username: newUser.username,
+                email: newUser.email,
+                role: newUser.role
+            }
+        });
 
     } catch (error) {
         console.error('Error en registro:', error);
-        res.redirect('/register.html?error=Error interno del servidor');
-    }
-});
-
-// Las otras rutas (check, logout) las mantenemos igual
-router.get('/check', (req, res) => {
-    if (req.session.user && req.session.user.loggedIn) {
-        res.json({ 
-            loggedIn: true, 
-            user: req.session.user 
-        });
-    } else {
-        res.json({ loggedIn: false });
-    }
-});
-
-router.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Error al cerrar sesión:', err);
-            return res.redirect('/?error=Error al cerrar sesión');
+        // Si el error es por duplicado (ej. email o username ya existen)
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(409).json({ error: 'El usuario o email ya existe.' });
         }
-        res.redirect('/');
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+
+
+// Ruta para verificar el estado de login (ahora con JWT)
+router.get('/check', verifyJWT, (req, res) => {
+    res.json({
+        loggedIn: true,
+        user: req.user // Los datos del usuario vienen del token verificado
     });
+});
+
+// Ruta para cerrar sesión (con JWT, es principalmente una acción del cliente)
+router.post('/logout', (req, res) => {
+    // Con JWT, el logout es principalmente una acción del cliente (eliminar el token del localStorage)
+    // En el backend, simplemente confirmamos que la solicitud fue recibida.
+    res.json({ message: 'Sesión cerrada exitosamente (token eliminado del cliente)' });
 });
 
 module.exports = router;
