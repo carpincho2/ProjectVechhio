@@ -6,7 +6,7 @@
     <link rel="shortcut icon" href="/logos/favicon_io/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="vechicles.css">
+    <link rel="stylesheet" href="vehicles.css">
     <title>Vehicles</title>
 </head>
 <body>
@@ -39,30 +39,44 @@
     <section class="vehicles-section">
         <h1>Vehicles</h1>
         <div class="filters">
-          <select>
-            <option selected disabled>Make</option>
-            <option value="">toyota</option>
-            <option value="">mercedes</option>
-            <option value="">lexus</option>
-            <option value="">ford</option>
-            <option value="">honda</option>
-            <option value="">Mclaren</option>
-            <option value="">peugeot</option>
-            <option value="">fiat</option>
+          <select name="brand">
+            <option value="">Make</option>
+            <option value="Toyota">Toyota</option>
+            <option value="Mercedes">Mercedes</option>
+            <option value="Lexus">Lexus</option>
+            <option value="Ford">Ford</option>
+            <option value="Honda">Honda</option>
+            <option value="Mclaren">Mclaren</option>
+            <option value="Peugeot">Peugeot</option>
+            <option value="Fiat">Fiat</option>
           </select>
-          <select>
-            <option selected disabled>Model</option>
+          <select name="model">
+            <option value="">Model</option>
           </select>
-          <select>
-            <option selected disabled>Price Range</option>
+          <select name="price">
+            <option value="">Price Range</option>
+            <option value="0-20000">$0 - $20,000</option>
+            <option value="20000-40000">$20,000 - $40,000</option>
+            <option value="40000-60000">$40,000 - $60,000</option>
+            <option value="60000-100000">$60,000 - $100,000</option>
+            <option value="100000">$100,000+</option>
           </select>
-          <select>
-            <option selected disabled>Fuel Type</option>
+          <select name="condition">
+            <option value="">Condition</option>
+            <option value="Nuevo">Nuevo</option>
+            <option value="Usado">Usado</option>
           </select>
-          <select>
-            <option selected disabled>Year</option>
+          <select name="year">
+            <option value="">Year</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
           </select>
         </div>
+        <div id="vehicle-list" class="vehicle-list"></div>
       </section>
+    <script src="vehicles.js" defer></script>
 </body>
 </html>

@@ -1,99 +1,67 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Elementos de navegación
+    // --- ELEMENTOS DEL DOM ---
     const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('.section');
     const logoutLinks = document.querySelectorAll('a[href="/logout"]');
-    const addVehicleForm = document.getElementById('add-vehicle-form');
-    const addServiceForm = document.getElementById('add-service-form');
     const notification = document.getElementById('notification');
     const notificationText = document.getElementById('notification-text');
+
+    // Forms
+    const addVehicleForm = document.getElementById('add-vehicle-form');
+
+    // Table Bodies
     const vehiclesTableBody = document.querySelector('#vehicles-table tbody');
     const servicesTableBody = document.querySelector('#services-table tbody');
     const financesTableBody = document.querySelector('#finances-table tbody');
-    
+    const usersTableBody = document.querySelector('#users-table tbody');
+
+    // Nav Links Específicos
+    const navUsersLi = document.getElementById('nav-users-li');
+
+    // --- ESTADO DE LA APP ---
+    const token = localStorage.getItem('jwtToken');
+    const userRole = localStorage.getItem('userRole');
+
+    // --- FUNCIONES ---
+
     // Función para mostrar notificaciones
     function showNotification(message, isSuccess = true) {
         notificationText.textContent = message;
-        notification.style.backgroundColor = isSuccess ? 'var(--success)' : 'var(--danger)';
+        notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
         notification.classList.add('show');
-        
-        setTimeout(() => {
-            notification.classList.remove('show');
-        }, 3000);
+        setTimeout(() => notification.classList.remove('show'), 3000);
     }
 
-
-    // Función para obtener el token JWT
-    function getAuthHeaders() {
-        const token = localStorage.getItem('jwtToken');
-        if (token) {
-            return { 'Authorization': `Bearer ${token}` };
-        } else {
-            // Si no hay token, redirigir al login
-            window.location.href = '/login.html?error=Sesión expirada o no iniciada';
-            return {};
-        }
-    }
-
-    // Función para manejar errores de autenticación
-    function handleAuthError(response) {
-        if (response.status === 401 || response.status === 403) {
-            localStorage.removeItem('jwtToken');
-            localStorage.removeItem('userRole');
-            localStorage.removeItem('userName');
-            showNotification('Sesión expirada o no autorizada. Por favor, inicia sesión de nuevo.', false);
-            setTimeout(() => {
-                window.location.href = '/login.html';
-            }, 1500);
-            return true; // Indica que se manejó un error de auth
-        }
-        return false; // No es un error de auth
-    }
-    
     // Función para cambiar de sección
     function showSection(sectionId) {
-        sections.forEach(section => {
-            section.classList.remove('active');
-        });
-        
+        sections.forEach(section => section.classList.remove('active'));
         const targetSection = document.getElementById(sectionId);
         if (targetSection) {
             targetSection.classList.add('active');
         }
-        
+
         navLinks.forEach(link => {
-            if (link.getAttribute('href') === `#${sectionId}`) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
+            link.classList.toggle('active', link.getAttribute('href') === `#${sectionId}`);
         });
-        
+
         window.history.replaceState(null, null, `#${sectionId}`);
         window.scrollTo(0, 0);
 
-        // Fetch data for the active section
-        if (sectionId === 'vehicles') {
-            fetchVehicles();
-        } else if (sectionId === 'services') {
-            fetchServices();
-        } else if (sectionId === 'finances') {
-            fetchFinances();
-        } else if (sectionId === 'profile') {
-            // La sección de perfil se maneja en profile.html, no aquí
-            // Si se quiere cargar dinámicamente aquí, se necesitaría una función fetchProfile
-            // similar a las otras, pero el plan indica que profile.html es una página separada.
-            // Por ahora, no hacemos nada aquí para 'profile'
+        // Cargar datos para la sección activa
+        switch (sectionId) {
+            case 'dashboard': fetchDashboardCounts(); break;
+            case 'vehicles': fetchVehicles(); break;
+            case 'services': fetchServices(); break;
+            case 'finances': fetchFinances(); break;
+            case 'users': fetchUsers(); break;
         }
     }
-    
-    // Fetch and display vehicles
+
+    // --- FUNCIONES DE FETCH ---
+
     async function fetchVehicles() {
         try {
-            const response = await fetch('/api/vehicles', {
-                headers: getAuthHeaders()
-            });
-            if (handleAuthError(response)) return; // Manejar error de autenticación
+            const response = await fetch('/api/vehicles', { headers: { 'Authorization': `Bearer ${token}` } });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -123,13 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Fetch and display services
     async function fetchServices() {
         try {
-            const response = await fetch('/api/services', {
-                headers: getAuthHeaders()
-            });
-            if (handleAuthError(response)) return; // Manejar error de autenticación
+            const response = await fetch('/api/services', { headers: { 'Authorization': `Bearer ${token}` } });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -140,8 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
             services.forEach(service => {
                 const row = servicesTableBody.insertRow();
                 row.innerHTML = `
-                    <td>${service.type}</td>
-                    <td>${service.date}</td>
+                    <td>${service.serviceType}</td>
+                    <td>${new Date(service.requestDate).toLocaleDateString()}</td>
                     <td>${service.status}</td>
                     <td class="table-actions">
                         <button class="btn btn-view" data-id="${service.id}"><i class="fas fa-eye"></i></button>
@@ -158,13 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Fetch and display finances
     async function fetchFinances() {
         try {
-            const response = await fetch('/api/finances', {
-                headers: getAuthHeaders()
-            });
-            if (handleAuthError(response)) return; // Manejar error de autenticación
+            const response = await fetch('/api/finances', { headers: { 'Authorization': `Bearer ${token}` } });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -193,6 +153,183 @@ document.addEventListener('DOMContentLoaded', () => {
             showNotification('Error al cargar finanzas.', false);
         }
     }
+
+    async function fetchUsers() {
+        if (userRole !== 'superadmin') return;
+        try {
+            const response = await fetch('/api/users', { headers: { 'Authorization': `Bearer ${token}` } });
+            if (!response.ok) throw new Error('No se pudo obtener la lista de usuarios.');
+            const users = await response.json();
+            
+            usersTableBody.innerHTML = '';
+            users.forEach(user => {
+                const row = usersTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td class="table-actions">
+                        <select class="role-select" data-user-id="${user.id}">
+                            <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
+                            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                            <option value="superadmin" ${user.role === 'superadmin' ? 'selected' : ''}>Superadmin</option>
+                        </select>
+                        <button class="btn btn-save-role" data-user-id="${user.id}">Guardar</button>
+                    </td>
+                `;
+            });
+        } catch (error) {
+            console.error('Error fetching users:', error);
+            showNotification(error.message, false);
+        }
+    }
+
+    async function fetchDashboardCounts() {
+        try {
+            // Fetch User Count (if applicable, assuming 'userCount' element exists)
+            // const usersResponse = await fetch('/api/users/all', { headers: { 'Authorization': `Bearer ${token}` } });
+            // if (usersResponse.ok) {
+            //     const users = await usersResponse.json();
+            //     const userCountElement = document.getElementById('userCount');
+            //     if (userCountElement) {
+            //         userCountElement.textContent = users.length;
+            //     }
+            // }
+
+            // Fetch Vehicle Count
+            const vehiclesResponse = await fetch('/api/vehicles', { headers: { 'Authorization': `Bearer ${token}` } });
+            if (vehiclesResponse.ok) {
+                const vehicles = await vehiclesResponse.json();
+                document.getElementById('totalVehicles').textContent = vehicles.length;
+
+                let newVehiclesCount = 0;
+                let usedVehiclesCount = 0;
+
+                vehicles.forEach(vehicle => {
+                    if (vehicle.condition === 'Nuevo') {
+                        newVehiclesCount++;
+                    } else if (vehicle.condition === 'Usado') {
+                        usedVehiclesCount++;
+                    }
+                });
+
+                document.getElementById('newVehicles').textContent = newVehiclesCount;
+                document.getElementById('usedVehicles').textContent = usedVehiclesCount;
+            }
+
+            // Fetch Service Counts
+            const servicesResponse = await fetch('/api/services', { headers: { 'Authorization': `Bearer ${token}` } });
+            if (servicesResponse.ok) {
+                const services = await servicesResponse.json();
+                let scheduledServicesCount = 0;
+                let completedServicesCount = 0;
+                let pendingServicesCount = 0;
+
+                services.forEach(service => {
+                    if (service.status === 'Programado') { // Assuming 'Programado' for scheduled
+                        scheduledServicesCount++;
+                    } else if (service.status === 'Completado') { // Assuming 'Completado' for completed
+                        completedServicesCount++;
+                    } else if (service.status === 'Pendiente') { // Assuming 'Pendiente' for pending
+                        pendingServicesCount++;
+                    }
+                });
+
+                document.getElementById('scheduledServices').textContent = scheduledServicesCount;
+                document.getElementById('completedServices').textContent = completedServicesCount;
+                document.getElementById('pendingServices').textContent = pendingServicesCount;
+            }
+
+            // Fetch Finance Counts
+            const financesResponse = await fetch('/api/finances', { headers: { 'Authorization': `Bearer ${token}` } });
+            if (financesResponse.ok) {
+                const finances = await financesResponse.json();
+                let totalFinanceRequests = finances.length;
+                let approvedFinances = 0;
+                let monthlyIncome = 0; // This might need more complex logic, assuming sum of approved amounts for now
+
+                finances.forEach(finance => {
+                    if (finance.status === 'Aprobada') { // Assuming 'Aprobada' for approved
+                        approvedFinances++;
+                        monthlyIncome += finance.amount; // Assuming 'amount' is a number
+                    }
+                });
+
+                document.getElementById('totalFinanceRequests').textContent = totalFinanceRequests;
+                document.getElementById('approvedFinances').textContent = approvedFinances;
+                document.getElementById('monthlyIncome').textContent = `${monthlyIncome.toFixed(2)}`; // Format as currency
+            }
+
+        } catch (error) {
+            console.error('Error fetching dashboard counts:', error);
+            showNotification('Error al cargar estadísticas del panel.', false);
+        }
+    }
+
+    // --- MANEJO DE EVENTOS ---
+
+    // Navegación
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').substring(1);
+            showSection(targetId);
+        });
+    });
+
+    // Logout
+    logoutLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.clear();
+            showNotification('Sesión cerrada correctamente');
+            setTimeout(() => window.location.href = 'index.html', 1000);
+        });
+    });
+
+    // Enviar formulario de vehículo
+    if (addVehicleForm) {
+        addVehicleForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(addVehicleForm);
+            try {
+                const response = await fetch('/api/vehicles', { method: 'POST', body: formData, headers: { 'Authorization': `Bearer ${token}` } });
+                if (!response.ok) throw new Error((await response.json()).error);
+                showNotification('Vehículo añadido correctamente');
+                addVehicleForm.reset();
+                fetchVehicles();
+            } catch (error) {
+                showNotification(`Error: ${error.message}`, false);
+            }
+        });
+    }
+
+    // Guardar cambio de rol de usuario
+    usersTableBody.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('btn-save-role')) {
+            const button = e.target;
+            const userId = button.dataset.userId;
+            const select = button.previousElementSibling;
+            const newRole = select.value;
+
+            try {
+                const response = await fetch(`/api/users/${userId}/role`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ role: newRole })
+                });
+                if (!response.ok) throw new Error((await response.json()).error);
+                showNotification('Rol de usuario actualizado.');
+                fetchUsers(); // Recargar la lista
+            } catch (error) {
+                showNotification(`Error: ${error.message}`, false);
+            }
+        }
+    });
 
     // Attach event listeners to action buttons (view, edit, delete)
     function attachActionButtonListeners() {
@@ -226,10 +363,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     try {
                         const response = await fetch(apiEndpoint, {
                             method: 'DELETE',
-                            headers: getAuthHeaders()
+                            headers: { 'Authorization': `Bearer ${token}` }
                         });
 
-                        if (handleAuthError(response)) return; // Manejar error de autenticación
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);
                         }
@@ -272,12 +408,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (apiEndpoint) {
                 try {
                     // Fetch current data to pre-fill prompt
-                    const currentResponse = await fetch(apiEndpoint, {
-                        headers: getAuthHeaders()
-                    });
-                    if (handleAuthError(currentResponse)) return; // Manejar error de autenticación
+                    const currentResponse = await fetch(apiEndpoint, { headers: { 'Authorization': `Bearer ${token}` } });
                     if (!currentResponse.ok) {
-                        throw new Error(`HTTP error! status: ${currentResponse.status}`);
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const currentItem = await currentResponse.json();
 
@@ -297,12 +430,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json',
-                                ...getAuthHeaders() // Añadir headers de autenticación
+                                'Authorization': `Bearer ${token}`
                             },
                             body: JSON.stringify(updatedData),
                         });
 
-                        if (handleAuthError(response)) return; // Manejar error de autenticación
                         if (!response.ok) {
                             const errorData = await response.json();
                             throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
@@ -326,24 +458,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 apiEndpoint = `/api/vehicles/${itemId}`;
             } else if (button.closest('#services-table')) {
                 apiEndpoint = `/api/services/${itemId}`;
+            } else if (button.closest('#finances-table')) {
+                apiEndpoint = `/api/finances/${itemId}`;
             }
 
             if (apiEndpoint) {
                 try {
-                    const response = await fetch(apiEndpoint, {
-                        headers: getAuthHeaders()
-                    });
-                    if (handleAuthError(response)) return; // Manejar error de autenticación
+                    const response = await fetch(apiEndpoint, { headers: { 'Authorization': `Bearer ${token}` } });
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const item = await response.json();
-                    let details = `Detalles del Elemento:
-
-`;
+                    let details = `Detalles del Elemento:\n\n`;
                     for (const key in item) {
-                        details += `${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}: ${item[key]}
-`;
+                        details += `${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}: ${item[key]}\n`;
                     }
                     alert(details);
                     showNotification('Vista detallada del elemento ' + itemId);
@@ -357,103 +485,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Manejar clics en enlaces de navegación
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href').substring(1);
-            showSection(targetId);
-        });
-    });
-    
-    // Manejar cierre de sesión
-    logoutLinks.forEach(link => {
-        link.addEventListener('click', async (e) => { // Añadir async
-            e.preventDefault();
-            // Llamar al endpoint de logout del backend (opcional, si hay limpieza de cookies/sesiones)
-            try {
-                const response = await fetch('/api/auth/logout', { method: 'POST' }); // Cambiado a POST
-                if (!response.ok) {
-                    console.error('Error al llamar al logout del backend', response.status);
-                }
-            } catch (error) {
-                console.error('Error de red al llamar al logout del backend', error);
-            }
-            localStorage.removeItem('jwtToken');
-            localStorage.removeItem('userRole');
-            localStorage.removeItem('userName');
-            showNotification('Sesión cerrada correctamente');
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
-        });
-    });
-    
-    // Manejar envío de formulario de vehículos
-    if (addVehicleForm) {
-        addVehicleForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(addVehicleForm);
-            
-            try {
-                const response = await fetch('/api/vehicles', {
-                    method: 'POST',
-                    body: formData,
-                    headers: getAuthHeaders() // Añadir headers de autenticación
-                });
+    // --- INICIALIZACIÓN ---
+    function initialize() {
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
 
-                if (handleAuthError(response)) return; // Manejar error de autenticación
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-                }
-                showNotification('Vehículo añadido correctamente');
-                addVehicleForm.reset();
-                fetchVehicles(); // Refresh the list
-            } catch (error) {
-                console.error('Error al añadir vehículo:', error);
-                showNotification(`Error: ${error.message}`, false);
-            }
-        });
-    }
-    
-    // Manejar envío de formulario de servicios
-    if (addServiceForm) {
-        addServiceForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(addServiceForm);
-            
-            try {
-                const response = await fetch('/api/services', {
-                    method: 'POST',
-                    body: formData,
-                    headers: getAuthHeaders() // Añadir headers de autenticación
-                });
+        // Mostrar pestaña de usuarios si es superadmin
+        if (userRole === 'superadmin') {
+            navUsersLi.style.display = 'list-item';
+        }
 
-                if (handleAuthError(response)) return; // Manejar error de autenticación
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-                }
-                showNotification('Servicio añadido correctamente');
-                addServiceForm.reset();
-                fetchServices(); // Refresh the list
-            } catch (error) {
-                console.error('Error al añadir servicio:', error);
-                showNotification(`Error: ${error.message}`, false);
-            }
-        });
+        // Cargar sección inicial
+        const initialSection = window.location.hash ? window.location.hash.substring(1) : 'dashboard';
+        showSection(initialSection);
+        fetchDashboardCounts(); // Call fetchDashboardCounts here
     }
-    
-    // Cargar sección basada en el hash de la URL al cargar la página
-    if (window.location.hash) {
-        const targetId = window.location.hash.substring(1);
-        showSection(targetId);
-    } else {
-        // Mostrar la sección de dashboard por defecto si no hay hash
-        showSection('dashboard');
-    }
-    
-    // Initial fetch of vehicles when the page loads
-    fetchVehicles();
+
+    initialize();
 });

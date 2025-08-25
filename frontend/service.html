@@ -58,15 +58,78 @@
 
   <div class="service-form-container">
     <h2>Solicitá tu turno</h2>
-    <form class="service-form">
-      <input type="text" placeholder="Nombre completo" required>
-      <input type="email" placeholder="Correo" required>
-      <input type="text" placeholder="Patente del vehículo" required>
-      <input type="date" required>
-      <textarea placeholder="Comentarios opcionales"></textarea>
+     <form class="service-form" id="serviceForm">
+      <input type="text" id="fullName" placeholder="Nombre completo" required>
+      <input type="email" id="email" placeholder="Correo" required>
+      <input type="text" id="licensePlate" placeholder="Patente del vehículo" required>
+      <select id="serviceType" required>
+        <option value="" disabled selected>Selecciona tipo de servicio</option>
+        <option value="Mantenimiento Preventivo">Mantenimiento Preventivo</option>
+        <option value="Revisión Completa">Revisión Completa</option>
+        <option value="Frenos y Suspensión">Frenos y Suspensión</option>
+        <option value="Cambio de Aceite">Cambio de Aceite</option>
+        <option value="Reparación General">Reparación General</option>
+      </select>
+      <input type="date" id="serviceDate" required>
+      <textarea id="comments" placeholder="Comentarios opcionales"></textarea>
       <button type="submit">Pedir Turno</button>
     </form>
   </div>
 </section>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const serviceForm = document.getElementById('serviceForm');
+
+        serviceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                alert('Debes iniciar sesión para solicitar un servicio.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const licensePlate = document.getElementById('licensePlate').value;
+            const serviceType = document.getElementById('serviceType').value;
+            const serviceDate = document.getElementById('serviceDate').value;
+            const comments = document.getElementById('comments').value;
+
+            try {
+                const response = await fetch('/api/services', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        type: serviceType,
+                        date: serviceDate,
+                        // status will be 'scheduled' by default in backend
+                        // userId will be extracted from token in backend
+                        // vehicleId is optional, not collected in this form
+                        comments: comments,
+                        // Assuming backend can handle additional fields like fullName, email, licensePlate
+                        // If not, these should be removed or handled differently
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Servicio solicitado con éxito!');
+                    serviceForm.reset();
+                } else {
+                    alert(`Error al solicitar servicio: ${data.error || data.message || 'Error desconocido'}`);
+                }
+            } catch (error) {
+                console.error('Error en la solicitud de servicio:', error);
+                alert('Error de conexión con el servidor.');
+            }
+        });
+    });
+</script>
 </body>
 </html>

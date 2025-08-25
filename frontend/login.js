@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     displayMessage(successMessageElement, data.message, 'success');
                     
                     // Redirect based on role
-                    if (data.user.role === 'admin') {
+                    if (data.user.role === 'admin' || data.user.role === 'superadmin') {
                         window.location.href = '/panel-control.html';
                     } else {
                         window.location.href = '/index.html';
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     displayMessage(successMessageElement, data.message, 'success');
                     // Redirect after successful registration
-                    if (data.user.role === 'admin') {
+                    if (data.user.role === 'admin' || data.user.role === 'superadmin') {
                         window.location.href = '/panel-control.html';
                     } else {
                         window.location.href = '/index.html';

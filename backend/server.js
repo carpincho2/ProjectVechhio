@@ -12,6 +12,7 @@ const financeRoutes = require('./routes/finances'); // Descomentar cuando se imp
 const serviceRoutes = require('./routes/service');   // Descomentar cuando se implementen
 const vehicleRoutes = require('./routes/vehicles'); // Descomentar cuando se implementen
 const profileRoutes = require('./routes/profile');
+const userRoutes = require('./routes/users');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -46,6 +47,7 @@ app.use('/api/finances', financeRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/users', userRoutes);
 
 app.get('/panel-control', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/panel-control.html'));

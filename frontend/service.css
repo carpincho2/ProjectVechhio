@@ -67,7 +67,8 @@
 }
 
 .service-form input,
-.service-form textarea {
+.service-form textarea,
+.service-form select {
   padding: 12px;
   border-radius: 8px;
   border: none;

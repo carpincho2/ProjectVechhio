@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Concesionaria</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/logos/favicon_io/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header class="header">
+        <div>
+            <a href="index.html"><img src="logo.png" alt="Logo Concesionaria" class="logo"></a>
+        </div>
+        <div class="vehicles">
+            <a href="vehicles.html">Vehículos</a>
+        </div>
+        <div class="certified">
+            <a href="certified.html">Certificados</a>
+        </div>
+        <div class="finance">
+            <a href="finance.html">Financiación</a>
+        </div>
+        <div class="service">
+            <a href="service.html" class="menu-btn">Servicios</a>
+        </div>
+        <div class="aboutUs">
+            <a href="aboutUs.html">Sobre Nosotros</a>
+        </div>
+        
+        <div class="user-auth-section">
+            <div id="login-section" class="hidden">
+                <a href="login.html" class="auth-link">Login</a>
+                <a href="register.html" class="auth-link">Register</a>
+            </div>
+            <div id="user-section">
+                <span class="welcome-text">Hola, <span id="user-name-placeholder"></span></span>
+                <a href="/profile.html" class="auth-link">Mi Perfil</a>
+                <a href="#" id="logout-btn" class="auth-link logout-btn">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="profile-container">
+        <div class="profile-card">
+            <h1>Mi Perfil</h1>
+            <div class="profile-info">
+                <p><strong>Usuario:</strong> <span id="profile-username">Cargando...</span></p>
+                <p><strong>Email:</strong> <span id="profile-email">Cargando...</span></p>
+                <p><strong>Rol:</strong> <span id="profile-role">Cargando...</span></p>
+            </div>
+            <div class="admin-link-container" id="admin-link-container" style="display: none;">
+                <a href="panel-control.html" class="button-admin">Acceder al Panel de Control</a>
+            </div>
+            <div id="profile-error" class="error-message" style="display: none;"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">Política de Privacidad</a>
+            <a href="#">Términos de Servicio</a>
+        </div>
+        <p class="footer-copy">© 2024 CarPane. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="profile.js"></script>
+</body>
+</html>

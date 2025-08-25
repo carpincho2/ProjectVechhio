@@ -15,8 +15,8 @@
             <li><a href="#vehicles" class="nav-link"><i class="fas fa-car"></i> Gestión de Vehículos</a></li>
             <li><a href="#services" class="nav-link"><i class="fas fa-tools"></i> Gestión de Servicios</a></li>
             <li><a href="#finances" class="nav-link"><i class="fas fa-chart-line"></i> Gestión de Finanzas</a></li>
-            <li><a href="#profile" class="nav-link"><i class="fas fa-user"></i> Mi Perfil</a></li>
-            <li><a href="/logout" class="logout-link"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            <li id="nav-users-li" style="display: none;"><a href="#users" id="nav-users" class="nav-link"><i class="fas fa-users-cog"></i> Gestionar Usuarios</a></li>
+            <li><a href="index.html" class="logout-link"><i class="fas fa-sign-out-alt"></i> Ir al Inicio</a></li>
         </ul>
     </div>
     <div class="main-container">
@@ -34,21 +34,21 @@
                 <div class="card-container">
                     <div class="card">
                         <h3><i class="fas fa-car"></i> Estadísticas de Vehículos</h3>
-                        <p>Total de vehículos: <span class="stat-value">12</span></p>
-                        <p>Vehículos nuevos: <span class="stat-value">8</span></p>
-                        <p>Vehículos usados: <span class="stat-value">4</span></p>
+                        <p>Total de vehículos: <span class="stat-value" id="totalVehicles">12</span></p>
+                        <p>Vehículos nuevos: <span class="stat-value" id="newVehicles">0</span></p>
+                        <p>Vehículos usados: <span class="stat-value" id="usedVehicles">0</span></p>
                     </div>
                     <div class="card">
                         <h3><i class="fas fa-tools"></i> Estadísticas de Servicios</h3>
-                        <p>Servicios programados: <span class="stat-value">5</span></p>
-                        <p>Servicios completados: <span class="stat-value">12</span></p>
-                        <p>Servicios pendientes: <span class="stat-value">3</span></p>
+                        <p>Servicios programados: <span class="stat-value" id="scheduledServices">5</span></p>
+                        <p>Servicios completados: <span class="stat-value" id="completedServices">12</span></p>
+                        <p>Servicios pendientes: <span class="stat-value" id="pendingServices">3</span></p>
                     </div>
                     <div class="card">
                         <h3><i class="fas fa-chart-line"></i> Estadísticas Financieras</h3>
-                        <p>Ingresos mensuales: <span class="stat-value">$24,500</span></p>
-                        <p>Solicitudes financiación: <span class="stat-value">7</span></p>
-                        <p>Aprobadas: <span class="stat-value">5</span></p>
+                        <p>Ingresos mensuales: <span class="stat-value" id="monthlyIncome">$24,500</span></p>
+                        <p>Solicitudes financiación: <span class="stat-value" id="totalFinanceRequests">7</span></p>
+                        <p>Aprobadas: <span class="stat-value" id="approvedFinances">5</span></p>
                     </div>
                 </div>
 
@@ -56,17 +56,17 @@
                 <div class="card-container">
                     <div class="card">
                         <h3><i class="fas fa-plus-circle"></i> Añadir Nuevo Vehículo</h3>
-                        <p>Agregar un nuevo vehículo al inventario.</p>
+                        <p>Agregar un nuevo vehículo al inventario o ver la lista de vehiculos.</p>
                         <a href="#vehicles" class="nav-link"><i class="fas fa-arrow-right"></i> Ir a Gestión de Vehículos</a>
                     </div>
                     <div class="card">
-                        <h3><i class="fas fa-calendar-plus"></i> Programar Servicio</h3>
-                        <p>Programar un nuevo servicio de mantenimiento.</p>
+                        <h3><i class="fas fa-calendar-plus"></i> Ver Servicio</h3>
+                        <p>Ver lista de servicios programados.</p>
                         <a href="#services" class="nav-link"><i class="fas fa-arrow-right"></i> Ir a Gestión de Servicios</a>
                     </div>
                     <div class="card">
-                        <h3><i class="fas fa-file-invoice-dollar"></i> Revisar Financiación</h3>
-                        <p>Revisar solicitudes de financiación pendientes.</p>
+                        <h3><i class="fas fa-file-invoice-dollar"></i> Ver Financiación</h3>
+                        <p>Ver lista de  financiación pendientes o completadas.</p>
                         <a href="#finances" class="nav-link"><i class="fas fa-arrow-right"></i> Ir a Gestión de Finanzas</a>
                     </div>
                 </div>
@@ -212,10 +212,23 @@
                 </div>
             </div>
 
-            <!-- Sección Mi Perfil -->
-            <div id="profile" class="section">
-                <h1><i class="fas fa-user"></i> Mi Perfil</h1>
-                <p>Aquí puedes ver y editar la información de tu perfil.</p>
+            <!-- Sección Gestionar Usuarios -->
+            <div id="users" class="section">
+                <h1><i class="fas fa-users-cog"></i> Gestionar Usuarios</h1>
+                <table id="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Cambiar Rol</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las filas de usuarios se insertarán aquí dinámicamente -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

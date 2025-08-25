@@ -17,11 +17,21 @@ const verifyJWT = (req, res, next) => {
 // Middleware para verificar si el usuario es administrador
 function isAdmin(req, res, next) {
   // Asume que verifyJWT ya ha adjuntado req.user
-  if (req.user && req.user.role === 'admin') {
+  if (req.user && (req.user.role === 'admin' || req.user.role === 'superadmin')) {
     next();
   } else {
     res.status(403).json({ error: 'Acceso denegado: Se requiere rol de administrador' });
   }
 }
 
-module.exports = { verifyJWT, isAdmin };
+// Middleware para verificar si el usuario es superadministrador
+function isSuperAdmin(req, res, next) {
+  // Asume que verifyJWT ya ha adjuntado req.user
+  if (req.user && req.user.role === 'superadmin') {
+    next();
+  } else {
+    res.status(403).json({ error: 'Acceso denegado: Se requiere rol de superadministrador' });
+  }
+}
+
+module.exports = { verifyJWT, isAdmin, isSuperAdmin };

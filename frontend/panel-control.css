@@ -42,7 +42,6 @@ body {
     margin-bottom: 40px;
     color: var(--letra);
     font-size: 1.8em;
-    border-bottom: 1px solid var(--boton);
     padding-bottom: 15px;
     display: flex;
     align-items: center;

@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             defaultValue: 'user',
             validate: {
-                isIn: [['user', 'admin']]
+                isIn: [['user', 'admin', 'superadmin']]
             }
         }
     }, {

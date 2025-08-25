@@ -12,6 +12,9 @@
     <form action="/api/auth/register" method="POST">
   <h2>Registro</h2>
 
+  <div id="errorMessage" class="message error" style="display:none;"></div>
+  <div id="successMessage" class="message success" style="display:none;"></div>
+
   <label for="username">Usuario</label>
   <input type="text" id="username" name="username" required class="input">
 
@@ -26,5 +29,6 @@
 
   <button type="submit">Crear cuenta</button>
 </form>
+<script src="login.js" defer></script>
 </body>
 </html>

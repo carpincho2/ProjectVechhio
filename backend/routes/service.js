@@ -4,7 +4,7 @@ const db = require('../models'); // Importa la instancia de la base de datos
 const { verifyJWT, isAdmin } = require('../middlewares/authmiddleware'); // Importa los middlewares de autenticación
 
 // Ruta para crear un nuevo servicio (solo admin)
-router.post('/', verifyJWT, isAdmin, async (req, res) => {
+router.post('/', verifyJWT, async (req, res) => {
     try {
         const { type, date, status, userId, vehicleId } = req.body; // Ejemplo de campos
         const newService = await db.Service.create({ type, date, status, userId, vehicleId });
