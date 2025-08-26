@@ -1,27 +1,28 @@
+/* About Us Section */
 .aboutus-container {
-  padding: 80px 20px;
+  padding: 60px 20px;
   background-color: var(--fondo);
   color: var(--letra);
   text-align: center;
 }
 
 .aboutus-title {
-  font-size: 36px;
+  font-size: 2.25rem; /* 36px */
   margin-bottom: 10px;
   margin-top: 30px;
 }
 
 .aboutus-description {
   max-width: 800px;
-  margin: 0 auto 50px auto;
-  font-size: 18px;
+  margin: 0 auto 40px auto;
+  font-size: 1.125rem; /* 18px */
   line-height: 1.6;
 }
 
 .aboutus-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
   align-items: center;
   max-width: 1100px;
   margin: 0 auto;
@@ -37,12 +38,12 @@
 .aboutus-text h2 {
   margin-top: 20px;
   color: var(--letra);
-  font-size: 24px;
+  font-size: 1.5rem; /* 24px */
 }
 
 .aboutus-text p {
   margin-top: 10px;
-  font-size: 16px;
+  font-size: 1rem; /* 16px */
   line-height: 1.6;
 }
 
@@ -53,5 +54,101 @@
 
 .aboutus-text li {
   margin-bottom: 8px;
-  font-size: 16px;
+  font-size: 1rem; /* 16px */
+}
+.aboutus-text strong,
+.aboutus-text .user-name,
+.aboutus-text .user-email {
+    color: var(--boton);
+    font-weight: 600;
+}
+
+/* Media Queries para hacerlo más responsive */
+
+/* Tablet */
+@media screen and (max-width: 768px) {
+  .aboutus-container {
+    padding: 40px 15px;
+  }
+  
+  .aboutus-title {
+    font-size: 2rem; /* 32px */
+    margin-top: 20px;
+  }
+  
+  .aboutus-description {
+    font-size: 1rem; /* 16px */
+    margin-bottom: 30px;
+  }
+  
+  .aboutus-grid {
+    gap: 25px;
+  }
+  
+  .aboutus-text h2 {
+    font-size: 1.375rem; /* 22px */
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+  .aboutus-container {
+    padding: 30px 10px;
+  }
+  
+  .aboutus-title {
+    font-size: 1.75rem; /* 28px */
+    margin-bottom: 8px;
+    margin-top: 15px;
+  }
+  
+  .aboutus-description {
+    font-size: 0.9375rem; /* 15px */
+    margin-bottom: 25px;
+    padding: 0 5px;
+  }
+  
+  .aboutus-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .aboutus-text h2 {
+    font-size: 1.25rem; /* 20px */
+    text-align: center;
+  }
+  
+  .aboutus-text p,
+  .aboutus-text li {
+    font-size: 0.875rem; /* 14px */
+  }
+  
+  .aboutus-text ul {
+    padding-left: 15px;
+  }
+}
+
+/* Mobile Small */
+@media screen and (max-width: 320px) {
+  .aboutus-container {
+    padding: 25px 8px;
+  }
+  
+  .aboutus-title {
+    font-size: 1.5rem; /* 24px */
+  }
+  
+  .aboutus-description {
+    font-size: 0.875rem; /* 14px */
+    margin-bottom: 20px;
+  }
+  
+  .aboutus-text h2 {
+    font-size: 1.125rem; /* 18px */
+  }
+  
+  .aboutus-text p,
+  .aboutus-text li {
+    font-size: 0.8125rem; /* 13px */
+  }
 }

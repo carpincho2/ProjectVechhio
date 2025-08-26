@@ -16,7 +16,7 @@
 - Configurar `/backend/config/database.js` para usar SQLite.  
 
 ✅ Resultado: backend inicial + conexión a DB lista.
-**Estado Actual**: ✅ **COMPLETADA**.
+**Estado Actual**: ✅ **COMPLsETADA**.
 
 ---
 
@@ -59,8 +59,9 @@
   - Filtros dinámicos (marca, precio, año).  
 
 ✅ Resultado: catálogo dinámico de autos.
-**Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.*   **Backend**: ✅ **COMPLETADA**. `POST`, `GET` (con filtros), `PUT`, `DELETE` implementados.
-*   **Frontend**: ✅ **COMPLETADA**. La página `vehicles.html` ahora carga dinámicamente la lista de vehículos y permite filtrarlos.
+**Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
+*   **Backend**: `POST`, `GET` (sin filtros), `PUT` implementados. **PENDIENTE**: `DELETE /vehicles/:id` no implementado. **PENDIENTE**: `GET /vehicles` no implementa filtros.
+*   **Frontend**: `vehicles.html` es una página estática. **PENDIENTE**: No hay JavaScript del lado del cliente para cargar dinámicamente la lista o aplicar filtros en esta página. (La gestión dinámica existe en el panel de administración).
 
 ---
 
@@ -75,7 +76,7 @@
 ✅ Resultado: turnos y financiación conectados al backend.
 **Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
 *   **Backend**: APIs para `POST`/`GET` de servicios y finanzas implementadas.
-*   **Frontend**: ✅ **COMPLETADA**. La gestión dinámica de servicios y finanzas en el panel de administración está implementada. **PENDIENTE**: Los formularios públicos (`service.html`, `finance.html`) aún no están conectados al backend.
+*   **Frontend**: `service.html` y `finance.html` son páginas estáticas. **PENDIENTE**: Sus formularios no están conectados al backend mediante JavaScript. (La gestión dinámica existe en el panel de administración).
 
 ---
 
@@ -87,20 +88,19 @@
 ✅ Resultado: sistema integrado completo.
 **Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
 *   **Admin Panel**: El panel administrativo está bien desarrollado y cumple con la gestión para el rol de administrador.
-*   **Gestión de Usuarios (SuperAdmin)**: ✅ **COMPLETADA**. Panel para listar usuarios y cambiar sus roles.
 *   **Usuarios Logueados (Datos Propios)**: ✅ **PARCIALMENTE COMPLETADA**. Se ha implementado la página de perfil (`profile.html`) donde un usuario puede ver su propia información (usuario, email, rol). **PENDIENTE**: Aún no se muestran los turnos o solicitudes de financiación del usuario.
 *   **Validaciones JS en Frontend**: **PENDIENTE**. Validaciones básicas existen, pero validaciones JavaScript más extensas para todos los formularios podrían estar ausentes.
 
 ---
 
 ## 🔹 **Fase 7 – Extras (Semana 8, si sobra tiempo)**
+- Exportar turnos/solicitudes a PDF.  
 - Dashboard con estadísticas (ej: cantidad de autos cargados, turnos dados).  
-  *   **Implementación**: El dashboard ahora muestra estadísticas dinámicas para vehículos (total, nuevos, usados), servicios (programados, completados, pendientes) y finanzas (ingresos mensuales, solicitudes totales, aprobadas), obtenidas directamente del backend.
 - Modo oscuro/claro en frontend.  
 
 ✅ Resultado: detalles que sorprenden al profe.
-**Estado Actual**: ✅ **COMPLETADA**.
-*   La funcionalidad de dashboard con estadísticas ha sido implementada.
+**Estado Actual**: ❌ **PENDIENTE**.
+*   Ninguna de estas funcionalidades extra ha sido implementada.
 
 ---
 

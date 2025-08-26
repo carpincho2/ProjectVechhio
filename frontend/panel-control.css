@@ -1,3 +1,5 @@
+/* Panel Control Styles */
+
 :root {
     --fondo: #1e1e2f;
     --letra: #f0f0f0;
@@ -258,7 +260,7 @@ form select {
     border-radius: 6px;
     border: 1px solid var(--boton);
     background-color: var(--fondoheaderboton);
-    color: var(--letra);
+    color: var(--boton);
     font-size: 16px;
 }
 

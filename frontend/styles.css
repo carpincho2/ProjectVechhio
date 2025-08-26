@@ -1,3 +1,4 @@
+/* Index Style - Optimizado y Responsive */
 :root{
     --fondo:#1e1e2f;
     --letra:#f0f0f0;
@@ -5,6 +6,7 @@
     --fondoheaderboton:#2E3E4E;
     --hoverboton:#4f46e5;
 }
+
 * {
     margin: 0;
     padding: 0;
@@ -12,65 +14,18 @@
     transition: all 0.2s ease-in-out;
     font-family: 'Inter', sans-serif;
 }
+
 html, body {
     margin: 0;
     padding: 0;
 }
+
 body{
     background-color: var(--fondo);
+    min-height: 100vh;
 }
-.logo{
-    width: 80px;
-    height: 80px;
-    /* margin-right: 300px; */ /* Eliminado para mejor responsive */
-    margin-left: 0;
-}
-.header{
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 80px;
-    background-color: var(--fondo);
-    border-bottom: 1px solid var(--boton);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 1000;
-}
-.header a{
-    text-decoration: none;
-    color: var(--letra);
-    margin-bottom: 2px;
-    font-weight: bold;
-}
-/* Asegurar que los elementos del header no se aprieten */
-:root{
-    --fondo:#1e1e2f;
-    --letra:#f0f0f0;
-    --boton:#6366f1;
-    --fondoheaderboton:#2E3E4E;
-    --hoverboton:#4f46e5;
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    transition: all 0.2s ease-in-out;
-    font-family: 'Inter', sans-serif;
-}
-html, body {
-    margin: 0;
-    padding: 0;
-}
-body{
-    background-color: var(--fondo);
-}
-.logo{
-    width: 80px;
-    height: 80px;
-    /* margin-right: 300px; */ /* Eliminado para mejor responsive */
-    margin-left: 0;
-}
+
+/* Header Styles */
 .header{
     position: fixed;
     top: 0;
@@ -84,105 +39,183 @@ body{
     z-index: 1000;
     padding: 15px 30px;
     gap: 20px;
-    flex-wrap: wrap;
 }
-.header a{
-    text-decoration: none;
-    color: var(--letra);
-    margin-bottom: 2px;
-    font-weight: bold;
+
+.logo{
+    height: 40px;
+    width: auto;
 }
-/* Asegurar que los elementos del header no se aprieten */
+
 .header > div {
     margin: 0 10px;
     white-space: nowrap;
 }
 
-/* Logo tamaño adecuado */
-.logo {
-    height: 40px;
-    width: auto;
-}
+/* Menu Container */
 .menu-container {
     position: relative;
 }
+
 .desplegable {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: var(--fondoheaderboton);
-  padding: 10px 20px;
-  border-radius: 6px;
-  z-index: 999;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--fondoheaderboton);
+    padding: 10px 20px;
+    border-radius: 6px;
+    z-index: 999;
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
+
 .menu-container:hover .desplegable {
-  display: block;
+    display: block;
 }
+
 .desplegable ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
+
+.desplegable li {
+    margin: 5px 0;
+}
+
 .desplegable li a {
-  display: block;
-  color: var(--letra);
-  text-decoration: none;
-  padding: 5px 0;
+    display: block;
+    color: var(--letra);
+    text-decoration: none;
+    padding: 8px 0;
+    transition: color 0.3s ease;
 }
+
 .desplegable li a:hover {
-  text-decoration: underline;
+    color: var(--boton);
+    text-decoration: underline;
 }
-.register{
-    margin-right: 10px;
+
+/* Authentication Section */
+.user-auth-section {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 10px;
 }
+
 .Login,
 .register {
     background-color: var(--fondoheaderboton);
-    padding: 6px 12px;
+    padding: 8px 15px;
     border-radius: 10px;
     color: var(--letra);
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 36px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid var(--boton);
 }
+
+.Login:hover,
+.register:hover {
+    background-color: var(--boton);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.register{
+    margin-right: 10px;
+}
+
+.welcome-text {
+    color: var(--boton);
+    font-weight: 600;
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
+
+#login-section {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#user-section {
+    display: none;
+    align-items: center;
+    gap: 10px;
+}
+
+.auth-link {
+    color: var(--letra);
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background-color: var(--fondoheaderboton);
+    border: 1px solid var(--boton);
+}
+
+.auth-link:hover {
+    background-color: var(--boton);
+    transform: translateY(-2px);
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Main Content */
 .section-subtitle {
     color: var(--letra);
-    font-size: 24px;
+    font-size: 1.5rem; /* 24px */
     margin-top: 130px;
     margin-left: 25px;
     text-align: left;
 }
+
 .main-banner {
     width: 100%;
     height: 450px;
     overflow: hidden;
 }
+
 .banner-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 0;
-     object-position: top;
+    object-position: top;
 }
+
 .titlevehicles {
     color: var(--letra);
     font-size: 2.5rem;
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 40px 0 30px 0;
 }
+
 .featurevehicles {
     display: flex;
     flex-wrap: wrap;
     gap: 25px;
     justify-content: center;
-    margin: 20px 0;
+    margin: 20px 0 50px 0;
+    padding: 0 20px 40px 20px;
     border-bottom: 1px solid var(--boton);
-    padding-bottom: 20px;
 }
+
 .carbox {
     flex: 1 1 280px;
     max-width: 320px;
@@ -192,12 +225,14 @@ body{
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
 }
+
 .carbox:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 35px rgba(99, 102, 241, 0.35);
 }
+
 .carbox img {
     height: 200px;
     width: 100%;
@@ -205,27 +240,30 @@ body{
     transition: transform 0.3s ease;
     border-radius: 15px 15px 0 0;
 }
+
 .carbox img:hover {
     transform: scale(1.05);
 }
+
 .section-subtitlecar {
     font-size: 1.4rem;
     margin: 15px 20px 10px 20px;
     color: var(--letra);
 }
+
 .description {
     flex-grow: 1;
     padding: 0 20px 20px 20px;
     font-size: 0.95rem;
     color: var(--letra);
-    line-height: 1.3;
+    line-height: 1.5;
 }
 
-/* ESTILO NUEVO PARA UBICACIONES */
+/* Direcciones Section */
 .direcciones {
     background-color: #2E3E4E;
     color: var(--letra);
-    padding: 20px 40px;
+    padding: 25px 40px;
     border-radius: 10px;
     max-width: 800px;
     margin: 40px auto 20px auto;
@@ -237,6 +275,7 @@ body{
     font-size: 1rem;
     border: 1px solid var(--boton);
 }
+
 .direcciones p {
     margin: 0;
     flex: 1 1 200px;
@@ -244,6 +283,7 @@ body{
     align-items: center;
     gap: 10px;
 }
+
 .direcciones p::before {
     content: "\f3c5";
     font-family: "Font Awesome 6 Free";
@@ -252,187 +292,172 @@ body{
     font-size: 1.2rem;
 }
 
-@media (max-width: 600px) {
-    .direcciones {
-        flex-direction: column;
-        max-width: 100%;
-        padding: 20px;
-    }
-    .direcciones p {
-        flex: none;
-    }
-}
-
+/* Contact Form */
 .contactUs {
     background-color: var(--fondo);
-    padding: 40px 20px;
+    padding: 50px 20px;
     max-width: 100%;
     margin-top: 30px;
     border-bottom: 1px solid var(--boton);
 }
+
 .formulario {
     max-width: 600px;
+    margin: 0 auto;
 }
+
 .contactUs h2 {
     color: var(--letra);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 2rem;
+    text-align: center;
 }  
+
 .contactUs p {
     color: var(--letra);
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
+
 form {
     display: flex;
     flex-direction: column;
-    gap: 15px;  
+    gap: 20px;
+    background-color: rgba(46, 62, 78, 0.8);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid var(--boton);
 }  
+
 form label {
     color: var(--letra);
     font-weight: bold;
+    font-size: 1rem;
 }  
-form input,form textarea {
-    padding: 12px;
-    border-radius: 6px;
-    border: none;
+
+form input,
+form textarea {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 2px solid transparent;
     background-color: #2E3E4E;
-    color: var(--letra);
-    font-size: 16px;
-}  
-form input::placeholder,form textarea::placeholder {
     color: var(--boton);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+form input:focus,
+form textarea:focus {
+    outline: none;
+    border-color: var(--boton);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+form input::placeholder,
+form textarea::placeholder {
+    color: #94a3b8;
 }  
+
 form textarea {
     resize: vertical;
-    field-sizing: content;
-    resize: none;
-    min-height: 60px;
+    min-height: 100px;
 }
+
 .boton {
     background-color: var(--boton);
     color: var(--letra);
-    padding: 12px;
+    padding: 12px 25px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
     width: fit-content;
+    font-size: 1rem;
+    align-self: center;
+    margin-top: 10px;
 } 
+
 .boton:hover {
     background-color: var(--hoverboton);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
+
 .title{
     color: var(--letra);
 }
+
+/* Footer */
 .footer {
     background-color:var(--fondo);
     color: var(--boton);
-    padding: 30px 20px;
+    padding: 40px 20px 30px 20px;
     text-align: center;
-    margin-top: 80px;
-    margin-bottom: 0;
+    margin-top: 60px;
 }  
+
 .footer-links {
     display: flex;
     justify-content: center;
-    gap: 40px;
-    margin-bottom: 20px;
+    gap: 30px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
 } 
+
 .footer-links a {
     color: var(--boton);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+    padding: 5px 10px;
 }
+
+.footer-links a:hover {
+    color: var(--hoverboton);
+    text-decoration: underline;
+}
+
 .footer-icons{
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
+
 .footer-icons i {
-    font-size: 20px;
+    font-size: 1.5rem;
     color: var(--boton);
-    margin: 0 10px;
-    transition: color 0.3s;
+    margin: 0 12px;
+    transition: all 0.3s ease;
 }
+
 .footer-icons i:hover {
     color: var(--hoverboton);
+    transform: translateY(-3px);
 }
+
+.footer-icons img {
+    height: 24px;
+    margin: 0 12px;
+    transition: all 0.3s ease;
+}
+
 .footer-icons img:hover {
     filter: brightness(1.2);
+    transform: translateY(-3px);
 } 
+
 .footer-copy {
-    font-size: 12px;
+    font-size: 0.8rem;
     color: #777;
     margin-bottom: 0;
 }
+
 .input{
     color: var(--boton); 
 }
 
-/* Contenedor principal de autenticación */
-.user-auth-section {
-    display: flex;
-    align-items: center;
-    margin-left: auto; /* Empuja hacia la derecha */
-}
-
-/* Estilos para los links de auth */
-.auth-link {
-    color: #333;
-    text-decoration: none;
-    padding: 8px 12px;
-    margin: 0 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.auth-link:hover {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-}
-
-/* Botón de logout específico */
-.logout-btn {
-    background-color: #dc3545;
-    color: white;
-    border-color: #dc3545;
-}
-
-.logout-btn:hover {
-    background-color: #c82333;
-    border-color: #bd2130;
-}
-
-/* Texto de bienvenida */
-.welcome-text {
-    color: var(--boton);
-    font-weight: 600;
-    margin-right: 10px;
-}
-
-/* Ocultar/mostrar secciones */
-#login-section {
-    display: flex;
-    gap: 10px;
-}
-
-#user-section {
-    display: none;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Asegurar que el header tenga espacio */
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 30px;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
+/* Utility Classes */
 .hidden {
     display: none !important;
 }
@@ -441,376 +466,435 @@ form textarea {
     display: flex !important;
 }
 
-@media (max-width: 768px) {
+/* Responsive Design */
+
+/* Large Tablet */
+@media (max-width: 1024px) {
+    .header {
+        padding: 15px 25px;
+        height: 70px;
+    }
+    
+    .logo {
+        height: 35px;
+    }
+    
+    .main-banner {
+        height: 400px;
+    }
+    
+    .titlevehicles {
+        font-size: 2.2rem;
+        margin: 30px 0 25px 0;
+    }
+    
+    .featurevehicles {
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+    
     .carbox {
+        flex: 1 1 250px;
+        max-width: 280px;
+    }
+    
+    .carbox img {
+        height: 180px;
+    }
+    
+    .direcciones {
+        padding: 20px 30px;
         max-width: 90%;
     }
+    
+    .contactUs {
+        padding: 40px 15px;
+    }
+    
+    .contactUs h2 {
+        font-size: 1.8rem;
+    }
+    
+    form {
+        padding: 25px;
+        gap: 15px;
+    }
 }
 
+/* Tablet */
 @media (max-width: 768px) {
-    .featurevehicles {
-        gap: 15px; /* Reducir el espacio entre elementos */
+    .header {
+        padding: 12px 20px;
+        height: 65px;
+        gap: 15px;
     }
+    
+    .logo {
+        height: 32px;
+    }
+    
+    .section-subtitle {
+        font-size: 1.3rem;
+        margin-top: 110px;
+        margin-left: 15px;
+    }
+    
+    .main-banner {
+        height: 350px;
+    }
+    
+    .titlevehicles {
+        font-size: 2rem;
+        margin: 25px 0 20px 0;
+    }
+    
+    .featurevehicles {
+        gap: 15px;
+        padding: 0 15px 30px 15px;
+        margin-bottom: 30px;
+    }
+    
     .carbox {
-        flex: 1 1 100%; /* Ocupar todo el ancho disponible */
-        max-width: 400px; /* Limitar el ancho máximo en pantallas medianas */
+        flex: 1 1 100%;
+        max-width: 400px;
+    }
+    
+    .section-subtitlecar {
+        font-size: 1.2rem;
+        margin: 12px 15px 8px 15px;
+    }
+    
+    .description {
+        padding: 0 15px 15px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .direcciones {
+        flex-direction: column;
+        max-width: 100%;
+        padding: 20px;
+        margin: 30px auto 15px auto;
+    }
+    
+    .direcciones p {
+        flex: none;
+        justify-content: center;
+        text-align: center;
+        padding: 8px 0;
+    }
+    
+    .contactUs {
+        padding: 30px 15px;
+        margin-top: 20px;
+    }
+    
+    .contactUs h2 {
+        font-size: 1.6rem;
+        margin-bottom: 12px;
+    }
+    
+    .contactUs p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    form {
+        padding: 20px;
+        gap: 12px;
+    }
+    
+    .footer {
+        padding: 30px 15px 25px 15px;
+        margin-top: 40px;
+    }
+    
+    .footer-links {
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+        font-size: 0.8rem;
+    }
+    
+    .welcome-text {
+        font-size: 0.8rem;
+    }
+    
+    .Login,
+    .register,
+    .auth-link {
+        padding: 6px 12px;
+        font-size: 0.85rem;
     }
 }
 
+/* Mobile */
 @media (max-width: 480px) {
-    .featurevehicles {
+    .header {
+        padding: 10px 15px;
+        height: 60px;
         gap: 10px;
     }
-    .carbox {
-        max-width: 100%; /* Asegurar que ocupe el 100% en pantallas muy pequeñas */
+    
+    .logo {
+        height: 28px;
     }
-}
-
-/* Logo tamaño adecuado */
-.logo {
-    height: 40px;
-    width: auto;
-}
-.menu-container {
-    position: relative;
-}
-.desplegable {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: var(--fondoheaderboton);
-  padding: 10px 20px;
-  border-radius: 6px;
-  z-index: 999;
-}
-.menu-container:hover .desplegable {
-  display: block;
-}
-.desplegable ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.desplegable li a {
-  display: block;
-  color: var(--letra);
-  text-decoration: none;
-  padding: 5px 0;
-}
-.desplegable li a:hover {
-  text-decoration: underline;
-}
-.register{
-    margin-right: 10px;
-}
-.Login,
-.register {
-    background-color: var(--fondoheaderboton);
-    padding: 6px 12px;
-    border-radius: 10px;
-    color: var(--letra);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 36px;
-}
-.section-subtitle {
-    color: var(--letra);
-    font-size: 24px;
-    margin-top: 130px;
-    margin-left: 25px;
-    text-align: left;
-}
-.main-banner {
-    width: 100%;
-    height: 450px;
-    overflow: hidden;
-}
-.banner-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 0;
-     object-position: top;
-}
-.titlevehicles {
-    color: var(--letra);
-    font-size: 2.5rem;
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-.featurevehicles {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
-    justify-content: center;
-    margin: 20px 0;
-    border-bottom: 1px solid var(--boton);
-    padding-bottom: 20px;
-}
-.carbox {
-    flex: 1 1 280px;
-    max-width: 320px;
-    background-color: rgba(99, 102, 241, 0.15);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.carbox:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 35px rgba(99, 102, 241, 0.35);
-}
-.carbox img {
-    height: 200px;
-    width: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-    border-radius: 15px 15px 0 0;
-}
-.carbox img:hover {
-    transform: scale(1.05);
-}
-.section-subtitlecar {
-    font-size: 1.4rem;
-    margin: 15px 20px 10px 20px;
-    color: var(--letra);
-}
-.description {
-    flex-grow: 1;
-    padding: 0 20px 20px 20px;
-    font-size: 0.95rem;
-    color: var(--letra);
-    line-height: 1.3;
-}
-
-/* ESTILO NUEVO PARA UBICACIONES */
-.direcciones {
-    background-color: #2E3E4E;
-    color: var(--letra);
-    padding: 20px 40px;
-    border-radius: 10px;
-    max-width: 800px;
-    margin: 40px auto 20px auto;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    gap: 20px;
-    font-size: 1rem;
-    border: 1px solid var(--boton);
-}
-.direcciones p {
-    margin: 0;
-    flex: 1 1 200px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.direcciones p::before {
-    content: "\f3c5";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    color: var(--boton);
-    font-size: 1.2rem;
-}
-
-@media (max-width: 600px) {
-    .direcciones {
-        flex-direction: column;
+    
+    .section-subtitle {
+        font-size: 1.1rem;
+        margin-top: 90px;
+        margin-left: 10px;
+    }
+    
+    .main-banner {
+        height: 280px;
+    }
+    
+    .titlevehicles {
+        font-size: 1.7rem;
+        margin: 20px 0 15px 0;
+    }
+    
+    .featurevehicles {
+        gap: 12px;
+        padding: 0 10px 25px 10px;
+        margin-bottom: 25px;
+    }
+    
+    .carbox {
         max-width: 100%;
-        padding: 20px;
+        border-radius: 12px;
     }
+    
+    .carbox img {
+        height: 160px;
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .section-subtitlecar {
+        font-size: 1.1rem;
+        margin: 10px 12px 6px 12px;
+    }
+    
+    .description {
+        padding: 0 12px 12px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .direcciones {
+        padding: 15px 10px;
+    }
+    
     .direcciones p {
-        flex: none;
+        font-size: 0.9rem;
+    }
+    
+    .direcciones p::before {
+        font-size: 1rem;
+    }
+    
+    .contactUs {
+        padding: 25px 10px;
+        margin-top: 15px;
+    }
+    
+    .contactUs h2 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+    
+    .contactUs p {
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+    
+    form {
+        padding: 15px;
+        gap: 10px;
+    }
+    
+    form input,
+    form textarea {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+        color: var(--boton);
+    }
+    
+    .boton {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .footer {
+        padding: 25px 10px 20px 10px;
+        margin-top: 30px;
+    }
+    
+    .footer-links {
+        gap: 15px;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+    
+    .footer-icons i {
+        font-size: 1.3rem;
+        margin: 0 8px;
+    }
+    
+    .footer-copy {
+        font-size: 0.7rem;
+    }
+    
+    .user-auth-section {
+        gap: 5px;
+    }
+    
+    .welcome-text {
+        font-size: 0.75rem;
+        margin-right: 5px;
+    }
+    
+    .Login,
+    .register,
+    .auth-link {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+        border-radius: 8px;
     }
 }
 
-.contactUs {
-    background-color: var(--fondo);
-    padding: 40px 20px;
-    max-width: 100%;
-    margin-top: 30px;
-    border-bottom: 1px solid var(--boton);
-}
-.formulario {
-    max-width: 600px;
-}
-.contactUs h2 {
-    color: var(--letra);
-    margin-bottom: 10px;
-}  
-.contactUs p {
-    color: var(--letra);
-    margin-bottom: 20px;
-}
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;  
-}  
-form label {
-    color: var(--letra);
-    font-weight: bold;
-}  
-form input,form textarea {
-    padding: 12px;
-    border-radius: 6px;
-    border: none;
-    background-color: #2E3E4E;
-    color: var(--letra);
-    font-size: 16px;
-}  
-form input::placeholder,form textarea::placeholder {
-    color: var(--boton);
-}  
-form textarea {
-    resize: vertical;
-    field-sizing: content;
-    resize: none;
-    min-height: 60px;
-}
-.boton {
-    background-color: var(--boton);
-    color: var(--letra);
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
-    width: fit-content;
-} 
-.boton:hover {
-    background-color: var(--hoverboton);
-}
-.title{
-    color: var(--letra);
-}
-.footer {
-    background-color:var(--fondo);
-    color: var(--boton);
-    padding: 30px 20px;
-    text-align: center;
-    margin-top: 80px;
-    margin-bottom: 0;
-}  
-.footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    margin-bottom: 20px;
-} 
-.footer-links a {
-    color: var(--boton);
-    text-decoration: none;
-    font-size: 14px;
-}
-.footer-icons{
-    margin-bottom: 15px;
-}
-.footer-icons i {
-    font-size: 20px;
-    color: var(--boton);
-    margin: 0 10px;
-    transition: color 0.3s;
-}
-.footer-icons i:hover {
-    color: var(--hoverboton);
-}
-.footer-icons img:hover {
-    filter: brightness(1.2);
-} 
-.footer-copy {
-    font-size: 12px;
-    color: #777;
-    margin-bottom: 0;
-}
-.input{
-    color: var(--boton); 
-}
-
-/* Contenedor principal de autenticación */
-.user-auth-section {
-    display: flex;
-    align-items: center;
-    margin-left: auto; /* Empuja hacia la derecha */
-}
-
-/* Estilos para los links de auth */
-.auth-link {
-    color: #333;
-    text-decoration: none;
-    padding: 8px 12px;
-    margin: 0 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.auth-link:hover {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-}
-
-/* Botón de logout específico */
-.logout-btn {
-    background-color: #dc3545;
-    color: white;
-    border-color: #dc3545;
-}
-
-.logout-btn:hover {
-    background-color: #c82333;
-    border-color: #bd2130;
-}
-
-/* Texto de bienvenida */
-.welcome-text {
-    color: var(--boton);
-    font-weight: 600;
-    margin-right: 10px;
-}
-
-/* Ocultar/mostrar secciones */
-#login-section {
-    display: flex;
-    gap: 10px;
-}
-
-#user-section {
-    display: none;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Asegurar que el header tenga espacio */
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 30px;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.hidden {
-    display: none !important;
-}
-
-.d-flex {
-    display: flex !important;
-}
-
-@media (max-width: 768px) {
+/* Mobile Small */
+@media (max-width: 320px) {
+    .header {
+        padding: 8px 10px;
+        height: 55px;
+    }
+    
+    .logo {
+        height: 24px;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
+        margin-top: 80px;
+        margin-left: 8px;
+    }
+    
+    .main-banner {
+        height: 240px;
+    }
+    
+    .titlevehicles {
+        font-size: 1.5rem;
+        margin: 15px 0 12px 0;
+    }
+    
+    .featurevehicles {
+        gap: 10px;
+        padding: 0 5px 20px 5px;
+    }
+    
     .carbox {
-        max-width: 90%;
+        border-radius: 10px;
+    }
+    
+    .carbox img {
+        height: 140px;
+        border-radius: 10px 10px 0 0;
+    }
+    
+    .section-subtitlecar {
+        font-size: 1rem;
+    }
+    
+    .description {
+        font-size: 0.8rem;
+    }
+    
+    form {
+        padding: 12px;
+        gap: 8px;
+    }
+    
+    form input,
+    form textarea {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+        color: var(--boton);
+    }
+    
+    .boton {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.75rem;
+    }
+    
+    .footer-icons i {
+        font-size: 1.2rem;
+    }
+}
+
+/* Large Screens */
+@media (min-width: 1200px) {
+    .header {
+        padding: 15px 40px;
+    }
+    
+    .main-banner {
+        height: 500px;
+    }
+    
+    .titlevehicles {
+        font-size: 2.8rem;
+    }
+    
+    .featurevehicles {
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto 60px auto;
+    }
+    
+    .carbox {
+        flex: 1 1 300px;
+        max-width: 350px;
+    }
+    
+    .carbox img {
+        height: 220px;
+    }
+    
+    .direcciones {
+        max-width: 900px;
+        padding: 30px 50px;
+    }
+    
+    .contactUs {
+        padding: 60px 20px;
+    }
+    
+    .contactUs h2 {
+        font-size: 2.2rem;
+    }
+    
+    form {
+        padding: 40px;
+        gap: 25px;
+        max-width: 650px;
+    }
+    
+    form input,
+    form textarea {
+        padding: 14px 16px;
+        font-size: 1.1rem;
+        color: var(--boton);
+    }
+    
+    .boton {
+        padding: 14px 30px;
+        font-size: 1.1rem;
     }
 }
