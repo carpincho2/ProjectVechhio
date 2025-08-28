@@ -11,6 +11,7 @@
   --letra: #f0f0f0;
   --boton: #6366f1;
   --fondoheaderboton: #2E3E4E;
+  --botonhover: #8082f1;
 }
 
 * {
@@ -175,7 +176,7 @@ button:active {
 .register-link {
   text-align: center;
   margin-top: 20px;
-  color: var(--text-color);
+  color: var(--botonhover);
   font-size: 0.9375rem;
 }
 

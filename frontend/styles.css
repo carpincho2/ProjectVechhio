@@ -2,7 +2,7 @@
 :root{
     --fondo:#1e1e2f;
     --letra:#f0f0f0;
-    --boton:#6366f1;
+    --boton:#9056ee;
     --fondoheaderboton:#2E3E4E;
     --hoverboton:#4f46e5;
 }
@@ -40,7 +40,10 @@ body{
     padding: 15px 30px;
     gap: 20px;
 }
-
+.header a{
+    text-decoration: none;
+    color: var(--boton);
+}
 .logo{
     height: 40px;
     width: auto;
@@ -121,7 +124,7 @@ body{
 
 .Login:hover,
 .register:hover {
-    background-color: var(--boton);
+   /* background-color: var(--hoverboton);*/
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
@@ -150,7 +153,7 @@ body{
 }
 
 .auth-link {
-    color: var(--letra);
+    color: var(--boton);
     text-decoration: none;
     padding: 8px 12px;
     border-radius: 6px;
@@ -161,7 +164,7 @@ body{
 }
 
 .auth-link:hover {
-    background-color: var(--boton);
+    background-color: var(--hoverboton);
     transform: translateY(-2px);
 }
 
