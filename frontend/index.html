@@ -32,19 +32,8 @@
         </div>
         
         <!-- SECCIÓN DE USUARIO (LOGUEADO/NO LOGUEADO) -->
-        <div class="user-auth-section">
-            <!-- Usuario NO logueado -->
-            <div id="login-section">
-                <a href="login.html" class="auth-link">Login</a>
-                <a href="register.html" class="auth-link">Register</a>
-            </div>
-            
-            <!-- Usuario logueado -->
-            <div id="user-section" class="hidden">
-                <span class="welcome-text">Hi, <span id="user-name"></span></span>
-                <a href="/profile.html" class="auth-link">Profile</a>
-                <a href="/api/auth/logout" class="auth-link logout-btn">Logout</a>
-            </div>
+        <div id="auth-container" class="user-auth-section">
+            <!-- Este contenido se generará dinámicamente -->
         </div>
     </header>
     <div class="main-banner">
@@ -105,8 +94,43 @@
             </div>              
             <p class="footer-copy">© 2024 CarPane. All rights reserved.</p>
     </footer>
-    <!-- js  -->
     
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('jwtToken');
+            const userName = localStorage.getItem('userName');
+            const authContainer = document.getElementById('auth-container');
 
+            if (token && userName) {
+                // Usuario logueado
+                authContainer.innerHTML = `
+                    <div id="user-section">
+                        <span class="welcome-text">Hi, ${userName}</span>
+                        <a href="/profile.html" class="auth-link">Profile</a>
+                        <a href="#" id="logout-btn" class="auth-link">Logout</a>
+                    </div>
+                `;
+                
+                const logoutBtn = document.getElementById('logout-btn');
+                if(logoutBtn) {
+                    logoutBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        localStorage.removeItem('jwtToken');
+                        localStorage.removeItem('userName');
+                        localStorage.removeItem('userRole');
+                        window.location.reload(); // Recargar la página para reflejar el estado de logout
+                    });
+                }
+            } else {
+                // Usuario NO logueado
+                authContainer.innerHTML = `
+                    <div id="login-section">
+                        <a href="login.html" class="auth-link">Login</a>
+                        <a href="register.html" class="auth-link">Register</a>
+                    </div>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>

@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const db = require('../models'); // Importa la instancia de la base de datos
 const { verifyJWT, isAdmin } = require('../middlewares/authmiddleware'); // Importa los middlewares de autenticación
+const vehicleController = require('../controllers/vehiclescontrol');
 
 // Configuración de Multer para guardar las imágenes
 const storage = multer.diskStorage({
@@ -18,15 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Ruta para obtener todos los vehículos
-router.get('/', async (req, res) => {
-    try {
-        const vehicles = await db.Vehiculo.findAll();
-        res.status(200).json(vehicles);
-    } catch (error) {
-        console.error('Error al obtener vehículos:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
+router.get('/', vehicleController.getAllVehicles);
 
 // Ruta para obtener un vehículo por ID
 router.get('/:id', verifyJWT, isAdmin, async (req, res) => {
@@ -83,8 +76,6 @@ router.put('/:id', verifyJWT, isAdmin, upload.single('image'), async (req, res) 
     }
 });
 
-router.delete('/:id', verifyJWT, isAdmin, (req, res) => {
-    res.status(501).json({ message: 'Eliminar vehículo no implementado aún.' });
-});
+router.delete('/:id', verifyJWT, isAdmin, vehicleController.deleteVehicle);
 
 module.exports = router;

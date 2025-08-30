@@ -1,5 +1,3 @@
-// Este archivo ya no se conecta a la DB.
-// Solo define el esquema del modelo en una función que será llamada por index.js
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         id: {

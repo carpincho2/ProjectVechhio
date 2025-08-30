@@ -16,7 +16,7 @@
 - Configurar `/backend/config/database.js` para usar SQLite.  
 
 ✅ Resultado: backend inicial + conexión a DB lista.
-**Estado Actual**: ✅ **COMPLsETADA**.
+**Estado Actual**: ✅ **COMPLETADA**.
 
 ---
 
@@ -59,9 +59,9 @@
   - Filtros dinámicos (marca, precio, año).  
 
 ✅ Resultado: catálogo dinámico de autos.
-**Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
-*   **Backend**: `POST`, `GET` (sin filtros), `PUT` implementados. **PENDIENTE**: `DELETE /vehicles/:id` no implementado. **PENDIENTE**: `GET /vehicles` no implementa filtros.
-*   **Frontend**: `vehicles.html` es una página estática. **PENDIENTE**: No hay JavaScript del lado del cliente para cargar dinámicamente la lista o aplicar filtros en esta página. (La gestión dinámica existe en el panel de administración).
+**Estado Actual**: ✅ **COMPLETADA**.
+*   **Backend**: CRUD completo, incluyendo eliminación y filtros dinámicos.
+*   **Frontend**: La página pública `vehicles.html` carga dinámicamente los vehículos y permite filtrarlos, conectándose correctamente al backend.
 
 ---
 
@@ -76,7 +76,9 @@
 ✅ Resultado: turnos y financiación conectados al backend.
 **Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
 *   **Backend**: APIs para `POST`/`GET` de servicios y finanzas implementadas.
-*   **Frontend**: `service.html` y `finance.html` son páginas estáticas. **PENDIENTE**: Sus formularios no están conectados al backend mediante JavaScript. (La gestión dinámica existe en el panel de administración).
+*   **Frontend**:
+    *   `service.html`: ✅ **Completado**. El formulario está conectado al backend y permite solicitar turnos.
+    *   `finance.html`: ❌ **PENDIENTE**. La página es estática y su formulario no se conecta con el backend.
 
 ---
 
@@ -116,8 +118,8 @@
 **Estado Actual de la Entrega Final**:
 *   **Web portable**: ✅ **COMPLETADA**. La estructura con `nodejs/` y los scripts `scripsts/` sugieren portabilidad.
 *   **Funcionalidades principales**:
-    *   **Registro/login**: ✅ **COMPLETADA** (con desviación a sesiones).
-    *   **Catálogo de autos**: ⚠️ **PARCIALMENTE COMPLETADA**. Backend casi completo, frontend público estático.
-    *   **Turnos de taller**: ⚠️ **PARCIALMENTE COMPLETADA**. Backend completo, frontend público estático.
-    *   **Solicitudes de financiación**: ⚠️ **PARCIALMENTE COMPLETADA**. Backend completo, frontend público estático.
+    *   **Registro/login**: ✅ **COMPLETADA**.
+    *   **Catálogo de autos**: ✅ **COMPLETADA**. El catálogo público es dinámico y funcional.
+    *   **Turnos de taller**: ✅ **COMPLETADA**. El formulario de solicitud de turnos es funcional.
+    *   **Solicitudes de financiación**: ⚠️ **PARCIALMENTE COMPLETADA**. Backend listo, pero el formulario del frontend no está conectado.
 *   **Extras opcionales**: ❌ **PENDIENTE**.

@@ -6,12 +6,12 @@
     <link rel="shortcut icon" href="/logos/favicon_io/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="vehicles.css">
+    <link rel="stylesheet" href="vechicles.css">
     <title>Vehicles</title>
 </head>
 <body>
     <header class="header">
-        <div >
+        <div>
             <a href="index.html"><img src="logo.png" alt="" class="logo"></a>
         </div>
         <div class="vehicles">
@@ -29,11 +29,8 @@
         <div class="aboutUs">
             <a href="aboutUs.html">About Us</a>
         </div>
-        <div class="Login">
-            <a href="login.html">login</a>
-        </div>
-        <div class="register">
-            <a href="register.html">Register</a>
+        <div id="auth-container" class="user-auth-section">
+            <!-- Este contenido se generará dinámicamente -->
         </div>
     </header>
     <section class="vehicles-section">
@@ -78,5 +75,42 @@
         <div id="vehicle-list" class="vehicle-list"></div>
       </section>
     <script src="vehicles.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('jwtToken');
+            const userName = localStorage.getItem('userName');
+            const authContainer = document.getElementById('auth-container');
+
+            if (token && userName) {
+                // Usuario logueado
+                authContainer.innerHTML = `
+                    <div id="user-section">
+                        <span class="welcome-text">Hi, ${userName}</span>
+                        <a href="/profile.html" class="auth-link">Profile</a>
+                        <a href="#" id="logout-btn" class="auth-link">Logout</a>
+                    </div>
+                `;
+                
+                const logoutBtn = document.getElementById('logout-btn');
+                if(logoutBtn) {
+                    logoutBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        localStorage.removeItem('jwtToken');
+                        localStorage.removeItem('userName');
+                        localStorage.removeItem('userRole');
+                        window.location.reload();
+                    });
+                }
+            } else {
+                // Usuario NO logueado
+                authContainer.innerHTML = `
+                    <div id="login-section">
+                        <a href="login.html" class="auth-link">Login</a>
+                        <a href="register.html" class="auth-link">Register</a>
+                    </div>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>

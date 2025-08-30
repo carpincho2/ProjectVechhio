@@ -66,7 +66,7 @@ async function startServer() {
         await db.sequelize.authenticate();
         console.log('✅ Base de datos conectada y autenticada.');
 
-        await db.sequelize.sync({ force: false }); // force: true resetea la DB
+        await db.sequelize.sync({ alter: true }); // alter: true actualiza las tablas para que coincidan con los modelos
         console.log('✅ Modelos sincronizados con la base de datos.');
         
         app.listen(PORT, '0.0.0.0', () => {

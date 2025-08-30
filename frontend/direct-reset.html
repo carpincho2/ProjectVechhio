@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="loginregisterstyle.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="/logos/favicon_io/favicon.ico" type="image/x-icon">
+    <title>Cambio Directo de Contraseña</title>
+</head>
+<body>
+    <form id="directResetForm">
+        <h2>Cambio Directo de Contraseña</h2>
+        <p style="text-align: center; color: #ffc107; margin-bottom: 15px;">ADVERTENCIA: Método no seguro, solo para desarrollo.</p>
+
+        <div id="message" class="message" style="display:none;"></div>
+
+        <label for="username">Nombre de Usuario</label>
+        <input type="text" id="username" name="username" required class="input">
+
+        <label for="password">Nueva Contraseña</label>
+        <input type="password" id="password" name="password" required class="input">
+
+        <button type="submit">Cambiar Contraseña</button>
+
+        <div class="register-link">
+            <p><a href="/login.html">Volver al Login</a></p>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('directResetForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            
+            try {
+                const response = await fetch('/api/auth/direct-reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.textContent = data.message;
+                    messageDiv.className = 'message success';
+                } else {
+                    messageDiv.textContent = data.error || 'Ocurrió un error.';
+                    messageDiv.className = 'message error';
+                }
+                messageDiv.style.display = 'block';
+
+            } catch (error) {
+                messageDiv.textContent = 'Error de conexión con el servidor.';
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
