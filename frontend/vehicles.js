@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 vehicleListContainer.appendChild(vehicleCard);
             });
 
+            // Línea de depuración añadida
+            console.log('DEBUG: Estado de FiltersContainer:', document.querySelector('.filters'));
+
         } catch (error) {
             console.error('Error al cargar los vehículos:', error);
             vehicleListContainer.innerHTML = '<p style="color: red; text-align: center;">Error al cargar los vehículos. Por favor, intente más tarde.</p>';

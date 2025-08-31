@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Vehiculo = sequelize.define('Vehiculo', {
+    const Vehicle = sequelize.define('Vehicle', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -47,13 +47,13 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         timestamps: true,
-        tableName: 'vehiculos' // Nombre de la tabla en la DB
+        tableName: 'vehicles' // Nombre de la tabla en la DB
     });
 
     // Opcional: Definir asociaciones si las hay
-    // Vehiculo.associate = (models) => {
-    //     Vehiculo.hasMany(models.Service, { foreignKey: 'vehicleId' });
+    // Vehicle.associate = (models) => {
+    //     Vehicle.hasMany(models.Service, { foreignKey: 'vehicleId' });
     // };
 
-    return Vehiculo;
+    return Vehicle;
 };

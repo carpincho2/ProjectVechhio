@@ -64,16 +64,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await response.json();
 
                 if (response.ok) {
+                    console.log('DEBUG: Intentando guardar en localStorage (Login):', data.token, data.user.role, data.user.username);
                     localStorage.setItem('jwtToken', data.token);
                     localStorage.setItem('userRole', data.user.role);
                     localStorage.setItem('userName', data.user.username);
-
-                    displayMessage(successMessageElement, data.message, 'success');
+                    console.log('DEBUG: Valores guardados en localStorage (Login):', localStorage.getItem('jwtToken'), localStorage.getItem('userRole'), localStorage.getItem('userName'));
                     
                     // Redirect based on role
                     if (data.user.role === 'admin' || data.user.role === 'superadmin') {
                         window.location.href = '/panel-control.html';
-                    } else {
+                    }
+                    else {
                         window.location.href = '/index.html';
                     }
                 } else {
@@ -119,11 +120,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await response.json();
 
                 if (response.ok) {
+                    console.log('DEBUG: Intentando guardar en localStorage (Registro):', data.token, data.user.role, data.user.username);
                     localStorage.setItem('jwtToken', data.token);
                     localStorage.setItem('userRole', data.user.role);
                     localStorage.setItem('userName', data.user.username);
-
-                    displayMessage(successMessageElement, data.message, 'success');
+                    console.log('DEBUG: Valores guardados en localStorage (Registro):', localStorage.getItem('jwtToken'), localStorage.getItem('userRole'), localStorage.getItem('userName'));
                     // Redirect after successful registration
                     if (data.user.role === 'admin' || data.user.role === 'superadmin') {
                         window.location.href = '/panel-control.html';

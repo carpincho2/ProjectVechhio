@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-                model: 'Vehiculos', // Nombre de la tabla a la que hace referencia
+                model: 'vehicles', // Nombre de la tabla a la que hace referencia
                 key: 'id'
             }
         }
@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     // Opcional: Definir asociaciones si las hay
     Service.associate = (models) => {
         Service.belongsTo(models.User, { foreignKey: 'userId' });
-        Service.belongsTo(models.Vehiculo, { foreignKey: 'vehicleId' }); // Asumiendo que tienes un modelo Vehiculo
+        Service.belongsTo(models.Vehicle, { foreignKey: 'vehicleId' }); // Asumiendo que tienes un modelo Vehiculo
     };
 
     return Service;

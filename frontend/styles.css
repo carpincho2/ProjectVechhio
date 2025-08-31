@@ -147,7 +147,7 @@ body{
 }
 
 #user-section {
-    display: none;
+    display: flex; /* Changed from none to flex */
     align-items: center;
     gap: 10px;
 }

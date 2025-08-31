@@ -2,80 +2,38 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const db = require('../models'); // Importa la instancia de la base de datos
-const { verifyJWT, isAdmin } = require('../middlewares/authmiddleware'); // Importa los middlewares de autenticación
+const { verifyJWT, isAdmin } = require('../middlewares/authmiddleware');
 const vehicleController = require('../controllers/vehiclescontrol');
 
 // Configuración de Multer para guardar las imágenes
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+        cb(null, 'uploads/'); // Directorio donde se guardarán las imágenes
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname)); // Nombre de archivo único
+        // Genera un nombre de archivo único con la fecha actual y la extensión original
+        cb(null, Date.now() + path.extname(file.originalname));
     }
 });
 
 const upload = multer({ storage: storage });
 
-// Ruta para obtener todos los vehículos
+// --- Rutas de Vehículos --- //
+
+// Obtener todos los vehículos (Ruta Pública)
 router.get('/', vehicleController.getAllVehicles);
 
-// Ruta para obtener un vehículo por ID
-router.get('/:id', verifyJWT, isAdmin, async (req, res) => {
-    try {
-        const vehicle = await db.Vehiculo.findByPk(req.params.id);
-        if (!vehicle) {
-            return res.status(404).json({ error: 'Vehículo no encontrado' });
-        }
-        res.status(200).json(vehicle);
-    } catch (error) {
-        console.error('Error al obtener vehículo por ID:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
+// Obtener un vehículo por su ID (Ruta Privada - Admin)
+router.get('/:id', verifyJWT, isAdmin, vehicleController.getVehicleById);
 
-// Ruta para crear un nuevo vehículo (solo admin)
+// Crear un nuevo vehículo (Ruta Privada - Admin)
+// upload.single('image') procesa un único archivo que venga en el campo 'image' del formulario
+router.post('/', verifyJWT, isAdmin, upload.single('image'), vehicleController.createVehicle);
 
-router.post('/', verifyJWT, isAdmin, upload.single('image'), async (req, res) => {
-    try {
-        const { brand, model, year, price, color, mileage, status, condition, description } = req.body;
-        const image = req.file ? `/uploads/${req.file.filename}` : null;
-        const newVehicle = await db.Vehiculo.create({ brand, model, year, price, color, mileage, status, condition, description, image });
-        res.status(201).json(newVehicle);
-    } catch (error) {
-        console.error('Error al crear vehículo:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
+// Actualizar un vehículo existente (Ruta Privada - Admin)
+router.put('/:id', verifyJWT, isAdmin, upload.single('image'), vehicleController.updateVehicle);
 
-// Ruta para actualizar un vehículo (solo admin)
-router.put('/:id', verifyJWT, isAdmin, upload.single('image'), async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { brand, model, year, price, color, mileage, status, condition, description } = req.body;
-        
-        const vehicle = await db.Vehiculo.findByPk(id);
-        if (!vehicle) {
-            return res.status(404).json({ error: 'Vehículo no encontrado' });
-        }
-
-        const updateData = {
-            brand, model, year, price, color, mileage, status, condition, description
-        };
-
-        if (req.file) {
-            updateData.image = `/uploads/${req.file.filename}`;
-        }
-
-        await vehicle.update(updateData);
-        res.status(200).json(vehicle);
-    } catch (error) {
-        console.error('Error al actualizar vehículo:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
-
+// Eliminar un vehículo (Ruta Privada - Admin)
 router.delete('/:id', verifyJWT, isAdmin, vehicleController.deleteVehicle);
 
 module.exports = router;

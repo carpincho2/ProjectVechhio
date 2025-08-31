@@ -6,7 +6,59 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="modulos.js" type="module" defer></script>
+    <script type="module" defer>
+        import { checkLogin } from './modulos.js';
+
+        function updateAuthHeader() {
+            const token = localStorage.getItem('jwtToken');
+            const userName = localStorage.getItem('userName');
+            const authContainer = document.getElementById('auth-container');
+            console.log('DEBUG index.html: updateAuthHeader ejecutado. Token:', token, 'UserName:', userName); // ADDED
+
+            if (token && userName) {
+                console.log('DEBUG index.html: Mostrando sección de usuario.'); // ADDED
+                // Usuario logueado
+                authContainer.innerHTML = `
+                    <div id="user-section">
+                        <span class="welcome-text">Hi, ${userName}</span>
+                        <a href="/profile.html" class="auth-link">Profile</a>
+                        <a href="#" id="logout-btn" class="auth-link">Logout</a>
+                    </div>
+                `;
+                const logoutBtn = document.getElementById('logout-btn');
+                if(logoutBtn) {
+                    logoutBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        localStorage.removeItem('jwtToken');
+                        localStorage.removeItem('userName');
+                        localStorage.removeItem('userRole');
+                        window.location.reload();
+                    });
+                }
+            } else {
+                console.log('DEBUG index.html: Mostrando sección de login/registro.'); // ADDED
+                // Usuario NO logueado
+                authContainer.innerHTML = `
+                    <div id="login-section">
+                        <a href="login.html" class="auth-link">Login</a>
+                        <a href="register.html" class="auth-link">Register</a>
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkLogin(); // Ensure session is checked and localStorage is consistent
+            updateAuthHeader(); // Then update the UI
+        });
+        // También llamar en pageshow para manejar la caché del navegador (bfcache)
+        window.addEventListener('pageshow', async function(event) {
+            if (event.persisted) {
+                await checkLogin(); // Re-check on pageshow
+                updateAuthHeader();
+            }
+        });
+    </script>
     <link rel="shortcut icon" href="/logos/favicon_io/favicon.ico" type="image/x-icon">
     <title>dealership</title>
 </head>
@@ -31,7 +83,6 @@
             <a href="aboutUs.html">About Us</a>
         </div>
         
-        <!-- SECCIÓN DE USUARIO (LOGUEADO/NO LOGUEADO) -->
         <div id="auth-container" class="user-auth-section">
             <!-- Este contenido se generará dinámicamente -->
         </div>
@@ -95,42 +146,5 @@
             <p class="footer-copy">© 2024 CarPane. All rights reserved.</p>
     </footer>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem('jwtToken');
-            const userName = localStorage.getItem('userName');
-            const authContainer = document.getElementById('auth-container');
-
-            if (token && userName) {
-                // Usuario logueado
-                authContainer.innerHTML = `
-                    <div id="user-section">
-                        <span class="welcome-text">Hi, ${userName}</span>
-                        <a href="/profile.html" class="auth-link">Profile</a>
-                        <a href="#" id="logout-btn" class="auth-link">Logout</a>
-                    </div>
-                `;
-                
-                const logoutBtn = document.getElementById('logout-btn');
-                if(logoutBtn) {
-                    logoutBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        localStorage.removeItem('jwtToken');
-                        localStorage.removeItem('userName');
-                        localStorage.removeItem('userRole');
-                        window.location.reload(); // Recargar la página para reflejar el estado de logout
-                    });
-                }
-            } else {
-                // Usuario NO logueado
-                authContainer.innerHTML = `
-                    <div id="login-section">
-                        <a href="login.html" class="auth-link">Login</a>
-                        <a href="register.html" class="auth-link">Register</a>
-                    </div>
-                `;
-            }
-        });
-    </script>
 </body>
 </html>

@@ -15,6 +15,9 @@ Los principales archivos que orquestan este flujo son:
 *   `frontend/login.html`: Página HTML para el inicio de sesión.
 *   `frontend/register.html`: Página HTML para el registro de nuevos usuarios.
 *   `frontend/login.js`: Script JavaScript que maneja la lógica del lado del cliente para el login y la visualización de mensajes.
+*   `frontend/modulos.js`: Módulo JavaScript que contiene funciones compartidas, incluyendo la verificación del estado de la sesión (`checkLogin`).
+*   `frontend/index.html`: Página principal que ahora coordina la verificación de sesión y la actualización de la interfaz de usuario.
+
 # Documentación del Frontend
 
 Este documento centraliza la explicación de toda la lógica del lado del cliente de la aplicación, desde la autenticación y el panel de control hasta las páginas de visualización estática.
@@ -31,10 +34,12 @@ Los principales archivos que orquestan este flujo son:
 
 *   `frontend/login.html`: Página HTML para el inicio de sesión.
 *   `frontend/register.html`: Página HTML para el registro de nuevos usuarios.
-
 *   `frontend/login.js`: Script JavaScript que maneja la lógica del lado del cliente para el login y la visualización de mensajes.
 *   `frontend/panel-control.html`: Página HTML del panel de control administrativo.
 *   `frontend/panel-control.js`: Script JavaScript que maneja la interactividad y la comunicación con el backend para el panel de control.
+*   `frontend/modulos.js`: Contiene la función `checkLogin` que verifica la validez del token JWT con el backend y limpia `localStorage` si el token es inválido. Esta función ahora es exportada y no se ejecuta automáticamente al cargar el módulo.
+*   `frontend/index.html`: La página principal ahora importa `checkLogin` de `modulos.js`. En los eventos `DOMContentLoaded` y `pageshow`, `index.html` primero `await`s la ejecución de `checkLogin` para asegurar que el estado de la sesión sea consistente, y luego llama a `updateAuthHeader` para actualizar la interfaz de usuario (mostrar el perfil del usuario o los enlaces de login/registro) basándose en el estado actual de `localStorage`.
+*   `frontend/styles.css`: Contiene las reglas de estilo para la aplicación. Se ha modificado la regla para `#user-section` de `display: none;` a `display: flex;` para asegurar que el `div` del perfil sea visible cuando se inyecta dinámicamente en el DOM.
 
 ## 1. Página de Login (`frontend/login.html` y `frontend/login.js`)
 
