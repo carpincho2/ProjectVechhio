@@ -1,39 +1,31 @@
 const express = require('express');
 const router = express.Router();
+const vehicleController = require('../controllers/vehiclescontrol.js');
+const { verifyJWT, isAdmin } = require('../middlewares/authmiddleware.js');
 const multer = require('multer');
 const path = require('path');
-const { verifyJWT, isAdmin } = require('../middlewares/authmiddleware');
-const vehicleController = require('../controllers/vehiclescontrol');
 
-// Configuración de Multer para guardar las imágenes
+// Configuración de Multer para la subida de archivos
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/'); // Directorio donde se guardarán las imágenes
     },
     filename: function (req, file, cb) {
-        // Genera un nombre de archivo único con la fecha actual y la extensión original
+        // Generar un nombre de archivo único para evitar colisiones
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
 
 const upload = multer({ storage: storage });
 
-// --- Rutas de Vehículos --- //
-
-// Obtener todos los vehículos (Ruta Pública)
+// Rutas públicas
 router.get('/', vehicleController.getAllVehicles);
+router.get('/:id', vehicleController.getVehicleById);
 
-// Obtener un vehículo por su ID (Ruta Privada - Admin)
-router.get('/:id', verifyJWT, isAdmin, vehicleController.getVehicleById);
-
-// Crear un nuevo vehículo (Ruta Privada - Admin)
-// upload.single('image') procesa un único archivo que venga en el campo 'image' del formulario
+// Rutas de administrador
+// Se añade upload.single('image') para procesar la subida de una imagen del campo 'image'
 router.post('/', verifyJWT, isAdmin, upload.single('image'), vehicleController.createVehicle);
-
-// Actualizar un vehículo existente (Ruta Privada - Admin)
-router.put('/:id', verifyJWT, isAdmin, upload.single('image'), vehicleController.updateVehicle);
-
-// Eliminar un vehículo (Ruta Privada - Admin)
+router.put('/:id', verifyJWT, isAdmin, vehicleController.updateVehicle);
 router.delete('/:id', verifyJWT, isAdmin, vehicleController.deleteVehicle);
 
 module.exports = router;

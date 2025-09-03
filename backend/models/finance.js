@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        amount: {
+        amount: { // Monto del vehículo al momento de la solicitud
             type: DataTypes.DECIMAL(10, 2),
             allowNull: false
         },
@@ -24,15 +24,24 @@ module.exports = (sequelize, DataTypes) => {
                 model: 'Users', // Nombre de la tabla a la que hace referencia
                 key: 'id'
             }
+        },
+        vehicleId: { // ID del vehículo que se está financiando
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Vehicles', // Nombre de la tabla a la que hace referencia
+                key: 'id'
+            }
         }
     }, {
         timestamps: true,
         tableName: 'finances'
     });
 
-    // Opcional: Definir asociaciones si las hay
+    // Definir asociaciones
     Finance.associate = (models) => {
         Finance.belongsTo(models.User, { foreignKey: 'userId' });
+        Finance.belongsTo(models.Vehicle, { foreignKey: 'vehicleId' });
     };
 
     return Finance;

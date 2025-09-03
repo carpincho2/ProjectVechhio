@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require('../models'); // Importar el modelo User
+const { User, Finance, Vehicle, Service } = require('../models'); // Importar modelos necesarios
 const authMiddleware = require('../middlewares/authmiddleware');
 
 // @route   GET /api/profile
@@ -26,6 +26,52 @@ router.get('/', authMiddleware.verifyJWT, async (req, res) => {
     } catch (err) {
         
         console.error('Error al obtener el perfil:', err.message);
+        res.status(500).send('Error del servidor');
+    }
+});
+
+// @route   GET /api/profile/finances
+// @desc    Obtener el historial de financiación del usuario autenticado
+// @access  Privado
+router.get('/finances', authMiddleware.verifyJWT, async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const financeHistory = await Finance.findAll({
+            where: { userId: userId },
+            include: [{
+                model: Vehicle,
+                attributes: ['brand', 'model', 'year'] // Solo incluir estos campos del vehículo
+            }],
+            order: [['createdAt', 'DESC']] // Ordenar por más reciente primero
+        });
+
+        res.json(financeHistory);
+    } catch (err) {
+        console.error('Error al obtener el historial de financiación:', err.message);
+        res.status(500).send('Error del servidor');
+    }
+});
+
+// @route   GET /api/profile/services
+// @desc    Obtener el historial de turnos de taller del usuario autenticado
+// @access  Privado
+router.get('/services', authMiddleware.verifyJWT, async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const serviceHistory = await Service.findAll({
+            where: { userId: userId },
+            include: [{
+                model: Vehicle,
+                attributes: ['brand', 'model', 'year']
+            }],
+            order: [['date', 'DESC']] // Ordenar por fecha del turno
+        });
+
+        res.json(serviceHistory);
+    } catch (err) {
+        console.error('Error al obtener el historial de servicios:', err.message);
         res.status(500).send('Error del servidor');
     }
 });

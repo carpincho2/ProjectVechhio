@@ -21,8 +21,8 @@
     </div>
     <div class="main-container">
         <div class="header">
-            <div class="user-info">
-                <a href="/logout" class="logout-link"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            <div id="auth-container" class="user-auth-section">
+                <!-- Este contenido se generará dinámicamente -->
             </div>
         </div>
         <div class="main-content">
@@ -46,9 +46,10 @@
                     </div>
                     <div class="card">
                         <h3><i class="fas fa-chart-line"></i> Estadísticas Financieras</h3>
-                        <p>Ingresos mensuales: <span class="stat-value" id="monthlyIncome">$24,500</span></p>
-                        <p>Solicitudes financiación: <span class="stat-value" id="totalFinanceRequests">7</span></p>
-                        <p>Aprobadas: <span class="stat-value" id="approvedFinances">5</span></p>
+                        <p>Solicitudes Totales: <span class="stat-value" id="totalFinanceRequests">0</span></p>
+                        <p>Aprobadas: <span class="stat-value" id="approvedFinances">0</span></p>
+                        <p>Pendientes: <span class="stat-value" id="pendingFinances">0</span></p>
+                        <p>Rechazadas: <span class="stat-value" id="rejectedFinances">0</span></p>
                     </div>
                 </div>
 
@@ -249,5 +250,6 @@
     </div>
 
     <script src="panel-control.js"></script>
+    <script type="module" src="./main.js" defer></script>
 </body>
 </html>

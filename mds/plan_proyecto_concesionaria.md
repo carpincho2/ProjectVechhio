@@ -74,11 +74,11 @@
   - `finance.html`: simulador de cuotas + guardar solicitud.  
 
 ✅ Resultado: turnos y financiación conectados al backend.
-**Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
+**Estado Actual**: ✅ **COMPLETADA**.
 *   **Backend**: APIs para `POST`/`GET` de servicios y finanzas implementadas.
 *   **Frontend**:
     *   `service.html`: ✅ **Completado**. El formulario está conectado al backend y permite solicitar turnos.
-    *   `finance.html`: ❌ **PENDIENTE**. La página es estática y su formulario no se conecta con el backend.
+    *   `finance.html`: ✅ **Completado**. El formulario es dinámico, se conecta al backend y permite a los usuarios autenticados enviar solicitudes.
 
 ---
 
@@ -121,5 +121,5 @@
     *   **Registro/login**: ✅ **COMPLETADA**.
     *   **Catálogo de autos**: ✅ **COMPLETADA**. El catálogo público es dinámico y funcional.
     *   **Turnos de taller**: ✅ **COMPLETADA**. El formulario de solicitud de turnos es funcional.
-    *   **Solicitudes de financiación**: ⚠️ **PARCIALMENTE COMPLETADA**. Backend listo, pero el formulario del frontend no está conectado.
+    *   **Solicitudes de financiación**: ✅ **COMPLETADA**. Los usuarios pueden enviar solicitudes de financiación a través del formulario, que está conectado al backend.
 *   **Extras opcionales**: ❌ **PENDIENTE**.

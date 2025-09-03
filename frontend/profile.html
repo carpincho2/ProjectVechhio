@@ -3,69 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil - Concesionaria</title>
+    <title>Mi Perfil</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="profile.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="/logos/favicon_io/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <header class="header">
-        <div>
-            <a href="index.html"><img src="logo.png" alt="Logo Concesionaria" class="logo"></a>
+        <!-- El header es el mismo que en las otras páginas -->
+        <div >
+           <a href="index.html"><img src="logo.png" alt="" class="logo"></a>
         </div>
         <div class="vehicles">
-            <a href="vehicles.html">Vehículos</a>
+            <a href="vehicles.html">Vehicles</a>
         </div>
         <div class="certified">
-            <a href="certified.html">Certificados</a>
+            <a href="certified.html">Certified</a>
         </div>
         <div class="finance">
-            <a href="finance.html">Financiación</a>
+            <a href="finance.html">Finance</a>
         </div>
         <div class="service">
-            <a href="service.html" class="menu-btn">Servicios</a>
+            <a href="service.html">Service</a>
         </div>
         <div class="aboutUs">
-            <a href="aboutUs.html">Sobre Nosotros</a>
+            <a href="aboutUs.html">About Us</a>
         </div>
-        
-        <div class="user-auth-section">
-            <div id="login-section" class="hidden">
-                <a href="login.html" class="auth-link">Login</a>
-                <a href="register.html" class="auth-link">Register</a>
-            </div>
-            <div id="user-section">
-                <span class="welcome-text">Hola, <span id="user-name-placeholder"></span></span>
-                <a href="/profile.html" class="auth-link">Mi Perfil</a>
-                <a href="#" id="logout-btn" class="auth-link logout-btn">Logout</a>
-            </div>
+        <div id="auth-container" class="user-auth-section">
+            <!-- Este contenido se generará dinámicamente -->
         </div>
     </header>
 
     <main class="profile-container">
-        <div class="profile-card">
-            <h1>Mi Perfil</h1>
-            <div class="profile-info">
-                <p><strong>Usuario:</strong> <span id="profile-username">Cargando...</span></p>
-                <p><strong>Email:</strong> <span id="profile-email">Cargando...</span></p>
-                <p><strong>Rol:</strong> <span id="profile-role">Cargando...</span></p>
-            </div>
-            <div class="admin-link-container" id="admin-link-container" style="display: none;">
-                <a href="panel-control.html" class="button-admin">Acceder al Panel de Control</a>
-            </div>
-            <div id="profile-error" class="error-message" style="display: none;"></div>
+        <h1>Mi Perfil</h1>
+        <div id="user-profile" class="profile-card">
+            <!-- La información del perfil se cargará aquí -->
+            <p>Cargando perfil...</p>
         </div>
+
+        <div class="profile-section">
+            <h2>Mis Solicitudes de Financiación</h2>
+            <div class="table-container">
+                <table id="finance-history-table">
+                    <thead>
+                        <tr>
+                            <th>Vehículo</th>
+                            <th>Monto Solicitado</th>
+                            <th>Cuotas</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="finance-history-body">
+                        <!-- El historial se cargará aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2>Mis Turnos de Taller</h2>
+            <div class="table-container">
+                <table id="service-history-table">
+                    <thead>
+                        <tr>
+                            <th>Vehículo</th>
+                            <th>Tipo de Servicio</th>
+                            <th>Fecha del Turno</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="service-history-body">
+                        <!-- El historial de turnos se cargará aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </main>
 
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="#">Política de Privacidad</a>
-            <a href="#">Términos de Servicio</a>
-        </div>
-        <p class="footer-copy">© 2024 CarPane. Todos los derechos reservados.</p>
-    </footer>
-
     <script src="profile.js"></script>
+    <script type="module" src="./main.js" defer></script>
 </body>
 </html>

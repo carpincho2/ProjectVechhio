@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="description"><strong>Condición:</strong> ${vehicle.condition}</p>
                     <p class="description"><strong>Kilometraje:</strong> ${new Intl.NumberFormat('es-AR').format(vehicle.mileage)} km</p>
                     <p class="description">${vehicle.description || 'Sin descripción.'}</p>
+                    <a href="finance.html?vehicleId=${vehicle.id}" class="finance-button">Financiar</a>
                 `;
 
                 vehicleListContainer.appendChild(vehicleCard);

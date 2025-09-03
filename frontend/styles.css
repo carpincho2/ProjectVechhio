@@ -1,10 +1,29 @@
 /* Index Style - Optimizado y Responsive */
 :root{
-    --fondo:#1e1e2f;
-    --letra:#f0f0f0;
-    --boton:#9056ee;
-    --fondoheaderboton:#2E3E4E;
-    --hoverboton:#4f46e5;
+     /* 🎨 Colores principales */
+  --btn-primary-bg: #6366f1;          /* Botón principal / links destacados */
+  --btn-primary-hover-bg: #4f46e5;    /* Hover del botón principal */
+  --btn-secondary-bg: #10b981;        /* Botón secundario (confirmación, éxito) */
+  --btn-accent-bg: #f59e0b;           /* Botón/acento especial (llamadas a la acción) */
+
+  /* 🌑 Fondos */
+  --bg-main: #1e1e2f;                 /* Fondo global */
+  --bg-header: #111827;               /* Header / navbar */
+  --bg-card: #2E3E4E;                 /* Tarjetas, paneles, secciones */
+
+  /* ✍️ Texto */
+  --text-primary: #f0f0f0;            /* Texto principal */
+  --text-secondary: #9ca3af;          /* Texto secundario */
+  --text-on-light: #111827;           /* Texto sobre fondos claros */
+
+  /* ⚠️ Estados */
+  --alert-error: #ef4444;             /* Errores */
+  --alert-success: #22c55e;           /* Éxito */
+  --alert-warning: #facc15;           /* Advertencia */
+
+  /* 🌈 Extras */
+  --border-default: rgba(255,255,255,0.1);  /* Bordes sutiles */
+  --shadow-default: rgba(0,0,0,0.5);
 }
 
 * {
@@ -21,7 +40,7 @@ html, body {
 }
 
 body{
-    background-color: var(--fondo);
+    background-color: var(--bg-main);
     min-height: 100vh;
 }
 
@@ -31,8 +50,8 @@ body{
     top: 0;
     width: 100%;
     height: 80px;
-    background-color: var(--fondo);
-    border-bottom: 1px solid var(--boton);
+    background-color: var(--bg-header);
+    border-bottom: 1px solid var(--border-default);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -42,7 +61,7 @@ body{
 }
 .header a{
     text-decoration: none;
-    color: var(--boton);
+    color: var(--text-primary);
 }
 .logo{
     height: 40px;
@@ -52,51 +71,6 @@ body{
 .header > div {
     margin: 0 10px;
     white-space: nowrap;
-}
-
-/* Menu Container */
-.menu-container {
-    position: relative;
-}
-
-.desplegable {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: var(--fondoheaderboton);
-    padding: 10px 20px;
-    border-radius: 6px;
-    z-index: 999;
-    min-width: 200px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-
-.menu-container:hover .desplegable {
-    display: block;
-}
-
-.desplegable ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.desplegable li {
-    margin: 5px 0;
-}
-
-.desplegable li a {
-    display: block;
-    color: var(--letra);
-    text-decoration: none;
-    padding: 8px 0;
-    transition: color 0.3s ease;
-}
-
-.desplegable li a:hover {
-    color: var(--boton);
-    text-decoration: underline;
 }
 
 /* Authentication Section */
@@ -166,17 +140,6 @@ body{
 .auth-link:hover {
     background-color: var(--hoverboton);
     transform: translateY(-2px);
-}
-
-.logout-btn {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: white;
-}
-
-.logout-btn:hover {
-    background-color: #c82333;
-    border-color: #bd2130;
 }
 
 /* Main Content */
@@ -288,7 +251,7 @@ body{
 }
 
 .direcciones p::before {
-    content: "\f3c5";
+    content: ''\f3c5'';
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     color: var(--boton);
@@ -389,10 +352,6 @@ form textarea {
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
-.title{
-    color: var(--letra);
-}
-
 /* Footer */
 .footer {
     background-color:var(--fondo);
@@ -454,19 +413,6 @@ form textarea {
     font-size: 0.8rem;
     color: #777;
     margin-bottom: 0;
-}
-
-.input{
-    color: var(--boton); 
-}
-
-/* Utility Classes */
-.hidden {
-    display: none !important;
-}
-
-.d-flex {
-    display: flex !important;
 }
 
 /* Responsive Design */

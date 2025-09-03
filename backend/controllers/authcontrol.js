@@ -36,7 +36,8 @@ exports.login = async (req, res) => {
             return res.status(401).json({ error: 'Credenciales incorrectas.' });
         }
 
-        const token = jwt.sign({ id: user.id, role: user.role, username: user.username }, process.env.JWT_SECRET, {
+        console.log('[DEBUG] authcontrol.js - Usando JWT_SECRET para firmar:', process.env.JWT_SECRET || 'miclavesupersecreta');
+        const token = jwt.sign({ id: user.id, role: user.role, username: user.username }, process.env.JWT_SECRET || 'miclavesupersecreta', {
             expiresIn: '24h'
         });
 

@@ -241,24 +241,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('pendingServices').textContent = pendingServicesCount;
             }
 
-            // Fetch Finance Counts
-            const financesResponse = await fetch('/api/finances', { headers: { 'Authorization': `Bearer ${token}` } });
-            if (financesResponse.ok) {
-                const finances = await financesResponse.json();
-                let totalFinanceRequests = finances.length;
-                let approvedFinances = 0;
-                let monthlyIncome = 0; // This might need more complex logic, assuming sum of approved amounts for now
-
-                finances.forEach(finance => {
-                    if (finance.status === 'Aprobada') { // Assuming 'Aprobada' for approved
-                        approvedFinances++;
-                        monthlyIncome += finance.amount; // Assuming 'amount' is a number
-                    }
-                });
-
-                document.getElementById('totalFinanceRequests').textContent = totalFinanceRequests;
-                document.getElementById('approvedFinances').textContent = approvedFinances;
-                document.getElementById('monthlyIncome').textContent = `${monthlyIncome.toFixed(2)}`; // Format as currency
+            // Fetch Finance Statistics from the new, efficient endpoint
+            const financeStatsResponse = await fetch('/api/statistics/finances', { headers: { 'Authorization': `Bearer ${token}` } });
+            if (financeStatsResponse.ok) {
+                const stats = await financeStatsResponse.json();
+                document.getElementById('totalFinanceRequests').textContent = stats.total;
+                document.getElementById('approvedFinances').textContent = stats.approved;
+                document.getElementById('pendingFinances').textContent = stats.pending;
+                document.getElementById('rejectedFinances').textContent = stats.rejected;
             }
 
         } catch (error) {
