@@ -1,29 +1,26 @@
 /* Index Style - Optimizado y Responsive */
-:root{
-     /* 🎨 Colores principales */
-  --btn-primary-bg: #6366f1;          /* Botón principal / links destacados */
-  --btn-primary-hover-bg: #4f46e5;    /* Hover del botón principal */
-  --btn-secondary-bg: #10b981;        /* Botón secundario (confirmación, éxito) */
-  --btn-accent-bg: #f59e0b;           /* Botón/acento especial (llamadas a la acción) */
-
+:root {
   /* 🌑 Fondos */
-  --bg-main: #1e1e2f;                 /* Fondo global */
-  --bg-header: #111827;               /* Header / navbar */
-  --bg-card: #2E3E4E;                 /* Tarjetas, paneles, secciones */
+    --bg-main: #1e1e2f;          /* Fondo global */
+    --bg-header: #252b3b;        /* Header / navbar */
+    --bg-card: #2f3b52;          /* Tarjetas/paneles */
 
-  /* ✍️ Texto */
-  --text-primary: #f0f0f0;            /* Texto principal */
-  --text-secondary: #9ca3af;          /* Texto secundario */
-  --text-on-light: #111827;           /* Texto sobre fondos claros */
+  /* 🎨 Acentos Pastel */
+    --accent-blue: #a5b4fc;       /* Azul pastel (botón primario) */
+    --accent-blue-hover: #818cf8; 
+    --accent-mint: #99f6e4; 
+    --accent-mint-hover: #7eddd4;     /* Verde menta pastel */
+    --accent-lavender: #c4b5fd;   /* Lavanda pastel */
+    --accent-peach: #fcd5ce;      /* Durazno pastel */
+    --accent-rose: #fecdd3;       /* Rosa pastel suave */
 
   /* ⚠️ Estados */
-  --alert-error: #ef4444;             /* Errores */
-  --alert-success: #22c55e;           /* Éxito */
-  --alert-warning: #facc15;           /* Advertencia */
+  --alert-error: #fca5a5;       /* Rojo pastel */
+  --alert-success: #bbf7d0;     /* Verde pastel */
+  --alert-warning: #fde68a;     /* Amarillo pastel */
 
   /* 🌈 Extras */
-  --border-default: rgba(255,255,255,0.1);  /* Bordes sutiles */
-  --shadow-default: rgba(0,0,0,0.5);
+    --shadow-default: rgba(0,0,0,0.5);
 }
 
 * {
@@ -51,7 +48,7 @@ body{
     width: 100%;
     height: 80px;
     background-color: var(--bg-header);
-    border-bottom: 1px solid var(--border-default);
+    border-bottom: 2px solid var(--accent-mint) !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -61,7 +58,7 @@ body{
 }
 .header a{
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--accent-blue);
 }
 .logo{
     height: 40px;
@@ -73,6 +70,12 @@ body{
     white-space: nowrap;
 }
 
+/* Menu Container */
+.menu-container {
+    position: relative;
+}
+
+
 /* Authentication Section */
 .user-auth-section {
     display: flex;
@@ -83,17 +86,17 @@ body{
 
 .Login,
 .register {
-    background-color: var(--fondoheaderboton);
+    background-color: var(--bg-header);
     padding: 8px 15px;
     border-radius: 10px;
-    color: var(--letra);
+    color: var(--accent-blue);
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     transition: all 0.3s ease;
-    border: 1px solid var(--boton);
+    border: 1px solid var(--accent-mint);
 }
 
 .Login:hover,
@@ -108,7 +111,7 @@ body{
 }
 
 .welcome-text {
-    color: var(--boton);
+    color: var(--accent-lavender);
     font-weight: 600;
     margin-right: 10px;
     font-size: 0.9rem;
@@ -127,24 +130,35 @@ body{
 }
 
 .auth-link {
-    color: var(--boton);
+    color: var(--accent-blue);
     text-decoration: none;
     padding: 8px 12px;
     border-radius: 6px;
     font-weight: 600;
     transition: all 0.3s ease;
-    background-color: var(--fondoheaderboton);
-    border: 1px solid var(--boton);
+    background-color: var(--bg-header);
+    border: 1px solid var(--accent-mint);
 }
 
 .auth-link:hover {
-    background-color: var(--hoverboton);
+    background-color: var(--accent-blue-hover);
     transform: translateY(-2px);
+}
+
+.logout-btn {
+    background-color: var(--bg-header);
+    border-color: var(--alert-error);
+    color: white;
+}
+
+.logout-btn:hover {
+    background-color: var(--alert-error);
+    border-color: var(--alert-error);
 }
 
 /* Main Content */
 .section-subtitle {
-    color: var(--letra);
+    color: var(--accent-blue);
     font-size: 1.5rem; /* 24px */
     margin-top: 130px;
     margin-left: 25px;
@@ -166,7 +180,7 @@ body{
 }
 
 .titlevehicles {
-    color: var(--letra);
+    color: var(--accent-blue);
     font-size: 2.5rem;
     text-align: center;
     margin: 40px 0 30px 0;
@@ -179,13 +193,13 @@ body{
     justify-content: center;
     margin: 20px 0 50px 0;
     padding: 0 20px 40px 20px;
-    border-bottom: 1px solid var(--boton);
+    border-bottom: 1px solid var(--accent-mint);
 }
 
 .carbox {
     flex: 1 1 280px;
     max-width: 320px;
-    background-color: rgba(99, 102, 241, 0.15);
+    background-color:var(--bg-card);
     box-shadow: 0 12px 25px rgba(0,0,0,0.15);
     border-radius: 15px;
     display: flex;
@@ -214,32 +228,32 @@ body{
 .section-subtitlecar {
     font-size: 1.4rem;
     margin: 15px 20px 10px 20px;
-    color: var(--letra);
+    color: var(--accent-blue);
 }
 
 .description {
     flex-grow: 1;
     padding: 0 20px 20px 20px;
     font-size: 0.95rem;
-    color: var(--letra);
+    color: var(--accent-lavender);
     line-height: 1.5;
 }
 
 /* Direcciones Section */
 .direcciones {
-    background-color: #2E3E4E;
-    color: var(--letra);
+    background-color: var(--bg-header);
+    color: var(--accent-blue);
     padding: 25px 40px;
     border-radius: 10px;
     max-width: 800px;
     margin: 40px auto 20px auto;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     gap: 20px;
     font-size: 1rem;
-    border: 1px solid var(--boton);
+    border: 1px solid var(--accent-mint);
 }
 
 .direcciones p {
@@ -251,20 +265,20 @@ body{
 }
 
 .direcciones p::before {
-    content: ''\f3c5'';
+    content: "\f3c5";
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
-    color: var(--boton);
+    color: var(--accent-blue-hover);
     font-size: 1.2rem;
 }
 
 /* Contact Form */
 .contactUs {
-    background-color: var(--fondo);
+    background-color: var(--bg-main);
     padding: 50px 20px;
     max-width: 100%;
     margin-top: 30px;
-    border-bottom: 1px solid var(--boton);
+    border-bottom: 1px solid var(--accent-mint);
 }
 
 .formulario {
@@ -273,14 +287,14 @@ body{
 }
 
 .contactUs h2 {
-    color: var(--letra);
+    color: var(--accent-blue);
     margin-bottom: 15px;
     font-size: 2rem;
     text-align: center;
 }  
 
 .contactUs p {
-    color: var(--letra);
+    color: var(--accent-lavender);
     margin-bottom: 30px;
     text-align: center;
     font-size: 1.1rem;
@@ -294,11 +308,11 @@ form {
     background-color: rgba(46, 62, 78, 0.8);
     padding: 30px;
     border-radius: 12px;
-    border: 1px solid var(--boton);
+    border: 2px solid var(--accent-mint);
 }  
 
 form label {
-    color: var(--letra);
+    color: var(--accent-blue-hover);
     font-weight: bold;
     font-size: 1rem;
 }  
@@ -308,8 +322,8 @@ form textarea {
     padding: 12px 15px;
     border-radius: 8px;
     border: 2px solid transparent;
-    background-color: #2E3E4E;
-    color: var(--boton);
+    background-color: var(--bg-input);
+    color: var(--accent-blue-hover);
     font-size: 1rem;
     transition: all 0.3s ease;
 }
@@ -317,13 +331,13 @@ form textarea {
 form input:focus,
 form textarea:focus {
     outline: none;
-    border-color: var(--boton);
+    border:1px solid var(--accent-mint);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
 }
 
 form input::placeholder,
 form textarea::placeholder {
-    color: #94a3b8;
+    color: var(--accent-blue-hover);
 }  
 
 form textarea {
@@ -332,8 +346,8 @@ form textarea {
 }
 
 .boton {
-    background-color: var(--boton);
-    color: var(--letra);
+    background-color: var(--accent-blue);
+    color: var(--accent-rose);
     padding: 12px 25px;
     border: none;
     border-radius: 8px;
@@ -347,15 +361,17 @@ form textarea {
 } 
 
 .boton:hover {
-    background-color: var(--hoverboton);
+    background-color: var(--hover-accent-blue);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
+
+
 /* Footer */
 .footer {
-    background-color:var(--fondo);
-    color: var(--boton);
+    background-color: var(--bg-footer);
+    color: var(--accent-blue);
     padding: 40px 20px 30px 20px;
     text-align: center;
     margin-top: 60px;
@@ -370,7 +386,7 @@ form textarea {
 } 
 
 .footer-links a {
-    color: var(--boton);
+    color: var(--accent-mint);
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.3s ease;
@@ -378,8 +394,8 @@ form textarea {
 }
 
 .footer-links a:hover {
-    color: var(--hoverboton);
-    text-decoration: underline;
+    color: var(--accent-mint-hover);
+    text-decoration: none;
 }
 
 .footer-icons{
@@ -388,13 +404,13 @@ form textarea {
 
 .footer-icons i {
     font-size: 1.5rem;
-    color: var(--boton);
+    color: var(--accent-mint);
     margin: 0 12px;
     transition: all 0.3s ease;
 }
 
 .footer-icons i:hover {
-    color: var(--hoverboton);
+    color: var(--accent-mint-hover);
     transform: translateY(-3px);
 }
 
@@ -413,6 +429,17 @@ form textarea {
     font-size: 0.8rem;
     color: #777;
     margin-bottom: 0;
+}
+
+
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.d-flex {
+    display: flex !important;
 }
 
 /* Responsive Design */
@@ -667,7 +694,6 @@ form textarea {
     form textarea {
         padding: 10px 12px;
         font-size: 0.9rem;
-        color: var(--boton);
     }
     
     .boton {
@@ -770,7 +796,6 @@ form textarea {
     form textarea {
         padding: 8px 10px;
         font-size: 0.85rem;
-        color: var(--boton);
     }
     
     .boton {
@@ -839,7 +864,6 @@ form textarea {
     form textarea {
         padding: 14px 16px;
         font-size: 1.1rem;
-        color: var(--boton);
     }
     
     .boton {

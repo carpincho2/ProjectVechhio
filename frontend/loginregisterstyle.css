@@ -1,12 +1,27 @@
 :root {
-  --fondo: #1e1e2f;
-  --fondo-secundario: #2E3E4E;
-  --letra: #f0f0f0;
-  --boton: #6366f1;
-  --hoverboton: #4f46e5;
-  --error: #ef4444;
-  --success: #10b981;
+  /* 🌑 Fondos */
+    --bg-main: #1e1e2f;          /* Fondo global */
+    --bg-header: #252b3b;        /* Header / navbar */
+    --bg-card: #2f3b52;          /* Tarjetas/paneles */
+
+  /* 🎨 Acentos Pastel */
+    --accent-blue: #a5b4fc;       /* Azul pastel (botón primario) */
+    --accent-blue-hover: #818cf8; 
+    --accent-mint: #99f6e4; 
+    --accent-mint-hover: #7eddd4;     /* Verde menta pastel */
+    --accent-lavender: #c4b5fd;   /* Lavanda pastel */
+    --accent-peach: #fcd5ce;      /* Durazno pastel */
+    --accent-rose: #fecdd3;       /* Rosa pastel suave */
+
+  /* ⚠️ Estados */
+  --alert-error: #fca5a5;       /* Rojo pastel */
+  --alert-success: #bbf7d0;     /* Verde pastel */
+  --alert-warning: #fde68a;     /* Amarillo pastel */
+
+  /* 🌈 Extras */
+    --shadow-default: rgba(0,0,0,0.5);
 }
+
 
 * {
   margin: 0;
