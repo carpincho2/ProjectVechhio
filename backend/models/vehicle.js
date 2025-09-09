@@ -50,10 +50,11 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'vehicles' // Nombre de la tabla en la DB
     });
 
-    // Opcional: Definir asociaciones si las hay
-    // Vehicle.associate = (models) => {
-    //     Vehicle.hasMany(models.Service, { foreignKey: 'vehicleId' });
-    // };
+    // Definir asociaciones
+    Vehicle.associate = (models) => {
+        Vehicle.hasMany(models.Finance, { foreignKey: 'vehicleId' });
+        Vehicle.hasMany(models.Service, { foreignKey: 'vehicleId' });
+    };
 
     return Vehicle;
 };

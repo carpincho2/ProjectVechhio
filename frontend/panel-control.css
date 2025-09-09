@@ -10,7 +10,7 @@
     --accent-blue: #a5b4fc;       /* Azul pastel (botón primario) */
     --accent-blue-hover: #818cf8; 
     --accent-mint: #99f6e4; 
-    --accent-mint-hover: #7eddd4;     /* Verde menta pastel */
+    --accent-mint-hover: #449990;     /* Verde menta pastel */
     --accent-lavender: #c4b5fd;   /* Lavanda pastel */
     --accent-peach: #fcd5ce;      /* Durazno pastel */
     --accent-rose: #fecdd3;       /* Rosa pastel suave */
@@ -33,16 +33,16 @@
 }
 
 body {
-    background-color: var(--fondo);
-    color: var(--letra);
+    background-color: var(--bg-main);
+    color: var(--accent-lavender);
     display: flex;
     min-height: 100vh;
 }
 
 .sidebar {
     width: 250px;
-    background: linear-gradient(180deg, #2E3E4E 0%, #1e1e2f 100%);
-    color: var(--letra);
+    background: linear-gradient(var(--bg-header), var(--bg-card));
+    color: var(--accent-lavender);
     padding: 20px;
     box-shadow: 3px 0 8px rgba(0,0,0,0.2);
     display: flex;
@@ -56,7 +56,7 @@ body {
 .sidebar h2 {
     text-align: center;
     margin-bottom: 40px;
-    color: var(--letra);
+    color: var(--accent-mint);
     font-size: 1.8em;
     padding-bottom: 15px;
     display: flex;
@@ -76,7 +76,7 @@ body {
 }
 
 .sidebar ul li a {
-    color: var(--letra);
+    color: var(--accent-lavender);
     text-decoration: none;
     padding: 12px 15px;
     display: flex;
@@ -89,8 +89,8 @@ body {
 
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
-    background-color: var(--hoverboton);
-    color: white;
+    background-color: var(--accent-blue-hover);
+    color: var(--accent-mint);
     font-weight: bold;
 }
 
@@ -103,23 +103,33 @@ body {
 }
 
 .header {
-    background-color: var(--fondoheaderboton);
+    background-color: var(--bg-header);
     padding: 20px 30px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: var(--letra);
-    border-bottom: 1px solid var(--boton);
+    color: var(--accent-blue-hover);
+    border-bottom: 1px solid var(--accent-mint);
     position: sticky;
     top: 0;
     z-index: 99;
+    flex-direction: row;
 }
 
-.header h1 {
-    margin: 0;
-    font-size: 1.8em;
-    color: var(--letra);
+.header a{
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+}
+#user-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .user-info {
@@ -128,21 +138,12 @@ body {
     gap: 15px;
 }
 
-.user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--boton);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-}
+
 
 .main-content {
     flex-grow: 1;
     padding: 30px;
-    background-color: var(--fondo);
+    background-color: var(--bg-main);
 }
 
 .section {
@@ -160,10 +161,10 @@ body {
 }
 
 .main-content h1 {
-    color: var(--letra);
+    color: var(--accent-mint);
     margin-bottom: 25px;
     font-size: 2em;
-    border-bottom: 1px solid var(--boton);
+    border-bottom: 1px solid var(--accent-lavender);
     padding-bottom: 10px;
     display: flex;
     align-items: center;
@@ -171,7 +172,7 @@ body {
 }
 
 .main-content h2 {
-    color: var(--letra);
+    color: var(--accent-mint);
     margin-top: 20px;
     margin-bottom: 15px;
 }
@@ -179,7 +180,7 @@ body {
 .main-content p {
     font-size: 1.1em;
     line-height: 1.6;
-    color: var(--letra);
+    color: var(--accent-mint);
     margin-bottom: 20px;
 }
 
@@ -191,8 +192,8 @@ body {
 }
 
 .card {
-    background-color: rgba(46,62,78,0.9);
-    border: 1px solid rgba(99,102,241,0.3);
+    background-color:var(--bg-card);
+    border: 1px solid var(--accent-mint);
     border-radius: 10px;
     padding: 25px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
@@ -201,12 +202,12 @@ body {
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(99, 102, 241, 0.35);
+    box-shadow: 0 6px 15px var(--accent-mint);
 }
 
 .card h3 {
     margin-top: 0;
-    color: var(--letra);
+    color: var(--accent-lavender);
     font-size: 1.4em;
     margin-bottom: 15px;
     display: flex;
@@ -215,21 +216,29 @@ body {
 }
 
 .card p {
-    color: var(--letra);
+    color: var(--accent-mint);
     font-size: 1em;
     margin: 10px 0;
 }
-
+.stats{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid var(--accent-lavender);
+    padding: 15px;
+    border-radius: 8px;
+    background: rgba(46,62,78,0.6);
+}
 .stat-value {
     font-size: 1.8em;
     font-weight: bold;
-    color: var(--boton);
+    color: var(--accent-mint);
     display: block;
     margin: 10px 0;
 }
 
 .card a {
-    color: var(--boton);
+    color: var(--accent-mint);
     text-decoration: none;
     font-weight: bold;
     display: flex;
@@ -240,7 +249,7 @@ body {
 }
 
 .card a:hover {
-    color: var(--hoverboton);
+    color: var(--accent-mint-hover);
     text-decoration: underline;
 }
 
@@ -264,7 +273,7 @@ form {
 
 .form-group label {
     font-weight: bold;
-    color: var(--letra);
+    color: var(--accent-lavender);
 }
 
 form input,
@@ -272,12 +281,15 @@ form textarea,
 form select {
     padding: 12px;
     border-radius: 6px;
-    border: 1px solid var(--boton);
-    background-color: var(--fondoheaderboton);
-    color: var(--boton);
+    border: 1px solid var(--accent-mint);
+    background-color: var(--bg-card);
+    color: var(--accent-mint);
     font-size: 16px;
 }
-
+::placeholder{
+    color: var(--accent-mint);
+    opacity: 0.7;
+}
 form input:focus,
 form textarea:focus,
 form select:focus {

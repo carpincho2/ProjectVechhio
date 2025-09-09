@@ -26,11 +26,11 @@
 .user-highlight,
 .user-name,
 .user-info {
-    color: var(--boton);
+    color: var(--accent-blue-hover);
     font-weight: 600;
 }
 .text {
-    color: var(--letra);
+    color: var(--accent-mint);
     font-size: 1.125rem; /* 18px */
     line-height: 1.6;
     margin: 16px 0;
@@ -38,7 +38,7 @@
 }
 
 a {
-    color: var(--boton);
+    color: var(--accent-blue);
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s ease;
@@ -46,7 +46,7 @@ a {
 }
 
 a:hover {
-    color: #4f46e5; /* darken(var(--boton), 10%) */
+    color: var(--accent-blue-hover); /* darken(var(--boton), 10%) */
 }
 
 .hero-banner {
@@ -67,7 +67,7 @@ a:hover {
 
 .section-subtitle2 {
     font-size: 1.5rem; /* 24px */
-    color: var(--letra);
+    color: var(--accent-lavender);
     margin: 20px 0;
     text-align: center;
 }

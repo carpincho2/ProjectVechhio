@@ -22,6 +22,9 @@ const PORT = process.env.PORT || 3000;
 // Servir archivos estáticos del frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
+// Servir archivos estáticos de la carpeta de subidas
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Parsear JSON y datos de formularios
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

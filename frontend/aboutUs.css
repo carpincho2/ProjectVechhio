@@ -25,8 +25,8 @@
 /* About Us Section */
 .aboutus-container {
   padding: 60px 20px;
-  background-color: var(--fondo);
-  color: var(--letra);
+  background-color: var(--bg-main);
+  color: var(--accent-lavender);
   text-align: center;
 }
 
@@ -34,6 +34,7 @@
   font-size: 2.25rem; /* 36px */
   margin-bottom: 10px;
   margin-top: 30px;
+  color: var(--accent-mint);
 }
 
 .aboutus-description {
@@ -61,7 +62,7 @@
 
 .aboutus-text h2 {
   margin-top: 20px;
-  color: var(--letra);
+  color: var(--accent-mint);
   font-size: 1.5rem; /* 24px */
 }
 
@@ -83,7 +84,7 @@
 .aboutus-text strong,
 .aboutus-text .user-name,
 .aboutus-text .user-email {
-    color: var(--boton);
+    color: var(--bg-card);
     font-weight: 600;
 }
 

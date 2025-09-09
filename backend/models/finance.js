@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'Vehicles', // Nombre de la tabla a la que hace referencia
+                model: 'vehicles', // Nombre de la tabla a la que hace referencia
                 key: 'id'
             }
         }

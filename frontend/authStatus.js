@@ -1,11 +1,11 @@
 function updateAuthStatus() {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
+    const token = localStorage.getItem('jwtToken');
+    const userName = localStorage.getItem('userName');
     const userPanelLink = document.getElementById('userPanelLink');
     const loginRegisterLink = document.getElementById('loginRegisterLink');
     const logoutLink = document.getElementById('logoutLink');
 
-    if (token && user) {
+    if (token && userName) {
         userPanelLink.style.display = 'block';
         loginRegisterLink.style.display = 'none';
         logoutLink.style.display = 'block';
@@ -14,4 +14,12 @@ function updateAuthStatus() {
         loginRegisterLink.style.display = 'block';
         logoutLink.style.display = 'none';
     }
+}
+
+
+function logout() {
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userRole');
+    window.location.href = 'index.html';
 }

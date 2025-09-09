@@ -32,8 +32,8 @@
 
 .vehicles-section {
     padding: 40px 20px;
-    background-color: var(--fondo);
-    color: var(--letra);
+    background-color: var(--bg-main);
+    color: var(--accent-lavender);
     min-height: calc(100vh - 80px);
     margin-top: 80px; /* Espacio para header fijo */
 }
@@ -41,7 +41,7 @@
 .vehicles-section h1 {
     font-size: 1.75rem; /* 28px */
     margin-bottom: 8px;
-    color: var(--letra);
+    color: var(--accent-lavender);
     text-align: center;
 }
 
@@ -67,7 +67,7 @@
 
 .filters select {
     padding: 10px 16px;
-    background-color: rgba(99, 102, 241, 0.15);
+    background-color: var(--bg-card);
     color: #f0f0f0;
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px;
@@ -79,7 +79,7 @@
 }
 
 .filters select:hover {
-    background-color: rgba(99, 102, 241, 0.25);
+    background-color:var(--bg-card);
     border-color: #6366f1;
     box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
 }
@@ -92,7 +92,7 @@
 
 h1{
     margin-top: 60px;
-    color:var(--letra);
+    color:var(--accent-mint);
     text-align: center;
 }
 

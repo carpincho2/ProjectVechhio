@@ -31,7 +31,7 @@
 }
 
 body {
-  background: linear-gradient(135deg, var(--fondo) 0%, #2d3748 100%);
+  background: linear-gradient(135deg, var(--bg-main) 0%, #2d3748 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,13 +40,13 @@ body {
 }
 
 form {
-  background: rgba(46, 62, 78, 0.9);
+  background-color: var(--bg-card);
   backdrop-filter: blur(12px);
   border-radius: 16px;
   padding: 40px 35px;
   max-width: 420px;
   width: 100%;
-  color: var(--letra);
+  color: var(--accent-lavender);
   box-shadow: 0 8px 30px rgba(0,0,0,0.5);
   border: 1px solid rgba(99,102,241,0.3);
   display: flex;
@@ -55,13 +55,13 @@ form {
 }
 
 form h2 {
+  background-color: var(--bg-card);
   text-align: center;
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 10px;
-  background: linear-gradient(90deg, var(--boton), var(--hoverboton));
+  color: var(--accent-lavender);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 label {
@@ -74,21 +74,21 @@ input {
   padding: 14px 16px;
   border-radius: 10px;
   border: 1px solid transparent;
-  background-color: var(--fondo-secundario);
-  color: var(--letra);
+  background-color: var(--bg-card);
+  color: var(--accent-mint);
   font-size: 15px;
   transition: all 0.3s ease;
 }
 
 input:focus {
   outline: none;
-  border-color: var(--boton);
+  border-color: var(--accent-peach);
   box-shadow: 0 0 8px rgba(99,102,241,0.4);
 }
 
 button {
-  background: linear-gradient(135deg, var(--boton) 0%, var(--hoverboton) 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-header) 100%);
+  color:var(--accent-blue-hover);
   padding: 14px;
   border: none;
   border-radius: 10px;
@@ -99,9 +99,10 @@ button {
 }
 
 button:hover {
-  background: linear-gradient(135deg, var(--hoverboton) 0%, #4338ca 100%);
+  background: linear-gradient(135deg, var(--bg-card) 0%, #4338ca 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+  color: var(--accent-mint);
 }
 
 .message {
@@ -112,15 +113,15 @@ button:hover {
 }
 
 .message.error {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid var(--error);
-  color: var(--error);
+  background: var(--accent-blue);
+  border: 1px solid var(--accent-mint);
+  color: var(--alert-error);
 }
 
 .message.success {
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid var(--success);
-  color: var(--success);
+  background: var(--accent-mint);
+  border: 1px solid var(--accent-mint-hover);
+  color: var(--alert-success);
 }
 
 .form-links, .register-link {
@@ -129,11 +130,12 @@ button:hover {
 }
 
 .form-links a, .register-link a {
-  color: var(--boton);
+  color: var(--accent-lavender);
   text-decoration: none;
   font-weight: 600;
 }
 
 .form-links a:hover, .register-link a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  color: var(--accent-rose);
 }

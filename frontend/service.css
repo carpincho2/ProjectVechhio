@@ -25,8 +25,8 @@
 /* Service Styles */
 .service-container {
   padding: 60px 20px;
-  color: var(--letra);
-  background-color: var(--fondo);
+  color: var(--accent-lavender);
+  background-color: var(--bg-main);
   text-align: center;
 }
 
@@ -34,6 +34,7 @@
   font-size: 2.25rem; /* 36px */
   margin-bottom: 10px;
   margin-top: 30px;
+  color: var(--accent-mint);
 }
 
 .service-description {
@@ -41,6 +42,7 @@
   max-width: 700px;
   margin: 0 auto 40px auto;
   line-height: 1.6;
+  color: var(--accent-mint);
 }
 
 .service-grid {
@@ -52,7 +54,7 @@
 }
 
 .service-card {
-  background-color: rgba(46, 62, 78, 0.9);
+  background-color:var(--bg-card);
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
@@ -67,18 +69,18 @@
 
 .service-card h2 {
   margin-bottom: 10px;
-  color: var(--letra);
+  color: var(--accent-lavender);
   font-size: 1.25rem; /* 20px */
 }
 
 .service-card p {
   font-size: 1rem; /* 16px */
   line-height: 1.5;
-  color: var(--letra);
+  color: var(--accent-lavender);
 }
 
 .service-form-container {
-  background-color: rgba(46, 62, 78, 0.9);
+  background-color: var(--bg-card);
   max-width: 600px;
   margin: 0 auto;
   padding: 40px;
@@ -90,7 +92,7 @@
 .service-form-container h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: var(--letra);
+  color: var(--accent-mint);
   font-size: 1.5rem; /* 24px */
 }
 
@@ -116,7 +118,7 @@
 .service-form textarea:focus,
 .service-form select:focus {
   outline: none;
-  border-color: var(--boton);
+  border-color: var(--accent-blue-hover);
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
 }
 
@@ -132,8 +134,8 @@
 }
 
 .service-form button {
-  background-color: var(--boton);
-  color: white;
+  background-color: var(--accent-mint);
+  color: var(--accent-lavender);
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
@@ -145,7 +147,7 @@
 }
 
 .service-form button:hover {
-  background-color: #4f46e5;
+  background-color: var(--accent-mint-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }

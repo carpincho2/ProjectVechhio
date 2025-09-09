@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="profile.css">
 </head>
 <body>
     <header class="header">
         <!-- El header es el mismo que en las otras páginas -->
-        <div >
+        <div>
            <a href="index.html"><img src="logo.png" alt="" class="logo"></a>
         </div>
         <div class="vehicles">
@@ -34,14 +35,24 @@
     </header>
 
     <main class="profile-container">
-        <h1>Mi Perfil</h1>
-        <div id="user-profile" class="profile-card">
-            <!-- La información del perfil se cargará aquí -->
-            <p>Cargando perfil...</p>
+        <div class="profile-card">
+            <h1><i class="fas fa-user-circle"></i> Mi Perfil</h1>
+            <div id="user-profile" class="profile-info">
+                <!-- La información del perfil se cargará aquí -->
+                <p><strong><i class="fas fa-user"></i> Nombre de Usuario:</strong> <span>Cargando...</span></p>
+                <p><strong><i class="fas fa-envelope"></i> Email:</strong> <span>Cargando...</span></p>
+                <p><strong><i class="fas fa-user-tag"></i> Rol:</strong> <span>Cargando...</span></p>
+            </div>
+            
+            <div id="admin-link-container" class="admin-link-container" style="display: none;">
+                <a href="panel-control.html" class="button-admin">
+                    <i class="fas fa-cog"></i> Panel de Administración
+                </a>
+            </div>
         </div>
 
         <div class="profile-section">
-            <h2>Mis Solicitudes de Financiación</h2>
+            <h2><i class="fas fa-file-invoice-dollar"></i> Mis Solicitudes de Financiación</h2>
             <div class="table-container">
                 <table id="finance-history-table">
                     <thead>
@@ -55,13 +66,16 @@
                     </thead>
                     <tbody id="finance-history-body">
                         <!-- El historial se cargará aquí -->
+                        <tr>
+                            <td colspan="5" style="text-align: center;">Cargando historial de financiación...</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div class="profile-section">
-            <h2>Mis Turnos de Taller</h2>
+            <h2><i class="fas fa-tools"></i> Mis Turnos de Taller</h2>
             <div class="table-container">
                 <table id="service-history-table">
                     <thead>
@@ -74,11 +88,13 @@
                     </thead>
                     <tbody id="service-history-body">
                         <!-- El historial de turnos se cargará aquí -->
+                        <tr>
+                            <td colspan="4" style="text-align: center;">Cargando historial de turnos...</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
     </main>
 
     <script src="profile.js"></script>
