@@ -4,10 +4,8 @@ function updateAuthHeader() {
     const token = localStorage.getItem('jwtToken');
     const userName = localStorage.getItem('userName');
     const authContainer = document.getElementById('auth-container');
-    console.log('DEBUG authLogic.js: updateAuthHeader ejecutado. Token:', token, 'UserName:', userName); // ADDED
 
     if (token && userName) {
-        console.log('DEBUG authLogic.js: Mostrando sección de usuario.'); // ADDED
         // Usuario logueado
         authContainer.innerHTML = `
             <div id="user-section">
@@ -27,7 +25,6 @@ function updateAuthHeader() {
             });
         }
     } else {
-        console.log('DEBUG authLogic.js: Mostrando sección de login/registro.'); // ADDED
         // Usuario NO logueado
         authContainer.innerHTML = `
             <div id="login-section">

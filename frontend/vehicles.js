@@ -2,6 +2,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const vehicleListContainer = document.getElementById('vehicle-list');
     const filtersContainer = document.querySelector('.filters');
 
+    // Diccionario de modelos por marca
+    const brandModels = {
+        Toyota: ["Aygo X", "bZ4X", "C-HR", "Camry", "Corolla", "Corolla Cross", "Yaris", "GR Yaris", "4Runner", "Crown", "RAV4", "Tacoma", "Tundra"],
+        Mercedes: ["Clase A", "Clase B", "Clase C", "Clase E", "Clase G", "Clase S", "CLA", "GLA", "GLB", "GLC", "GLE", "GLS", "AMG GT", "AMG SL"],
+        Lexus: ["CT", "ES", "LBX", "LM", "LS", "NX", "RX", "RZ", "UX"],
+        Ford: ["Bronco", "Capri", "Explorer", "Focus", "Kuga", "Mustang", "Mustang Mach-E", "Puma", "Tourneo Custom", "Fiesta", "Mondeo", "EcoSport", "Edge"],
+        Honda: ["Accord", "Civic", "CR-V", "e:Ny1", "HR-V", "Jazz", "ZR-V", "City", "Civic Type R"],
+        Mclaren: ["540C", "570S", "600LT", "650S", "720S", "750S", "765LT", "Artura", "Solus GT"],
+        Peugeot: ["208", "308", "2008", "3008", "5008"],
+        Fiat: ["500", "600", "Panda", "Tipo", "Topolino", "Doblò", "Ducato", "Scudo"]
+    };
+
+    // Elementos select
+    const brandSelect = filtersContainer.querySelector('select[name="brand"]');
+    const modelSelect = filtersContainer.querySelector('select[name="model"]');
+
+    // Actualiza los modelos según la marca seleccionada
+    function updateModelOptions() {
+        const selectedBrand = brandSelect.value;
+        modelSelect.innerHTML = '<option value="">Model</option>';
+        if (brandModels[selectedBrand]) {
+            brandModels[selectedBrand].forEach(model => {
+                const option = document.createElement('option');
+                option.value = model;
+                option.textContent = model;
+                modelSelect.appendChild(option);
+            });
+        }
+    }
+
+    brandSelect.addEventListener('change', () => {
+        updateModelOptions();
+        applyFilters();
+    });
+
+    // Si el usuario cambia el modelo, aplicar filtros
+    modelSelect.addEventListener('change', applyFilters);
+
     const fetchAndDisplayVehicles = async (queryString = '') => {
         try {
             const response = await fetch(`/api/vehicles?${queryString}`);
@@ -57,6 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     filtersContainer.addEventListener('change', applyFilters);
+
+        // Inicializar modelos si ya hay una marca seleccionada
+        updateModelOptions();
 
     // Carga inicial de todos los vehículos
     fetchAndDisplayVehicles();

@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const db = require('../models'); // Importa la instancia de la base de datos
 
 async function createAdminUser() {

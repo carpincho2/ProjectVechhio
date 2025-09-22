@@ -35,13 +35,38 @@
     background-color: var(--bg-main);
     color: var(--accent-lavender);
     min-height: calc(100vh - 80px);
-    margin-top: 80px; /* Espacio para header fijo */
+    margin-top: 40px; /* Espacio para header fijo */
+}
+
+/* Botón/enlace Financiar estilizado */
+
+.finance-button {
+    display: block;
+    width: 90%;
+    margin: 18px auto 0 auto;
+    color: var(--bg-main);
+    background: var(--accent-mint);
+    font-size: 1.08em;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 12px;
+    padding: 12px 0;
+    box-shadow: 0 2px 12px rgba(165,180,252,0.12);
+    letter-spacing: 0.5px;
+    text-align: center;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.finance-button:hover {
+    background: var(--accent-mint-hover);
+    color: var(--accent-peach);
+    box-shadow: 0 6px 24px rgba(165,180,252,0.18);
+    transform: translateY(-2px) scale(1.03);
 }
 
 .vehicles-section h1 {
     font-size: 1.75rem; /* 28px */
     margin-bottom: 8px;
-    color: var(--accent-lavender);
+    color: var(--accent-mint);
     text-align: center;
 }
 

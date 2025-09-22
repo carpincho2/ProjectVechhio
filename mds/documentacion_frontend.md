@@ -97,7 +97,17 @@ Este documento describe la lógica y el propósito de las páginas HTML del fron
         4.  **Renderizado Dinámico**: La función `fetchAndDisplayVehicles` es ahora capaz de enviar la cadena de consulta a la API. El backend procesa estos filtros y devuelve una lista de vehículos que coinciden con los criterios, que luego se renderiza en la página.
 *   **Estado Actual**: La visualización y el filtrado de vehículos son completamente funcionales.
 
+### Página de Financiación (`frontend/finance.html` y `frontend/finance.js`)
 
+*   **Propósito**: Permitir a los usuarios solicitar financiación para un vehículo específico.
+*   **Estructura HTML (`finance.html`)**:
+    *   Muestra la información del vehículo seleccionado.
+    *   Presenta un formulario para que el usuario seleccione el número de cuotas.
+*   **Lógica JavaScript (`finance.js`)**:
+    *   Obtiene el `vehicleId` de los parámetros de la URL.
+    *   Realiza una petición `fetch` para obtener y mostrar los datos del vehículo.
+    *   Maneja el envío del formulario de financiación.
+    *   **Importante**: Se ha corregido el script para que utilice la clave `'jwtToken'` (en lugar de `'token'`) al recuperar el token de autenticación del `localStorage`. Esto asegura que las solicitudes de financiación se envíen con el encabezado de autorización correcto, solucionando el problema que impedía a los usuarios logueados realizar la solicitud.
 ---
 
 # Variables CSS Globales

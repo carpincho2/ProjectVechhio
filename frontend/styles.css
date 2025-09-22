@@ -156,7 +156,7 @@ body{
 
 /* Main Content */
 .section-subtitle {
-    color: var(--accent-blue);
+    color: var(--accent-mint);
     font-size: 1.5rem; /* 24px */
     margin-top: 130px;
     margin-left: 25px;
@@ -178,7 +178,7 @@ body{
 }
 
 .titlevehicles {
-    color: var(--accent-blue);
+    color: var(--accent-mint);
     font-size: 2.5rem;
     text-align: center;
     margin: 40px 0 30px 0;
@@ -226,7 +226,7 @@ body{
 .section-subtitlecar {
     font-size: 1.4rem;
     margin: 15px 20px 10px 20px;
-    color: var(--accent-blue);
+    color: var(--accent-mint);
 }
 
 .description {
@@ -285,7 +285,7 @@ body{
 }
 
 .contactUs h2 {
-    color: var(--accent-blue);
+    color: var(--accent-mint);
     margin-bottom: 15px;
     font-size: 2rem;
     text-align: center;

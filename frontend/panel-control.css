@@ -426,7 +426,11 @@ table tr:nth-child(even) {
 .notification.show {
     transform: translateX(0);
 }
-
+.botonauto{
+    background-color: var(--accent-mint-hover);
+    color:black;
+    font-weight: bold;
+}
 /* Basic Responsiveness */
 @media (max-width: 968px) {
     .sidebar {

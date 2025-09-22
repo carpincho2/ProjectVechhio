@@ -9,6 +9,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // Forms
     const addVehicleForm = document.getElementById('add-vehicle-form');
 
+        // --- MODELOS POR MARCA ---
+        const brandModels = {
+            Toyota: ["Aygo X", "bZ4X", "C-HR", "Camry", "Corolla", "Corolla Cross", "Yaris", "GR Yaris", "4Runner", "Crown", "RAV4", "Tacoma", "Tundra"],
+            Mercedes: ["Clase A", "Clase B", "Clase C", "Clase E", "Clase G", "Clase S", "CLA", "GLA", "GLB", "GLC", "GLE", "GLS", "AMG GT", "AMG SL"],
+            Lexus: ["CT", "ES", "LBX", "LM", "LS", "NX", "RX", "RZ", "UX"],
+            Ford: ["Bronco", "Capri", "Explorer", "Focus", "Kuga", "Mustang", "Mustang Mach-E", "Puma", "Tourneo Custom", "Fiesta", "Mondeo", "EcoSport", "Edge"],
+            Honda: ["Accord", "Civic", "CR-V", "e:Ny1", "HR-V", "Jazz", "ZR-V", "City", "Civic Type R"],
+            Mclaren: ["540C", "570S", "600LT", "650S", "720S", "750S", "765LT", "Artura", "Solus GT"],
+            Peugeot: ["208", "308", "2008", "3008", "5008"],
+            Fiat: ["500", "600", "Panda", "Tipo", "Topolino", "Doblò", "Ducato", "Scudo"]
+        };
+
+        // --- LÓGICA DE SELECTS EN FORMULARIO ---
+        const brandSelectAdmin = document.querySelector('#add-vehicle-form select[name="brand"]');
+        const modelSelectAdmin = document.querySelector('#add-vehicle-form select[name="model"]');
+
+        function updateModelOptionsAdmin() {
+            const selectedBrand = brandSelectAdmin.value;
+            modelSelectAdmin.innerHTML = '<option value="">Modelo</option>';
+            if (brandModels[selectedBrand]) {
+                brandModels[selectedBrand].forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    modelSelectAdmin.appendChild(option);
+                });
+            }
+        }
+
+        if (brandSelectAdmin && modelSelectAdmin) {
+            brandSelectAdmin.addEventListener('change', updateModelOptionsAdmin);
+            // Inicializar modelos si ya hay una marca seleccionada
+            updateModelOptionsAdmin();
+        }
+
     // Table Bodies
     const vehiclesTableBody = document.querySelector('#vehicles-table tbody');
     const servicesTableBody = document.querySelector('#services-table tbody');
@@ -150,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             attachActionButtonListeners();
         } catch (error) {
             console.error('Error fetching finances:', error);
-            showNotification('Error al cargar finanzas.', false);
+            showNotification(`Error al cargar finanzas: ${error.message}`, false);
         }
     }
 
@@ -187,73 +222,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchDashboardCounts() {
         try {
-            // Fetch User Count (if applicable, assuming 'userCount' element exists)
-            // const usersResponse = await fetch('/api/users/all', { headers: { 'Authorization': `Bearer ${token}` } });
-            // if (usersResponse.ok) {
-            //     const users = await usersResponse.json();
-            //     const userCountElement = document.getElementById('userCount');
-            //     if (userCountElement) {
-            //         userCountElement.textContent = users.length;
-            //     }
-            // }
+            const headers = { 'Authorization': `Bearer ${token}` };
 
             // Fetch Vehicle Count
-            const vehiclesResponse = await fetch('/api/vehicles', { headers: { 'Authorization': `Bearer ${token}` } });
+            const vehiclesResponse = await fetch('/api/vehicles', { headers });
             if (vehiclesResponse.ok) {
                 const vehicles = await vehiclesResponse.json();
                 document.getElementById('totalVehicles').textContent = vehicles.length;
-
-                let newVehiclesCount = 0;
-                let usedVehiclesCount = 0;
-
-                vehicles.forEach(vehicle => {
-                    if (vehicle.condition === 'Nuevo') {
-                        newVehiclesCount++;
-                    } else if (vehicle.condition === 'Usado') {
-                        usedVehiclesCount++;
-                    }
-                });
-
-                document.getElementById('newVehicles').textContent = newVehiclesCount;
-                document.getElementById('usedVehicles').textContent = usedVehiclesCount;
+                const newCount = vehicles.filter(v => v.condition === 'Nuevo').length;
+                const usedCount = vehicles.filter(v => v.condition === 'Usado').length;
+                document.getElementById('newVehicles').textContent = newCount;
+                document.getElementById('usedVehicles').textContent = usedCount;
             }
 
             // Fetch Service Counts
-            const servicesResponse = await fetch('/api/services', { headers: { 'Authorization': `Bearer ${token}` } });
+            const servicesResponse = await fetch('/api/services', { headers });
             if (servicesResponse.ok) {
                 const services = await servicesResponse.json();
-                let scheduledServicesCount = 0;
-                let completedServicesCount = 0;
-                let pendingServicesCount = 0;
-
-                services.forEach(service => {
-                    if (service.status === 'Programado') { // Assuming 'Programado' for scheduled
-                        scheduledServicesCount++;
-                    } else if (service.status === 'Completado') { // Assuming 'Completado' for completed
-                        completedServicesCount++;
-                    } else if (service.status === 'Pendiente') { // Assuming 'Pendiente' for pending
-                        pendingServicesCount++;
-                    }
-                });
-
-                document.getElementById('scheduledServices').textContent = scheduledServicesCount;
-                document.getElementById('completedServices').textContent = completedServicesCount;
-                document.getElementById('pendingServices').textContent = pendingServicesCount;
+                document.getElementById('scheduledServices').textContent = services.filter(s => s.status === 'Programado').length;
+                document.getElementById('completedServices').textContent = services.filter(s => s.status === 'Completado').length;
+                document.getElementById('pendingServices').textContent = services.filter(s => s.status === 'Pendiente').length;
             }
 
-            // Fetch Finance Statistics from the new, efficient endpoint
-            const financeStatsResponse = await fetch('/api/statistics/finances', { headers: { 'Authorization': `Bearer ${token}` } });
+            // Fetch Finance Statistics from the efficient endpoint
+            const financeStatsResponse = await fetch('/api/statistics/finances', { headers });
             if (financeStatsResponse.ok) {
                 const stats = await financeStatsResponse.json();
                 document.getElementById('totalFinanceRequests').textContent = stats.total;
                 document.getElementById('approvedFinances').textContent = stats.approved;
                 document.getElementById('pendingFinances').textContent = stats.pending;
                 document.getElementById('rejectedFinances').textContent = stats.rejected;
+            } else {
+                // Handle potential error if the stats endpoint fails
+                const errorData = await financeStatsResponse.json();
+                throw new Error(errorData.error || 'Error al cargar estadísticas financieras');
             }
 
         } catch (error) {
             console.error('Error fetching dashboard counts:', error);
-            showNotification('Error al cargar estadísticas del panel.', false);
+            const statsErrorDiv = document.getElementById('stats-error');
+            if (statsErrorDiv) {
+                statsErrorDiv.textContent = error.message;
+                statsErrorDiv.style.display = 'block';
+            }
+            // Optionally show placeholders on error
+            document.getElementById('totalFinanceRequests').textContent = 'Error';
+            document.getElementById('approvedFinances').textContent = 'Error';
+            document.getElementById('pendingFinances').textContent = 'Error';
+            document.getElementById('rejectedFinances').textContent = 'Error';
         }
     }
 
@@ -379,25 +395,58 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (action === 'btn-edit') {
             let apiEndpoint = '';
             let refreshFunction;
-            let fieldsToEdit = [];
 
             if (button.closest('#vehicles-table')) {
                 apiEndpoint = `/api/vehicles/${itemId}`;
                 refreshFunction = fetchVehicles;
-                fieldsToEdit = ['brand', 'model', 'year', 'price', 'condition', 'mileage', 'color', 'description'];
+                // ... (vehicle edit logic)
             } else if (button.closest('#services-table')) {
                 apiEndpoint = `/api/services/${itemId}`;
                 refreshFunction = fetchServices;
-                fieldsToEdit = ['type', 'date', 'status', 'userId', 'vehicleId'];
+                // ... (service edit logic)
             } else if (button.closest('#finances-table')) {
-                apiEndpoint = `/api/finances/${itemId}`;
-                refreshFunction = fetchFinances;
-                fieldsToEdit = ['amount', 'term', 'userId'];
+                // Custom logic for finances
+                try {
+                    const newStatus = prompt('Cambiar estado de la financiación (approved/rejected):');
+                    if (newStatus && (newStatus === 'approved' || newStatus === 'rejected')) {
+                        let appointmentDate = null;
+                        if (newStatus === 'approved') {
+                            appointmentDate = prompt('Ingrese la fecha de la cita (YYYY-MM-DD HH:MM:SS):');
+                            if (!appointmentDate) {
+                                showNotification('La fecha de la cita es obligatoria para aprobar.', false);
+                                return;
+                            }
+                        }
+
+                        const response = await fetch(`/api/finances/${itemId}/status`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({ status: newStatus, appointmentDate: appointmentDate })
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                        }
+
+                        showNotification('Estado de la financiación actualizado.');
+                        fetchFinances();
+                    } else if (newStatus) {
+                        showNotification('Estado no válido. Use \'approved\' o \'rejected\'.', false);
+                    }
+                } catch (error) {
+                    console.error('Error al editar financiación:', error);
+                    showNotification(`Error: ${error.message}`, false);
+                }
+                return; // End execution for finances
             }
 
+            // Generic edit logic for other types
             if (apiEndpoint) {
                 try {
-                    // Fetch current data to pre-fill prompt
                     const currentResponse = await fetch(apiEndpoint, { headers: { 'Authorization': `Bearer ${token}` } });
                     if (!currentResponse.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -406,10 +455,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     let updatedData = {};
                     let changesMade = false;
+                    const fieldsToEdit = Object.keys(currentItem); // Simplified
 
                     for (const field of fieldsToEdit) {
+                        if (field === 'id' || field === 'createdAt' || field === 'updatedAt') continue;
                         let newValue = prompt(`Editar ${field} (actual: ${currentItem[field]}):`, currentItem[field]);
-                        if (newValue !== null && newValue !== String(currentItem[field])) { // Check for null (cancel) and actual change
+                        if (newValue !== null && newValue !== String(currentItem[field])) {
                             updatedData[field] = newValue;
                             changesMade = true;
                         }
@@ -430,7 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
                         }
                         showNotification('Elemento actualizado correctamente');
-                        refreshFunction(); // Refresh the list
+                        refreshFunction();
                     } else {
                         showNotification('No se realizaron cambios.', false);
                     }
@@ -438,8 +489,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Error al editar elemento:', error);
                     showNotification(`Error al editar elemento: ${error.message}`, false);
                 }
-            } else {
-                showNotification('No se pudo determinar el tipo de elemento a editar.', false);
             }
         } else if (action === 'btn-view') {
             // For view, we need to know the type of item

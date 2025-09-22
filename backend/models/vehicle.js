@@ -52,8 +52,8 @@ module.exports = (sequelize, DataTypes) => {
 
     // Definir asociaciones
     Vehicle.associate = (models) => {
-        Vehicle.hasMany(models.Finance, { foreignKey: 'vehicleId' });
-        Vehicle.hasMany(models.Service, { foreignKey: 'vehicleId' });
+           Vehicle.hasMany(models.Finance, { foreignKey: 'vehicleId', onDelete: 'CASCADE', hooks: true });
+           Vehicle.hasMany(models.Service, { foreignKey: 'vehicleId', onDelete: 'CASCADE', hooks: true });
     };
 
     return Vehicle;

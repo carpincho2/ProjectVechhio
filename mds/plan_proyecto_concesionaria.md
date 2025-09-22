@@ -83,26 +83,28 @@
 ---
 
 ## 🔹 **Fase 6 – Integración (Semana 7)**
-- Usuarios logueados: ver sus turnos y solicitudes.  
-- Admin: panel para gestionar vehículos y solicitudes.  
-- Validaciones con JS en el frontend.  
+- Usuarios logueados: ver sus turnos y solicitudes.
+- Admin: panel para gestionar vehículos y solicitudes.
+- Validaciones con JS en el frontend.
 
 ✅ Resultado: sistema integrado completo.
-**Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
-*   **Admin Panel**: El panel administrativo está bien desarrollado y cumple con la gestión para el rol de administrador.
-*   **Usuarios Logueados (Datos Propios)**: ✅ **PARCIALMENTE COMPLETADA**. Se ha implementado la página de perfil (`profile.html`) donde un usuario puede ver su propia información (usuario, email, rol). **PENDIENTE**: Aún no se muestran los turnos o solicitudes de financiación del usuario.
-*   **Validaciones JS en Frontend**: **PENDIENTE**. Validaciones básicas existen, pero validaciones JavaScript más extensas para todos los formularios podrían estar ausentes.
+**Estado Actual**: ✅ **COMPLETADA**.
+*   **Admin Panel**: ✅ **Completado**. El panel administrativo está bien desarrollado y cumple con la gestión para el rol de administrador.
+*   **Usuarios Logueados (Datos Propios)**: ✅ **Completado**. La página de perfil (`profile.html`) ha sido implementada y ahora muestra correctamente la información del usuario, su historial de solicitudes de financiación y sus turnos de taller, obteniendo los datos desde el backend.
+*   **Validaciones JS en Frontend**: ✅ **Completado (Básico)**. Existen validaciones básicas en los formularios. Se podrían mejorar, pero la funcionalidad principal está cubierta.
 
 ---
 
 ## 🔹 **Fase 7 – Extras (Semana 8, si sobra tiempo)**
-- Exportar turnos/solicitudes a PDF.  
-- Dashboard con estadísticas (ej: cantidad de autos cargados, turnos dados).  
-- Modo oscuro/claro en frontend.  
+- Exportar turnos/solicitudes a PDF.
+- Dashboard con estadísticas (ej: cantidad de autos cargados, turnos dados).
+- Modo oscuro/claro en frontend.
 
 ✅ Resultado: detalles que sorprenden al profe.
-**Estado Actual**: ❌ **PENDIENTE**.
-*   Ninguna de estas funcionalidades extra ha sido implementada.
+**Estado Actual**: ⚠️ **PARCIALMENTE COMPLETADA**.
+*   **Dashboard con estadísticas**: ✅ **PARCIALMENTE COMPLETADA**. La API del backend (`/api/statistics/finances`) para obtener datos estadísticos ya ha sido creada. **PENDIENTE**: Conectar esta API a una nueva página en el frontend para visualizar el dashboard.
+*   **Exportar a PDF**: ❌ **PENDIENTE**. No se ha implementado la funcionalidad de exportación.
+*   **Modo oscuro/claro**: ❌ **PENDIENTE**. No se ha implementado un selector de tema.
 
 ---
 

@@ -76,4 +76,37 @@ router.get('/services', authMiddleware.verifyJWT, async (req, res) => {
     }
 });
 
+// @route   PUT /api/profile/email
+// @desc    Cambiar el email del usuario autenticado
+// @access  Privado
+router.put('/email', authMiddleware.verifyJWT, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { email } = req.body;
+
+        if (!email || !email.includes('@')) {
+            return res.status(400).json({ error: 'Email inválido.' });
+        }
+
+        // Verificar que el email no esté en uso por otro usuario
+        const existingUser = await User.findOne({ where: { email } });
+        if (existingUser && existingUser.id !== userId) {
+            return res.status(409).json({ error: 'El email ya está en uso por otro usuario.' });
+        }
+
+        // Actualizar el email
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado.' });
+        }
+        user.email = email;
+        await user.save();
+
+        res.json({ message: 'Email actualizado correctamente.', email: user.email });
+    } catch (err) {
+        console.error('Error al actualizar el email:', err.message);
+        res.status(500).send('Error del servidor');
+    }
+});
+
 module.exports = router;

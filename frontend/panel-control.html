@@ -35,27 +35,28 @@
                     <div class="card">
                         <h3><i class="fas fa-car"></i> Estadísticas de Vehículos</h3>
                         <div class="stats">
-                            <p>Total de vehículos: <span class="stat-value" id="totalVehicles">12</span></p>
-                            <p>Vehículos nuevos: <span class="stat-value" id="newVehicles">0</span></p>
-                            <p>Vehículos usados: <span class="stat-value" id="usedVehicles">0</span></p>
+                            <p>Total de vehículos: <span class="stat-value" id="totalVehicles">Cargando...</span></p>
+                            <p>Vehículos nuevos: <span class="stat-value" id="newVehicles">Cargando...</span></p>
+                            <p>Vehículos usados: <span class="stat-value" id="usedVehicles">Cargando...</span></p>
                         </div>
                     </div>
                     <div class="card">
                         <h3><i class="fas fa-tools"></i> Estadísticas de Servicios</h3>
                         <div class="stats">
-                            <p>Servicios programados: <span class="stat-value" id="scheduledServices">5</span></p>
-                            <p>Servicios completados: <span class="stat-value" id="completedServices">12</span></p>
-                            <p>Servicios pendientes: <span class="stat-value" id="pendingServices">3</span></p>
+                            <p>Servicios programados: <span class="stat-value" id="scheduledServices">Cargando...</span></p>
+                            <p>Servicios completados: <span class="stat-value" id="completedServices">Cargando...</span></p>
+                            <p>Servicios pendientes: <span class="stat-value" id="pendingServices">Cargando...</span></p>
                         </div>
                     </div>
                     <div class="card">
                         <h3><i class="fas fa-chart-line"></i> Estadísticas Financieras</h3>
-                        <div class="stats">
-                            <p>Solicitudes Totales: <span class="stat-value" id="totalFinanceRequests">0</span></p>
-                            <p>Aprobadas: <span class="stat-value" id="approvedFinances">0</span></p>
-                            <p>Pendientes: <span class="stat-value" id="pendingFinances">0</span></p>
-                            <p>Rechazadas: <span class="stat-value" id="rejectedFinances">0</span></p>
+                        <div class="stats" id="finance-stats-container">
+                            <p>Solicitudes Totales: <span class="stat-value" id="totalFinanceRequests">Cargando...</span></p>
+                            <p>Aprobadas: <span class="stat-value" id="approvedFinances">Cargando...</span></p>
+                            <p>Pendientes: <span class="stat-value" id="pendingFinances">Cargando...</span></p>
+                            <p>Rechazadas: <span class="stat-value" id="rejectedFinances">Cargando...</span></p>
                         </div>
+                        <div id="stats-error" class="error-message" style="display: none; color: red; margin-top: 10px;"></div>
                     </div>
                 </div>
 
@@ -101,7 +102,9 @@
                         </div>
                         <div class="form-group">
                             <label for="model">Modelo:</label>
-                            <input type="text" id="model" name="model" placeholder="Modelo" required>
+                                <select id="model" name="model" required>
+                                    <option value="">Modelo</option>
+                                </select>
                         </div>
                         <div class="form-group">
                             <label for="year">Año:</label>
@@ -127,7 +130,7 @@
                             <label for="description">Descripción:</label>
                             <textarea id="description" name="description" placeholder="Descripción"></textarea>
                         </div>
-                        <button type="submit"><i class="fas fa-plus"></i> Añadir Vehículo</button>
+                        <button type="submit" class="botonauto"><i class="fas fa-plus"></i> Añadir Vehículo</button>
                     </form>
 
                     <h2>Listado de Vehículos</h2>

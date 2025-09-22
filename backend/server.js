@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const session = require('express-session');
 
 // Importar el objeto 'db' centralizado desde models/index.js
 const db = require('./models');
@@ -28,14 +27,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Parsear JSON y datos de formularios
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Configuración de la sesión
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'consecionaria-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 'secure: true' en producción con HTTPS
-}));
 
 // Middleware de debug para sessions (opcional, útil para desarrollo)
 app.use((req, res, next) => {
@@ -71,7 +62,7 @@ async function startServer() {
         await db.sequelize.authenticate();
         console.log('✅ Base de datos conectada y autenticada.');
 
-        await db.sequelize.sync({ alter: true }); // alter: true actualiza las tablas para que coincidan con los modelos
+        await db.sequelize.sync(); // Se elimina { alter: true }
         console.log('✅ Modelos sincronizados con la base de datos.');
         
         app.listen(PORT, '0.0.0.0', () => {

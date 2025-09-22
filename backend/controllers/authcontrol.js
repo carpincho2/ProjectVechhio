@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { User, Sequelize } = require('../models');
 
@@ -51,34 +51,7 @@ exports.login = async (req, res) => {
     }
 };
 
-// Reseteo Directo y No Seguro
-exports.directResetPassword = async (req, res) => {
-    try {
-        const { username, password } = req.body;
 
-        if (!username || !password) {
-            return res.status(400).json({ error: 'El nombre de usuario y la nueva contraseña son obligatorios.' });
-        }
-
-        const user = await User.findOne({ where: { username: username } });
-
-        if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado.' });
-        }
-
-        // Actualizar contraseña
-        const hashedPassword = await bcrypt.hash(password, 10);
-        await user.update({
-            password: hashedPassword
-        });
-
-        res.status(200).json({ message: `Contraseña para el usuario '${username}' actualizada exitosamente.` });
-
-    } catch (error) {
-        console.error('[ERROR] en directResetPassword:', error);
-        res.status(500).json({ error: 'Error al restablecer la contraseña.' });
-    }
-};
 
 // Funciones de check y logout
 exports.checkAuth = (req, res) => {

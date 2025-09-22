@@ -154,6 +154,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // --- CAMBIO DE EMAIL ---
+    const changeEmailForm = document.getElementById('change-email-form');
+    const newEmailInput = document.getElementById('new-email');
+    const changeEmailMessage = document.getElementById('change-email-message');
+
+    if (changeEmailForm) {
+        changeEmailForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newEmail = newEmailInput.value.trim();
+            changeEmailMessage.textContent = '';
+            if (!newEmail || !newEmail.includes('@')) {
+                changeEmailMessage.textContent = 'Email inválido.';
+                changeEmailMessage.style.color = 'red';
+                return;
+            }
+            try {
+                const response = await fetch('/api/profile/email', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ email: newEmail })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    changeEmailMessage.textContent = 'Email actualizado correctamente.';
+                    changeEmailMessage.style.color = 'green';
+                    fetchUserProfile(); // Actualiza el email mostrado
+                } else {
+                    changeEmailMessage.textContent = data.error || 'Error al actualizar el email.';
+                    changeEmailMessage.style.color = 'red';
+                }
+            } catch (err) {
+                changeEmailMessage.textContent = 'Error de conexión.';
+                changeEmailMessage.style.color = 'red';
+            }
+        });
+    }
+
     // Cargar todos los datos al iniciar la página
     fetchUserProfile();
     fetchFinanceHistory();

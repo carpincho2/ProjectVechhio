@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadVehicleData = async () => {
         if (!vehicleId) {
-            vehicleInfoDiv.innerHTML = `<p style="color: red;">No se ha especificado un vehículo. Por favor, <a href="vehicles.html">seleccione uno del catálogo</a>.</p>`;
+            vehicleInfoDiv.innerHTML = `<p style="color: red;">No se ha especificado un vehículo. Por favor, <a href="vehicles.html" style='color:violet;'>seleccione uno del catálogo</a>.</p>`;
             return;
         }
 
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     financeForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const token = localStorage.getItem('token');
+                const token = localStorage.getItem('jwtToken');
         if (!token) {
             messageDiv.textContent = 'Debe iniciar sesión para enviar una solicitud. Redirigiendo...';
             messageDiv.style.color = 'red';

@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         status: {
             type: DataTypes.STRING,
-            defaultValue: 'pending'
+            defaultValue: 'received' // Cambiado de 'pending' a 'received'
+        },
+        appointmentDate: { // Fecha de la cita para la financiación
+            type: DataTypes.DATE,
+            allowNull: true
         },
         userId: {
             type: DataTypes.INTEGER,

@@ -219,6 +219,24 @@ tbody tr:hover {
     transform: translateY(0);
 }
 
+/* Botón cambiar email (mint accent) */
+#change-email-form button {
+    background-color: var(--accent-mint);
+    color: var(--bg-main);
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 8px rgba(153, 246, 228, 0.15);
+}
+#change-email-form button:hover {
+    background-color: var(--accent-mint-hover);
+    box-shadow: 0 4px 12px rgba(153, 246, 228, 0.25);
+}
+
 /* Error Message */
 .error-message {
     color: #7f1d1d;
