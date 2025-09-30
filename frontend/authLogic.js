@@ -39,3 +39,12 @@ export async function handleAuthInitialization() {
     await checkLogin();
     updateAuthHeader();
 }
+
+// Event listener para el botón de Google Sign-In
+const googleSignInBtn = document.getElementById('google-signin-btn');
+if (googleSignInBtn) {
+    googleSignInBtn.addEventListener('click', function() {
+        // Redirigir al endpoint de autenticación de Google en el backend
+        window.location.href = '/api/auth/google';
+    });
+}

@@ -26,9 +26,18 @@
         <label for="confirm">Repetir Contraseña</label>
         <input type="password" id="confirm" name="confirm" required class="input">
 
+        <div class="google-auth-container">
+            <button id="google-signin-btn" class="google-btn">
+                <i class="fab fa-google"></i> Registrarse con Google
+            </button>
+        </div>
+
         <button type="submit">Crear cuenta</button>
     </form>
+
     <script src="login.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+    <script type="module" src="./authLogic.js" defer></script>
     <script>
         const form = document.getElementById('registerForm');
         const password = document.getElementById('password');

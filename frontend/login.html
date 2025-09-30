@@ -6,6 +6,8 @@
   <title>Login - Carpane</title>
   <link rel="shortcut icon" href="/logos/favicon_io/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="loginregisterstyle.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+  <script type="module" src="./authLogic.js" defer></script>
 </head>
 <body>
   <form id="loginForm" action="/api/auth/login" method="POST">
@@ -27,6 +29,12 @@
     
     <div class="form-links">
       <a href="/direct-reset.html">¿Olvidaste tu contraseña?</a>
+    </div>
+
+    <div class="google-auth-container">
+      <button id="google-signin-btn" class="google-btn">
+        <i class="fab fa-google"></i> Iniciar sesión con Google
+      </button>
     </div>
 
   </form>

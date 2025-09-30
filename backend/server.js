@@ -17,6 +17,10 @@ const statisticsRoutes = require('./routes/statistics');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Configuración de Passport
+const passport = require('passport');
+require('./config/passport')(passport);
+
 // --- Middlewares ---
 // Servir archivos estáticos del frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
@@ -27,6 +31,18 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Parsear JSON y datos de formularios
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Configuración de Sesión para Passport
+const session = require('express-session');
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'tu_secreto_de_sesion',
+    resave: false,
+    saveUninitialized: false
+}));
+
+// Inicialización de Passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Middleware de debug para sessions (opcional, útil para desarrollo)
 app.use((req, res, next) => {
@@ -62,7 +78,7 @@ async function startServer() {
         await db.sequelize.authenticate();
         console.log('✅ Base de datos conectada y autenticada.');
 
-        await db.sequelize.sync(); // Se elimina { alter: true }
+        await db.sequelize.sync({ alter: true }); // Forzar actualización del esquema
         console.log('✅ Modelos sincronizados con la base de datos.');
         
         app.listen(PORT, '0.0.0.0', () => {

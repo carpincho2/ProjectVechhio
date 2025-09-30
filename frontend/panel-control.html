@@ -242,7 +242,7 @@
                             <th>Username</th>
                             <th>Email</th>
                             <th>Rol</th>
-                            <th>Cambiar Rol</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -256,6 +256,30 @@
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
         <span id="notification-text">Operación realizada con éxito</span>
+    </div>
+
+    <!-- Modal para Editar Financiación -->
+    <div id="finance-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Editar Estado de Financiación</h2>
+            <form id="finance-edit-form">
+                <input type="hidden" id="finance-id-input">
+                <div class="form-group">
+                    <label for="finance-status-select">Estado:</label>
+                    <select id="finance-status-select" name="status">
+                        <option value="received">Recibido</option>
+                        <option value="approved">Aprobado</option>
+                        <option value="rejected">Rechazado</option>
+                    </select>
+                </div>
+                <div class="form-group" id="appointment-date-group" style="display: none;">
+                    <label for="appointment-date-input">Fecha de la Cita:</label>
+                    <input type="datetime-local" id="appointment-date-input" name="appointmentDate">
+                </div>
+                <button type="submit" class="btn btn-save">Guardar Cambios</button>
+            </form>
+        </div>
     </div>
 
     <script src="panel-control.js"></script>

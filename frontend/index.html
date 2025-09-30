@@ -6,10 +6,12 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js"></script>
     <script type="module" src="./authLogic.js" defer></script>
     
     <link rel="shortcut icon" href="/logos/favicon_io/favicon.ico" type="image/x-icon">
-    <title>dealership</title>
+    <title>dealership-pane</title>
 </head>
 <body>
     <header class="header">
@@ -34,6 +36,9 @@
         
         <div id="auth-container" class="user-auth-section">
             <!-- Este contenido se generará dinámicamente -->
+            <button id="google-signin-btn" class="google-btn">
+                <i class="fab fa-google"></i> Iniciar sesión con Google
+            </button>
         </div>
     </header>
     <div class="main-banner">

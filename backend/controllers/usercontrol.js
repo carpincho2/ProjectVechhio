@@ -52,7 +52,35 @@ const updateUserRole = async (req, res) => {
     }
 };
 
+// @desc    Eliminar un usuario
+// @route   DELETE /api/users/:id
+// @access  Private (SuperAdmin)
+const deleteUser = async (req, res) => {
+    try {
+        const userIdToDelete = req.params.id;
+        const currentUserId = req.user.id;
+
+        // Un superadmin no puede eliminarse a sí mismo
+        if (userIdToDelete == currentUserId) {
+            return res.status(403).json({ error: 'Acción no permitida: no puedes eliminar tu propia cuenta.' });
+        }
+
+        const user = await User.findByPk(userIdToDelete);
+
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        await user.destroy();
+
+        res.status(200).json({ message: 'Usuario eliminado correctamente.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al eliminar el usuario: ' + error.message });
+    }
+};
+
 module.exports = {
     getAllUsers,
-    updateUserRole
+    updateUserRole,
+    deleteUser
 };

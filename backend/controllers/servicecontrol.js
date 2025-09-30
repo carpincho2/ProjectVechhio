@@ -1,38 +1,65 @@
-const db = require('../models');
+const { Service, User, Vehicle } = require('../models');
 
-// Crear un nuevo servicio
-exports.createService = async (serviceData) => {
+// @desc    Crear una nueva solicitud de servicio
+// @route   POST /api/services
+// @access  Private
+exports.createService = async (req, res) => {
     try {
-        const newService = await db.Service.create(serviceData);
-        return newService;
+        const { type, date, vehicleId } = req.body;
+        const userId = req.user.id; // Se obtiene del token JWT
+
+        if (!type || !date) {
+            return res.status(400).json({ error: 'El tipo y la fecha del servicio son obligatorios.' });
+        }
+
+        const newService = await Service.create({ type, date, vehicleId, userId, status: 'scheduled' });
+        res.status(201).json(newService);
     } catch (error) {
         console.error('Error al crear servicio:', error);
-        throw new Error('Error interno del servidor');
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
-// Obtener todos los servicios
-exports.getAllServices = async () => {
+// @desc    Obtener todos los servicios
+// @route   GET /api/services
+// @access  Private (Admin)
+exports.getAllServices = async (req, res) => {
     try {
-        const services = await db.Service.findAll();
-        return services;
+        const services = await Service.findAll({
+            include: [
+                { model: User, attributes: ['id', 'username'] },
+                { model: Vehicle, attributes: ['id', 'brand', 'model'] }
+            ]
+        });
+        res.status(200).json(services);
     } catch (error) {
         console.error('Error al obtener servicios:', error);
-        throw new Error('Error interno del servidor');
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
-// Actualizar un servicio
-exports.updateService = async (id, serviceData) => {
+// @desc    Actualizar un servicio
+// @route   PUT /api/services/:id
+// @access  Private (Admin)
+exports.updateService = async (req, res) => {
     try {
-        const service = await db.Service.findByPk(id);
+        const { id } = req.params;
+        const { type, date, status } = req.body;
+
+        const service = await Service.findByPk(id);
         if (!service) {
-            throw new Error('Servicio no encontrado');
+            return res.status(404).json({ error: 'Servicio no encontrado' });
         }
-        await service.update(serviceData);
-        return service;
+
+        // Actualizar solo los campos que se envían
+        service.type = type || service.type;
+        service.date = date || service.date;
+        service.status = status || service.status;
+
+        await service.save();
+        res.status(200).json(service);
     } catch (error) {
         console.error('Error al actualizar servicio:', error);
-        throw new Error('Error interno del servidor');
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };

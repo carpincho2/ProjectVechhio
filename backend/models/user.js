@@ -23,10 +23,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true, // La contraseña no es obligatoria para usuarios de Google
             validate: {
                 len: [6, 100]
             }
+        },
+        googleId: {
+            type: DataTypes.STRING,
+            unique: true
         },
         role: {
             type: DataTypes.STRING,

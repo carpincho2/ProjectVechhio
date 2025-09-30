@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const vehicleListContainer = document.getElementById('vehicle-list');
-    const filtersContainer = document.querySelector('.filters');
+    const filters = document.querySelector('.filters');
 
-    // Diccionario de modelos por marca
     const brandModels = {
         Toyota: ["Aygo X", "bZ4X", "C-HR", "Camry", "Corolla", "Corolla Cross", "Yaris", "GR Yaris", "4Runner", "Crown", "RAV4", "Tacoma", "Tundra"],
         Mercedes: ["Clase A", "Clase B", "Clase C", "Clase E", "Clase G", "Clase S", "CLA", "GLA", "GLB", "GLC", "GLE", "GLS", "AMG GT", "AMG SL"],
@@ -14,15 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
         Fiat: ["500", "600", "Panda", "Tipo", "Topolino", "Doblò", "Ducato", "Scudo"]
     };
 
-    // Elementos select
-    const brandSelect = filtersContainer.querySelector('select[name="brand"]');
-    const modelSelect = filtersContainer.querySelector('select[name="model"]');
+    const brandSelect = filters.querySelector('select[name="brand"]');
+    const modelSelect = filters.querySelector('select[name="model"]');
 
-    // Actualiza los modelos según la marca seleccionada
     function updateModelOptions() {
         const selectedBrand = brandSelect.value;
-        modelSelect.innerHTML = '<option value="">Model</option>';
-        if (brandModels[selectedBrand]) {
+        modelSelect.innerHTML = '<option value="">Model</option>'; // Reset and add default
+        if (selectedBrand && brandModels[selectedBrand]) {
             brandModels[selectedBrand].forEach(model => {
                 const option = document.createElement('option');
                 option.value = model;
@@ -32,15 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    brandSelect.addEventListener('change', () => {
-        updateModelOptions();
-        applyFilters();
-    });
-
-    // Si el usuario cambia el modelo, aplicar filtros
-    modelSelect.addEventListener('change', applyFilters);
-
-    const fetchAndDisplayVehicles = async (queryString = '') => {
+    async function fetchAndDisplayVehicles(queryString = '') {
         try {
             const response = await fetch(`/api/vehicles?${queryString}`);
             if (!response.ok) {
@@ -48,57 +37,62 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const vehicles = await response.json();
 
-            vehicleListContainer.innerHTML = ''; // Limpiar siempre antes de mostrar
+            vehicleListContainer.innerHTML = '';
 
             if (vehicles.length === 0) {
-                vehicleListContainer.innerHTML = '<p style="color: white; text-align: center;">No se encontraron vehículos que coincidan con su búsqueda.</p>';
+                vehicleListContainer.innerHTML = '<p class="no-vehicles-message">No vehicles found matching your criteria.</p>';
                 return;
             }
 
             vehicles.forEach(vehicle => {
                 const vehicleCard = document.createElement('div');
                 vehicleCard.classList.add('carbox');
-
-                const imageUrl = vehicle.image ? `/uploads/${vehicle.image}` : 'https://via.placeholder.com/300x200.png?text=Sin+Imagen';
+                const imageUrl = vehicle.image ? `/uploads/${vehicle.image}` : 'https://via.placeholder.com/300x200.png?text=No+Image';
 
                 vehicleCard.innerHTML = `
                     <img src="${imageUrl}" alt="${vehicle.brand} ${vehicle.model}" class="car">
                     <h2 class="section-subtitlecar">${vehicle.brand} ${vehicle.model} (${vehicle.year})</h2>
-                    <p class="description"><strong>Precio:</strong> ${new Intl.NumberFormat('es-AR').format(vehicle.price)}</p>
-                    <p class="description"><strong>Condición:</strong> ${vehicle.condition}</p>
-                    <p class="description"><strong>Kilometraje:</strong> ${new Intl.NumberFormat('es-AR').format(vehicle.mileage)} km</p>
-                    <p class="description">${vehicle.description || 'Sin descripción.'}</p>
-                    <a href="finance.html?vehicleId=${vehicle.id}" class="finance-button">Financiar</a>
+                    <p class="description"><strong>Price:</strong> $${new Intl.NumberFormat('en-US').format(vehicle.price)}</p>
+                    <p class="description"><strong>Condition:</strong> ${vehicle.condition}</p>
+                    <p class="description"><strong>Mileage:</strong> ${vehicle.mileage ? new Intl.NumberFormat('en-US').format(vehicle.mileage) + ' km' : 'N/A'}</p>
+                    <p class="description">${vehicle.description || 'No description available.'}</p>
+                    <a href="finance.html?vehicleId=${vehicle.id}" class="finance-button">Finance</a>
                 `;
-
                 vehicleListContainer.appendChild(vehicleCard);
             });
-
-            // Línea de depuración añadida
-            console.log('DEBUG: Estado de FiltersContainer:', document.querySelector('.filters'));
-
         } catch (error) {
-            console.error('Error al cargar los vehículos:', error);
-            vehicleListContainer.innerHTML = '<p style="color: red; text-align: center;">Error al cargar los vehículos. Por favor, intente más tarde.</p>';
+            console.error('Error fetching vehicles:', error);
+            vehicleListContainer.innerHTML = '<p class="no-vehicles-message" style="color: red;">Failed to load vehicles. Please try again later.</p>';
         }
-    };
+    }
 
-    const applyFilters = () => {
-        const selects = filtersContainer.querySelectorAll('select');
+    function applyFilters() {
         const params = new URLSearchParams();
+        const selects = filters.querySelectorAll('select');
+        
         selects.forEach(select => {
-            if (select.value && select.value !== select.options[0].text) {
+            // Only add the filter if a meaningful value is selected
+            if (select.value) {
                 params.append(select.name, select.value);
             }
         });
+        
         fetchAndDisplayVehicles(params.toString());
-    };
+    }
 
-    filtersContainer.addEventListener('change', applyFilters);
+    // --- EVENT LISTENERS ---
 
-        // Inicializar modelos si ya hay una marca seleccionada
+    brandSelect.addEventListener('change', () => {
         updateModelOptions();
+        applyFilters(); // Apply filters after updating models
+    });
 
-    // Carga inicial de todos los vehículos
-    fetchAndDisplayVehicles();
+    // Add event listeners to all other filters
+    filters.querySelectorAll('select:not([name="brand"])').forEach(select => {
+        select.addEventListener('change', applyFilters);
+    });
+
+    // --- INITIALIZATION ---
+    updateModelOptions(); // Initial call to populate models if a brand is pre-selected
+    fetchAndDisplayVehicles(); // Initial load of all vehicles
 });
