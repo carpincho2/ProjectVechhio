@@ -13,6 +13,7 @@ const vehicleRoutes = require('./routes/vehicles'); // Descomentar cuando se imp
 const profileRoutes = require('./routes/profile');
 const userRoutes = require('./routes/users');
 const statisticsRoutes = require('./routes/statistics');
+const contactRoutes = require('./routes/contact');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -60,6 +61,7 @@ app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/statistics', statisticsRoutes);
+app.use('/api/contact', contactRoutes);
 
 app.get('/panel-control', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/panel-control.html'));
@@ -78,7 +80,11 @@ async function startServer() {
         await db.sequelize.authenticate();
         console.log('✅ Base de datos conectada y autenticada.');
 
-        await db.sequelize.sync({ alter: true }); // Forzar actualización del esquema
+        if (db.UserBackup) {
+            await db.UserBackup.destroy({ truncate: true });
+        }
+
+        await db.sequelize.sync(); // Forzar actualización del esquema
         console.log('✅ Modelos sincronizados con la base de datos.');
         
         app.listen(PORT, '0.0.0.0', () => {

@@ -43,7 +43,6 @@ exports.createFinance = async (req, res) => {
 
         res.status(201).json(newFinance);
     } catch (error) {
-        console.error('Error al crear solicitud de financiación:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };
@@ -59,7 +58,6 @@ exports.getAllFinances = async (req, res) => {
         });
         res.status(200).json(finances);
     } catch (error) {
-        console.error('Error al obtener solicitudes de financiación:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
@@ -125,7 +123,6 @@ exports.updateFinanceStatus = async (req, res) => {
 
         res.status(200).json(finance);
     } catch (error) {
-        console.error('Error al actualizar la solicitud de financiación:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };
@@ -146,7 +143,6 @@ exports.deleteFinance = async (req, res) => {
         await finance.destroy();
         res.json({ message: 'Solicitud de financiación eliminada correctamente.' });
     } catch (error) {
-        console.error('Error al eliminar la solicitud de financiación:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };

@@ -156,6 +156,13 @@
   transform: translateY(0);
 }
 
+/* Mejora visual para campos con error en el formulario de servicio */
+.input-error {
+  border: 2px solid #ef4444 !important;
+  background: #fff0f0;
+  transition: border 0.2s, background 0.2s;
+}
+
 /* Responsive Design */
 
 /* Tablet */

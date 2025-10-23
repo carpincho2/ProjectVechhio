@@ -11,7 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadVehicleData = async () => {
         if (!vehicleId) {
-            vehicleInfoDiv.innerHTML = `<p style="color: red;">No se ha especificado un vehículo. Por favor, <a href="vehicles.html" style='color:violet;'>seleccione uno del catálogo</a>.</p>`;
+            vehicleInfoDiv.innerHTML = `
+                <div class="no-vehicle-error">
+                  <span class="no-vehicle-title">Financiar Vehículo</span>
+                  <p class="no-vehicle-message">No se ha especificado un vehículo.<br>Por favor, <a href="vehicles.html" class="no-vehicle-link">seleccione uno del catálogo</a>.</p>
+                </div>
+            `;
             return;
         }
 

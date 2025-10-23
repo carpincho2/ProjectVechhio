@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financiación - Pane Concesionaria</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="finance.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/logos/favicon_io/favicon.ico" type="image/x-icon">
-    <title>Finance</title>
 </head>
 <body>
     <header class="header">
-        <div >
-           <a href="index.html"><img src="logo.png" alt="" class="logo"></a>
+        <div>
+           <a href="index.html"><img src="logo.png" alt="Logo" class="logo"></a>
         </div>
         <div class="vehicles">
             <a href="vehicles.html">Vehicles</a>
@@ -20,7 +20,7 @@
             <a href="certified.html">Certified</a>
         </div>
         <div class="finance">
-            <a href="finance.html">Finance</a>
+            <a href="finance.html" class="active">Finance</a>
         </div>
         <div class="service">
             <a href="service.html">Service</a>
@@ -33,49 +33,36 @@
         </div>
     </header>
 
-    <section class="finance-container">
-  <h1 class="finance-title">Opciones de Financiación</h1>
-  <p class="finance-description">
-    Estás a un paso de conseguir el auto de tus sueños. Completa el formulario para solicitar la financiación.
-  </p>
+    <section class="finance-hero">
+      <h1>Opciones de Financiación</h1>
+      <p>Estás a un paso de conseguir el auto de tus sueños.<br>Completá el formulario para solicitar la financiación.</p>
+    </section>
 
-  <div class="finance-grid">
-    <div class="finance-card">
-      <h2>Créditos Flexibles</h2>
-      <p>Elegí la cantidad de cuotas que mejor se adapte a vos.</p>
-    </div>
-    <div class="finance-card">
-      <h2>Financiar Vehículo</h2>
-      <div id="vehicle-info-display" class="vehicle-details">
-          <!-- La información del vehículo se cargará aquí -->
+    <section class="finance-grid">
+      <div class="finance-card">
+        <h2>Financiar Vehículo</h2>
+        <div id="vehicle-info-display" class="vehicle-details">
+            <!-- La información del vehículo se cargará aquí -->
+        </div>
+        <form class="finance-form" id="finance-form" style="display: none;">
+          <label for="monto">Monto a financiar (AR$)</label>
+          <input type="number" id="monto" placeholder="Cargando..." readonly required>
+
+          <label for="cuotas">Cuotas</label>
+          <select id="cuotas" required>
+            <option value="12">12</option>
+            <option value="24">24</option>
+            <option value="36">36</option>
+            <option value="48">48</option>
+          </select>
+
+          <button type="submit">Solicitar Financiación</button>
+        </form>
+        <div id="form-message" class="finance-result" style="display: none;"></div>
       </div>
-      <form class="finance-form" id="finance-form" style="display: none;"> <!-- Oculto hasta que se cargue el vehículo -->
-        <label for="monto">Monto a financiar (AR$)</label>
-        <input type="number" id="monto" placeholder="Cargando..." readonly required>
+    </section>
 
-        <label for="cuotas">Cuotas</label>
-        <select id="cuotas" required>
-          <option value="12">12</option>
-          <option value="24">24</option>
-          <option value="36">36</option>
-          <option value="48">48</option>
-        </select>
-
-        <button type="submit">Solicitar Financiación</button>
-      </form>
-      <div id="form-message" class="finance-result" style="display: none;"></div>
-    </div>
-    <div class="finance-card">
-      <h2>Ventajas Exclusivas</h2>
-      <ul>
-        <li>Preaprobación online</li>
-        <li>Bonificación de seguro</li>
-        <li>Atención personalizada</li>
-      </ul>
-    </div>
-  </div>
-</section>
-<script src="finance.js"></script>
+    <script src="finance.js"></script>
     <script type="module" src="./main.js" defer></script>
 </body>
 </html>

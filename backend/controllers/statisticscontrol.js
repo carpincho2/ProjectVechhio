@@ -18,7 +18,6 @@ const getFinanceStats = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error al obtener estadísticas de financiación:', error);
         res.status(500).json({ error: 'Error interno del servidor al calcular las estadísticas.' });
     }
 };
@@ -39,7 +38,6 @@ const getVehicleStats = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error al obtener estadísticas de vehículos:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };
@@ -62,7 +60,6 @@ const getServiceStats = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error al obtener estadísticas de servicios:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };

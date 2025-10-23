@@ -12,8 +12,9 @@ Este documento detalla la lógica implementada en el frontend para el proceso de
 
 Los principales archivos que orquestan este flujo son:
 
-*   `frontend/login.html`: Página HTML para el inicio de sesión.
+*   `frontend/login.html`: Página HTML para el inicio de sesión. Contiene un enlace para "Iniciar sesión con Google".
 *   `frontend/register.html`: Página HTML para el registro de nuevos usuarios.
+*   `frontend/auth-success.html`: Página de transición que se encarga de capturar el token JWT de la URL después de una autenticación exitosa con Google.
 *   `frontend/login.js`: Script JavaScript que maneja la lógica del lado del cliente para el login y la visualización de mensajes.
 *   `frontend/modulos.js`: Módulo JavaScript que contiene funciones compartidas, incluyendo la verificación del estado de la sesión (`checkLogin`).
 *   `frontend/authLogic.js`: Nuevo módulo JavaScript que encapsula la lógica de `updateAuthHeader` y la inicialización del estado de autenticación (`handleAuthInitialization`), importando `checkLogin` de `modulos.js`.
@@ -30,9 +31,17 @@ Los principales archivos que orquestan este flujo son:
 *   **Funciones `displayMessage` y `clearMessages`**: Controlan la visibilidad, el contenido y el estilo de los elementos `errorMessage` y `successMessage`.
 *   **Redirección por Rol**: Después de un login o registro exitoso, el script guarda el token JWT y el rol del usuario en `localStorage`. Redirige a `/panel-control.html` si el rol es `admin` o `superadmin`, y a `/index.html` en caso contrario.
 
-## 2. Página de Registro (`frontend/register.html`)
+## 2. Flujo de Autenticación con Google
 
-*   Similar al login, pero para crear nuevos usuarios. La lógica de redirección también considera los roles `admin` y `superadmin`.
+1.  **Inicio del Flujo**: En `login.html`, el usuario hace clic en el enlace "Iniciar sesión con Google", que apunta a `/api/auth/google`.
+2.  **Redirección a Google**: El backend intercepta esta solicitud y redirige al usuario a la página de autenticación de Google.
+3.  **Callback del Backend**: Una vez que el usuario se autentica en Google, es redirigido de vuelta al backend (`/api/auth/google/callback`).
+4.  **Redirección al Frontend con Token**: El backend genera un token JWT y redirige al usuario a `frontend/auth-success.html`, incluyendo el token en la URL (ej: `auth-success.html?token=...`).
+5.  **Captura del Token**: La página `auth-success.html` ejecuta un script simple que:
+    *   Extrae el token de los parámetros de la URL.
+    *   Guarda el token en `localStorage`.
+    *   Redirige al usuario a la página principal (`index.html`).
+6.  **Sesión Iniciada**: La lógica en `index.html` (y otras páginas) detecta el token en `localStorage` y actualiza la interfaz para reflejar que el usuario ha iniciado sesión.
 
 ## 3. Panel de Control Administrativo (`frontend/panel-control.html` y `frontend/panel-control.js`)
 
@@ -51,7 +60,7 @@ Este es el corazón de la interfaz de administración.
 *   **`fetchServices()`**: Implementada para obtener y mostrar dinámicamente la lista de solicitudes de servicio en la tabla `#services-table`. Incluye el encabezado `Authorization` para peticiones autenticadas.
 *   **`fetchFinances()`**: Implementada para obtener y mostrar dinámicamente la lista de solicitudes de financiación en la tabla `#finances-table`. Incluye el encabezado `Authorization` para peticiones autenticadas.
 *   **`fetchUsers()`**: Nueva función que se llama al acceder a la sección `#users`. Realiza una petición `GET` a `/api/users` (ruta protegida) para obtener la lista de todos los usuarios.
-*   **`fetchDashboardCounts()`**: Nueva función que obtiene el número total de vehículos, servicios y solicitudes de financiación del backend y actualiza los elementos correspondientes en el Dashboard. **Se ha mejorado para calcular y mostrar también el número de vehículos 'Nuevos' y 'Usados' basándose en la propiedad `condition` de los vehículos obtenidos del backend, y para actualizar dinámicamente las estadísticas de servicios (programados, completados, pendientes) y finanzas (ingresos mensuales, solicitudes totales, aprobadas) basándose en los datos obtenidos de sus respectivas APIs.**
+*   **`fetchDashboardCounts()`**: **Actualizado**. Esta función ahora realiza llamadas a los endpoints de estadísticas del backend (`/api/statistics/vehicles`, `/api/statistics/services`, etc.) para obtener los datos de forma eficiente, en lugar de calcularlos en el cliente.
 *   **Renderizado de Tablas**: Las funciones `fetchVehicles`, `fetchServices`, `fetchFinances` y `fetchUsers` pueblan dinámicamente sus respectivas tablas con los datos obtenidos del backend.
 *   **Actualización de Roles**: Se ha añadido un `eventListener` a la tabla de usuarios. Al hacer clic en "Guardar", se envía una petición `PUT` a `/api/users/:id/role` con el nuevo rol seleccionado, actualizando al usuario en la base de datos. Se muestra una notificación de éxito o error.
 *   **Manejo de Acciones (Ver/Editar/Eliminar)**: La función `handleActionButtonClick` maneja las operaciones de ver, editar y **eliminar** elementos (vehículos, servicios, finanzas). Ahora incluye el encabezado `Authorization` en todas las peticiones `fetch` para asegurar que las operaciones estén correctamente autenticadas.

@@ -64,11 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await response.json();
 
                 if (response.ok) {
-                    console.log('DEBUG: Intentando guardar en localStorage (Login):', data.token, data.user.role, data.user.username);
                     localStorage.setItem('jwtToken', data.token);
                     localStorage.setItem('userRole', data.user.role);
                     localStorage.setItem('userName', data.user.username);
-                    console.log('DEBUG: Valores guardados en localStorage (Login):', localStorage.getItem('jwtToken'), localStorage.getItem('userRole'), localStorage.getItem('userName'));
                     
                     // Redirect based on role
                     if (data.user.role === 'admin' || data.user.role === 'superadmin') {
@@ -81,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     displayMessage(errorMessageElement, data.error || 'Error en el login.', 'error');
                 }
             } catch (error) {
-                console.error('Error en la solicitud de login:', error);
                 displayMessage(errorMessageElement, 'Error de conexión con el servidor.', 'error');
             }
         });
@@ -120,11 +117,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await response.json();
 
                 if (response.ok) {
-                    console.log('DEBUG: Intentando guardar en localStorage (Registro):', data.token, data.user.role, data.user.username);
                     localStorage.setItem('jwtToken', data.token);
                     localStorage.setItem('userRole', data.user.role);
                     localStorage.setItem('userName', data.user.username);
-                    console.log('DEBUG: Valores guardados en localStorage (Registro):', localStorage.getItem('jwtToken'), localStorage.getItem('userRole'), localStorage.getItem('userName'));
                     // Redirect after successful registration
                     if (data.user.role === 'admin' || data.user.role === 'superadmin') {
                         window.location.href = '/panel-control.html';
@@ -135,7 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     displayMessage(errorMessageElement, data.error || 'Error en el registro.', 'error');
                 }
             } catch (error) {
-                console.error('Error en la solicitud de registro:', error);
                 displayMessage(errorMessageElement, 'Error de conexión con el servidor.', 'error');
             }
         });

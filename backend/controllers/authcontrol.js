@@ -36,7 +36,6 @@ exports.login = async (req, res) => {
             return res.status(401).json({ error: 'Credenciales incorrectas.' });
         }
 
-        console.log('[DEBUG] authcontrol.js - Usando JWT_SECRET para firmar:', process.env.JWT_SECRET || 'miclavesupersecreta');
         const token = jwt.sign({ id: user.id, role: user.role, username: user.username }, process.env.JWT_SECRET || 'miclavesupersecreta', {
             expiresIn: '24h'
         });
@@ -50,8 +49,6 @@ exports.login = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
-
 
 // Funciones de check y logout
 exports.checkAuth = (req, res) => {

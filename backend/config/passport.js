@@ -1,4 +1,3 @@
-
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { User } = require('../models');
 
@@ -34,7 +33,6 @@ module.exports = function(passport) {
                 }
             }
         } catch (err) {
-            console.error(err);
             done(err, null);
         }
     }));

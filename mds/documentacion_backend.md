@@ -15,75 +15,64 @@ Los principales componentes que orquestan la autenticación son:
 *   **Controlador**: `controllers/authcontrol.js` (Contiene la lógica para registrar y loguear usuarios).
 *   **Rutas**: `routes/auth.js` (Expone las rutas `/register` y `/login` para la API).
 *   **Middleware**: `middlewares/authmiddleware.js` (Protege las rutas que requieren autenticación).
+*   **Configuración de Passport**: `config/passport.js` (Contiene la estrategia de autenticación de Google).
 
 ## 1. Modelo de Usuario (`models/user.js`)
 
-*   **Definición**: Utiliza Sequelize para definir el modelo `User` con los siguientes campos:
-    *   `id`: Clave primaria autoincremental.
-    *   `username`: Nombre de usuario, debe ser único.
-    *   `email`: Email, debe ser único y tener un formato válido.
-    *   `password`: Contraseña del usuario.
-    *   `role`: Rol del usuario (`user` o `admin`), con `user` como valor por defecto.
-*   **Seguridad**: No se almacena la contraseña en texto plano. Se utiliza `bcrypt` para hashearla antes de guardarla en la base de datos.
+Se ha modificado para soportar la autenticación de Google:
+
+*   **`password`**: Ahora es opcional (`allowNull: true`) para permitir que los usuarios de Google se registren sin una contraseña local.
+*   **`googleId`**: Nuevo campo `STRING` que almacena el ID único del perfil de Google del usuario. Tiene una restricción `UNIQUE` para evitar duplicados.
 
 ## 2. Controlador de Autenticación (`controllers/authcontrol.js`)
 
-Este archivo maneja la lógica de negocio para el registro y el inicio de sesión.
+Maneja la lógica para el registro y login tradicional. El flujo de Google es gestionado principalmente por Passport.
 
 ### 2.1. Registro (`register`)
 
-*   **Entrada**: Recibe `username`, `email` y `password` del cuerpo de la solicitud (`req.body`).
-*   **Proceso**:
-    1.  **Validación**: Comprueba si ya existe un usuario con el mismo `username` o `email`. Si es así, devuelve un error 400.
-    2.  **Hashing de Contraseña**: Utiliza `bcrypt.hash()` para encriptar la contraseña proporcionada. El "salt round" (factor de coste) se define en una variable de entorno (`process.env.SALT_ROUNDS`) para mayor seguridad y flexibilidad.
-    3.  **Creación de Usuario**: Crea un nuevo registro en la tabla `User` con los datos proporcionados y la contraseña hasheada.
-    4.  **Generación de Token**: Llama a la función `generateToken` para crear un JWT para el nuevo usuario.
-    5.  **Respuesta**: Devuelve un estado 201 (Creado) con un mensaje de éxito y el token JWT.
-*   **Manejo de Errores**: Captura cualquier error durante el proceso y devuelve un estado 500 (Error del Servidor).
+*   **Proceso**: Crea un usuario con `username`, `email` y una contraseña hasheada.
 
 ### 2.2. Inicio de Sesión (`login`)
 
-*   **Entrada**: Recibe `username` y `password` del cuerpo de la solicitud.
-*   **Proceso**:
-    1.  **Búsqueda de Usuario**: Busca al usuario en la base de datos por su `username`. Si no lo encuentra, devuelve un error 404.
-    2.  **Verificación de Contraseña**: Utiliza `bcrypt.compare()` para comparar la contraseña proporcionada con el hash almacenado en la base de datos. Si no coinciden, devuelve un error 401 (No autorizado).
-    3.  **Generación de Token**: Si la contraseña es correcta, genera un nuevo JWT para el usuario.
-    4.  **Respuesta**: Devuelve un estado 200 (OK) con un mensaje de éxito, el token JWT y los datos del usuario (excluyendo la contraseña).
+*   **Proceso**: Verifica las credenciales (`username` y `password`) y devuelve un token JWT si son correctas.
 
-### 2.3. Generación de Token (`generateToken`)
+## 3. Autenticación con Google (Flujo con Passport.js)
 
-*   **Función Auxiliar**: No es un controlador, sino una función interna.
-*   **Proceso**:
-    *   Utiliza `jwt.sign()` para crear el token.
-    *   **Payload**: El contenido del token incluye el `id`, `username` y `role` del usuario. Esto permite que el backend identifique al usuario y sus permisos en futuras solicitudes.
-    *   **Secreto**: Firma el token con una clave secreta almacenada en una variable de entorno (`process.env.JWT_SECRET`).
-    *   **Expiración**: El token está configurado para expirar en un tiempo determinado (`1h`), definido en `process.env.JWT_EXPIRES_IN`.
+La autenticación con Google se maneja a través de `passport-google-oauth20`.
 
-## 3. Rutas de Autenticación (`routes/auth.js`)
+### 3.1. Configuración de la Estrategia (`config/passport.js`)
 
-*   **Definición**: Utiliza `express.Router()` para definir las rutas de la API relacionadas con la autenticación.
-*   **Rutas Expuestas**:
-    *   `POST /register`: Mapea esta ruta a la función `register` del `authcontrol`.
-    *   `POST /login`: Mapea esta ruta a la función `login` del `authcontrol`.
+*   **Estrategia `GoogleStrategy`**:
+    1.  **Configuración**: Utiliza un `clientID` y un `clientSecret` de las variables de entorno para conectarse con la API de Google.
+    2.  **Función `verify`**: Esta es la función que se ejecuta después de que un usuario se autentica con Google.
+        *   Recibe el perfil de Google (`profile`).
+        *   Busca en la base de datos un usuario con el `googleId` correspondiente.
+        *   **Si el usuario existe**, lo devuelve.
+        *   **Si el usuario no existe**, crea un nuevo usuario en la base de datos utilizando la información del perfil de Google (ID, email, y nombre de usuario). La contraseña se deja nula.
+        *   Devuelve el usuario (existente o nuevo) para continuar el flujo.
+
+### 3.2. Rutas de Autenticación (`routes/auth.js`)
+
+Se han añadido nuevas rutas para manejar el flujo de OAuth2 con Google:
+
+*   **`GET /google`**:
+    *   **Middleware**: `passport.authenticate('google', { scope: ['profile', 'email'] })`.
+    *   **Acción**: Inicia el proceso de autenticación. Redirige al usuario a la página de inicio de sesión de Google.
+
+*   **`GET /google/callback`**:
+    *   **Middleware**: `passport.authenticate('google', { failureRedirect: '/login.html', session: false })`.
+    *   **Acción**: Es la URL a la que Google redirige después de que el usuario da su consentimiento.
+        1.  Passport procesa el código de autorización y llama a la función `verify` de la estrategia.
+        2.  Si la autenticación falla, redirige a la página de login.
+        3.  Si tiene éxito, el middleware de Passport adjunta el objeto `user` a la solicitud (`req.user`).
+    *   **Generación de Token**: Después de la autenticación exitosa, el controlador:
+        1.  Genera un token JWT firmado con el `id`, `role` y `username` del usuario.
+        2.  Redirige al usuario a una página de éxito en el frontend (`/auth-success.html`), pasando el token como un parámetro en la URL (`?token=...`).
 
 ## 4. Middleware de Autenticación (`middlewares/authmiddleware.js`)
 
-Este es un componente crucial para la seguridad de la API.
+No cambia su función principal: sigue verificando el token JWT en la cabecera `Authorization` para proteger las rutas de la API, independientemente de si el token fue generado por un login tradicional o por Google.
 
-*   **`verifyJWT`**:
-    *   **Propósito**: Es un middleware que se puede añadir a cualquier ruta que necesite ser protegida.
-    *   **Proceso**:
-        1.  **Extracción del Token**: Busca el token en la cabecera `Authorization` de la solicitud (en el formato `Bearer <token>`).
-        2.  **Verificación**: Si el token existe, utiliza `jwt.verify()` para decodificarlo y verificar su validez usando el `JWT_SECRET`.
-        3.  **Adjuntar Usuario**: Si el token es válido, el payload decodificado (que contiene `id`, `username`, `role`) se adjunta al objeto `req` (`req.user`).
-        4.  **Continuación**: Llama a `next()` para permitir que la solicitud continúe hacia el controlador de la ruta protegida.
-    *   **Manejo de Errores**: Si no hay token o si este es inválido, el middleware detiene la solicitud y devuelve un error 401 o 403.
-*   **`isAdmin`**:
-    *   **Propósito**: Middleware adicional para rutas que solo pueden ser accedidas por administradores.
-    *   **Proceso**: Se ejecuta *después* de `verifyJWT` y comprueba si `req.user.role` es igual a `'admin'`.
-    *   **Respuesta**: Si no es admin, devuelve un error 403 (Prohibido).
-
-En resumen, el sistema de autenticación está diseñado para ser seguro y escalable, separando responsabilidades y utilizando estándares como JWT y bcrypt para proteger los datos y el acceso a la API.
 
 ---
 # Lógica de Gestión de Vehículos (Backend)

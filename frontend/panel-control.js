@@ -126,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             attachActionButtonListeners();
         } catch (error) {
-            console.error('Error fetching vehicles:', error);
             showNotification('Error al cargar vehículos.', false);
         }
     }
@@ -135,7 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('/api/services', { headers: { 'Authorization': `Bearer ${token}` } });
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const services = await response.json();
+            const result = await response.json();
+            const services = Array.isArray(result) ? result : (result.data || []);
             servicesTableBody.innerHTML = '';
             services.forEach(service => {
                 const row = servicesTableBody.insertRow();
@@ -152,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             attachActionButtonListeners();
         } catch (error) {
-            console.error('Error fetching services:', error);
             showNotification('Error al cargar servicios.', false);
         }
     }
@@ -179,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             attachActionButtonListeners();
         } catch (error) {
-            console.error('Error fetching finances:', error);
             showNotification(`Error al cargar finanzas: ${error.message}`, false);
         }
     }
@@ -211,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             });
         } catch (error) {
-            console.error('Error fetching users:', error);
             showNotification(error.message, false);
         }
     }
@@ -231,7 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('newVehicles').textContent = stats.new || 0;
                 document.getElementById('usedVehicles').textContent = stats.used || 0;
             } else {
-                console.error('Error al cargar estadísticas de vehículos');
                 document.getElementById('totalVehicles').textContent = 'Error';
             }
 
@@ -241,7 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('completedServices').textContent = stats.completed || 0;
                 document.getElementById('pendingServices').textContent = stats.pending || 0;
             } else {
-                console.error('Error al cargar estadísticas de servicios');
                 document.getElementById('scheduledServices').textContent = 'Error';
             }
 
@@ -252,11 +247,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('pendingFinances').textContent = stats.pending || 0;
                 document.getElementById('rejectedFinances').textContent = stats.rejected || 0;
             } else {
-                console.error('Error al cargar estadísticas de finanzas');
                 document.getElementById('totalFinanceRequests').textContent = 'Error';
             }
         } catch (error) {
-            console.error('Error fetching dashboard counts:', error);
             const statsErrorDiv = document.getElementById('stats-error');
             if (statsErrorDiv) {
                 statsErrorDiv.textContent = 'Hubo un error general al cargar las estadísticas.';
@@ -325,7 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchFinances();
             fetchDashboardCounts();
         } catch (error) {
-            console.error('Error al editar financiación:', error);
             showNotification(`Error: ${error.message}`, false);
         }
     });

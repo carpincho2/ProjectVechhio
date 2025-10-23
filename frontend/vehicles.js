@@ -61,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 vehicleListContainer.appendChild(vehicleCard);
             });
         } catch (error) {
-            console.error('Error fetching vehicles:', error);
             vehicleListContainer.innerHTML = '<p class="no-vehicles-message" style="color: red;">Failed to load vehicles. Please try again later.</p>';
         }
     }
@@ -94,5 +93,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- INITIALIZATION ---
     updateModelOptions(); // Initial call to populate models if a brand is pre-selected
-    fetchAndDisplayVehicles(); // Initial load of all vehicles
+
+    // Si la URL tiene ?used=1, selecciona automáticamente el filtro de usados
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('used') === '1') {
+        const conditionSelect = filters.querySelector('select[name="condition"]');
+        if (conditionSelect) {
+            conditionSelect.value = 'Usado';
+            applyFilters(); // Aplica el filtro inmediatamente
+            return; // Evita cargar todos los vehículos sin filtro
+        }
+    }
+    fetchAndDisplayVehicles(); // Initial load of all vehicles solo si no hay filtro especial
 });
