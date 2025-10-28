@@ -1,14 +1,34 @@
 const path = require('path');
 
-// Exporta solo el objeto de configuración.
-// La instancia de Sequelize se creará en models/index.js
-module.exports = {
+// Configuración por defecto para SQLite (local)
+const sqliteConfig = {
     dialect: 'sqlite',
-    // La ruta real a la base de datos se construirá en models/index.js
-    // storage: path.join(__dirname, '../../database/consecionaria.db'),
-    logging: false, // Se puede activar para debug: console.log
+    storage: path.join(__dirname, '../../database/consecionaria.db'),
+    logging: false,
     define: {
         timestamps: true,
         underscored: true
     }
 };
+
+// Si existe DATABASE_URL, asumimos Postgres en producción
+if (process.env.DATABASE_URL) {
+    module.exports = {
+        url: process.env.DATABASE_URL,
+        dialect: 'postgres',
+        protocol: 'postgres',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        },
+        logging: false,
+        define: {
+            timestamps: true,
+            underscored: true
+        }
+    };
+} else {
+    module.exports = sqliteConfig;
+}

@@ -83,7 +83,7 @@ async function startServer() {
         // Sincronizar modelos antes de operar sobre las tablas
         await db.sequelize.sync(); // Forzar actualización del esquema
         console.log('✅ Modelos sincronizados con la base de datos.');
-        
+
         // Intentar truncar la tabla de backup solo si existe (evitar crash si no existe)
         if (db.UserBackup) {
             try {
@@ -92,6 +92,25 @@ async function startServer() {
             } catch (err) {
                 console.warn('⚠️ No se pudo truncar users_backup (probablemente no existe aún). Se continúa con el inicio.');
             }
+        }
+
+        // Crear un usuario admin demo si no existe (útil para el profe)
+        try {
+            const adminExists = await db.User.findOne({ where: { role: 'superadmin' } });
+            if (!adminExists) {
+                const bcrypt = require('bcryptjs');
+                const salt = await bcrypt.genSalt(10);
+                const hashed = await bcrypt.hash(process.env.ADMIN_PASSWORD || '280208', salt);
+                await db.User.create({
+                    username: process.env.ADMIN_USERNAME || 'admincarpi',
+                    email: process.env.ADMIN_EMAIL || 'carpijefe@gmail.com',
+                    password: hashed,
+                    role: 'superadmin'
+                });
+                console.log('✅ Usuario admin demo creado.');
+            }
+        } catch (err) {
+            console.warn('⚠️ No se pudo crear el admin demo:', err.message || err);
         }
 
         app.listen(PORT, '0.0.0.0', () => {

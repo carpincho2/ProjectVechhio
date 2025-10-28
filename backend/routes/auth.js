@@ -10,25 +10,16 @@ router.post('/login', authController.login);
 router.post('/register', authController.register);
 
 // Rutas de autenticación de Google
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google', (req, res, next) => {
+    passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
+});
 
-router.get('/google/callback', 
-    passport.authenticate('google', { failureRedirect: '/login.html', session: false }),
-    (req, res) => {
-        // El usuario ha sido autenticado por Google gracias a la estrategia de passport
-        const user = req.user;
-        
-        // Generar un token JWT
-        const token = jwt.sign(
-            { id: user.id, role: user.role, username: user.username }, 
-            process.env.JWT_SECRET || 'miclavesupersecreta', 
-            { expiresIn: '24h' }
-        );
-
-        // Redirigir al frontend a una página de éxito que guardará el token
-        res.redirect(`/auth-success.html?token=${token}`);
-    }
-);
+router.get('/google/callback', (req, res, next) => {
+    passport.authenticate('google', { failureRedirect: '/login.html' })(req, res, () => {
+        // Successful auth, redirect to panel
+        res.redirect('/panel-control');
+    });
+});
 
 // Rutas de verificación y logout
 router.get('/check', verifyJWT, authController.checkAuth);
