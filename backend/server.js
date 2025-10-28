@@ -76,17 +76,24 @@ app.get('/api/status', (req, res) => {
 // --- Inicio del Servidor ---
 async function startServer() {
     try {
-        // Autenticar y sincronizar la base de datos usando la instancia de Sequelize de 'db'
+        // Autenticar la conexión
         await db.sequelize.authenticate();
         console.log('✅ Base de datos conectada y autenticada.');
 
-        if (db.UserBackup) {
-            await db.UserBackup.destroy({ truncate: true });
-        }
-
+        // Sincronizar modelos antes de operar sobre las tablas
         await db.sequelize.sync(); // Forzar actualización del esquema
         console.log('✅ Modelos sincronizados con la base de datos.');
         
+        // Intentar truncar la tabla de backup solo si existe (evitar crash si no existe)
+        if (db.UserBackup) {
+            try {
+                await db.UserBackup.destroy({ truncate: true });
+                console.log('✅ Tabla users_backup truncada.');
+            } catch (err) {
+                console.warn('⚠️ No se pudo truncar users_backup (probablemente no existe aún). Se continúa con el inicio.');
+            }
+        }
+
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
         });
