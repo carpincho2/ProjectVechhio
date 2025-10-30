@@ -64,9 +64,13 @@ app.use('/api/statistics', statisticsRoutes);
 app.use('/api/contact', contactRoutes);
 
 // Endpoint temporal para crear un superadmin
+// Ajuste: Hashear la contraseña antes de guardar el superadmin
+const bcrypt = require('bcryptjs');
+
 app.get('/api/admin/create', async (req, res) => {
     const secret = req.query.secret;
     if (secret !== process.env.ADMIN_CREATION_SECRET) {
+        console.log('ADMIN_CREATION_SECRET:', process.env.ADMIN_CREATION_SECRET); // Log para depuración
         return res.status(403).json({ message: 'Unauthorized' });
     }
 
@@ -81,6 +85,11 @@ app.get('/api/admin/create', async (req, res) => {
         if (existingAdmin) {
             return res.status(400).json({ message: 'Admin already exists' });
         }
+
+        // Hashear la contraseña
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(adminData.password, salt);
+        adminData.password = hashedPassword;
 
         const newAdmin = await db.User.create(adminData);
         res.status(201).json({ message: 'Superadmin created', admin: newAdmin });
