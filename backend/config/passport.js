@@ -6,7 +6,7 @@ module.exports = function(passport) {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         // Usar GOOGLE_CALLBACK_URL si está definida (producción), sino fallback a localhost
-        callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/auth/google/callback'
+       
     },
     async (accessToken, refreshToken, profile, done) => {
         const newUser = {
