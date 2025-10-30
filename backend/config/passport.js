@@ -6,11 +6,23 @@ module.exports = function(passport) {
     console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID);
     console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET);
 
+    // Validar que las variables críticas estén definidas.
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.GOOGLE_CALLBACK_URL) {
+        console.error('ERROR: Faltan variables de entorno para Google OAuth. Asegura GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET y GOOGLE_CALLBACK_URL.');
+        // En producción abortamos el inicio para evitar usar valores incorrectos.
+        if (process.env.NODE_ENV === 'production') {
+            throw new Error('Missing required Google OAuth environment variables. Aborting startup.');
+        }
+    }
+
     passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        // Usar GOOGLE_CALLBACK_URL si está definida (producción), sino fallback a localhost
-       
+    // Usar la URL de callback proveniente de las env vars. No hay fallback a localhost.
+    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+        // cuando se despliega detrás de proxies (render, heroku, etc.) ayuda a usar el protocolo correcto
+        proxy: true
+        
     },
     async (accessToken, refreshToken, profile, done) => {
         const newUser = {

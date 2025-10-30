@@ -16,6 +16,9 @@ const statisticsRoutes = require('./routes/statistics');
 const contactRoutes = require('./routes/contact');
 
 const app = express();
+// Si la app se ejecuta detrás de un proxy (Render, Heroku, etc.),
+// habilitamos trust proxy para que Express conozca el protocolo original (https)
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 
 // Configuración de Passport
@@ -35,10 +38,17 @@ app.use(express.urlencoded({ extended: true }));
 
 // Configuración de Sesión para Passport
 const session = require('express-session');
+// Ajuste de cookies para producción: si estamos en producción (HTTPS detrás de proxy)
+// marcamos la cookie como secure para que solo se transmita por HTTPS.
+// También setea sameSite='lax' que funciona bien con OAuth flows.
 app.use(session({
     secret: process.env.SESSION_SECRET || 'tu_secreto_de_sesion',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+        secure: (process.env.NODE_ENV === 'production'),
+        sameSite: 'lax'
+    }
 }));
 
 // Inicialización de Passport
