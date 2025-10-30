@@ -63,6 +63,32 @@ app.use('/api/users', userRoutes);
 app.use('/api/statistics', statisticsRoutes);
 app.use('/api/contact', contactRoutes);
 
+// Endpoint temporal para crear un superadmin
+app.get('/api/admin/create', async (req, res) => {
+    const secret = req.query.secret;
+    if (secret !== process.env.ADMIN_CREATION_SECRET) {
+        return res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    const adminData = {
+        username: process.env.ADMIN_USERNAME || 'admin',
+        email: process.env.ADMIN_EMAIL || 'admin@example.com',
+        password: process.env.ADMIN_PASSWORD || 'supersecurepassword',
+    };
+
+    try {
+        const existingAdmin = await db.User.findOne({ where: { email: adminData.email } });
+        if (existingAdmin) {
+            return res.status(400).json({ message: 'Admin already exists' });
+        }
+
+        const newAdmin = await db.User.create(adminData);
+        res.status(201).json({ message: 'Superadmin created', admin: newAdmin });
+    } catch (error) {
+        res.status(500).json({ message: 'Error creating superadmin', error });
+    }
+});
+
 app.get('/panel-control', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/panel-control.html'));
 });
