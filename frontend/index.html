@@ -15,30 +15,18 @@
 </head>
 <body>
     <header class="header">
-        <div>
-            <a href="index.html"><img src="logo.png" alt="" class="logo"></a>
-        </div>
-        <div class="vehicles">
-            <a href="vehicles.html">Vehicles</a>
-        </div>
-        <div class="certified">
-            <a href="certified.html">Certified</a>
-        </div>
-        
-        <div class="service">
-            <a href="service.html" class="menu-btn">Service</a>
-        </div>
-        <div class="aboutUs">
-            <a href="aboutUs.html">About Us</a>
-        </div>
-        
-        <div id="auth-container" class="user-auth-section">
-            <!-- Este contenido se generará dinámicamente -->
-            <button id="google-signin-btn" class="google-btn">
-                <i class="fab fa-google"></i> Iniciar sesión con Google
-            </button>
-        </div>
-    </header>
+  <a href="index.html"><img src="logo.png" class="logo"></a>
+  <button class="hamburger" id="hamburger-btn">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="nav-menu" id="nav-menu">
+    <a href="index.html">Inicio</a>
+    <a href="service.html">Servicios</a>
+    <a href="vehicles.html">Vehículos</a>
+    <a href="aboutUs.html">Nosotros</a>
+    <a href="login.html" class="Login">Login</a>
+  </nav>
+</header>
     <div class="main-banner">
             <img src="logos/carpane2.png" alt="" class="banner-image">
     </div>
@@ -98,5 +86,14 @@
     </footer>
     
     <script type="module" src="./index.js" defer></script>
+    <script>
+const hamburger = document.getElementById('hamburger-btn');
+const navMenu = document.getElementById('nav-menu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  navMenu.classList.toggle('active');
+});
+</script>
+
 </body>
 </html>
