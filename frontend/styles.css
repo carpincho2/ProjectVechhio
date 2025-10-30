@@ -1,23 +1,23 @@
-/* Index Style - Optimizado y Responsive */
+/* Index Style - Optimizado y Responsive con Menú Hamburguesa */
 :root {
   /* 🌑 Fondos */
-    --bg-main: #1e1e2f;          /* Fondo global */
-    --bg-header: #252b3b;        /* Header / navbar */
-    --bg-card: #2f3b52;          /* Tarjetas/paneles */
+    --bg-main: #1e1e2f;
+    --bg-header: #252b3b;
+    --bg-card: #2f3b52;
 
   /* 🎨 Acentos Pastel */
-    --accent-blue: #a5b4fc;       /* Azul pastel (botón primario) */
+    --accent-blue: #a5b4fc;
     --accent-blue-hover: #818cf8; 
     --accent-mint: #99f6e4; 
-    --accent-mint-hover: #7eddd4;     /* Verde menta pastel */
-    --accent-lavender: #c4b5fd;   /* Lavanda pastel */
-    --accent-peach: #fcd5ce;      /* Durazno pastel */
-    --accent-rose: #fecdd3;       /* Rosa pastel suave */
+    --accent-mint-hover: #7eddd4;
+    --accent-lavender: #c4b5fd;
+    --accent-peach: #fcd5ce;
+    --accent-rose: #fecdd3;
 
   /* ⚠️ Estados */
-  --alert-error: #fca5a5;       /* Rojo pastel */
-  --alert-success: #bbf7d0;     /* Verde pastel */
-  --alert-warning: #fde68a;     /* Amarillo pastel */
+  --alert-error: #fca5a5;
+  --alert-success: #bbf7d0;
+  --alert-warning: #fde68a;
 
   /* 🌈 Extras */
     --shadow-default: rgba(0,0,0,0.5);
@@ -70,11 +70,48 @@ body{
     white-space: nowrap;
 }
 
-/* Menu Container */
+/* ========== HAMBURGER MENU ========== */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1001;
+    background: none;
+    border: none;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: var(--accent-mint);
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Navigation Menu */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .menu-container {
     position: relative;
 }
-
 
 /* Authentication Section */
 .user-auth-section {
@@ -100,7 +137,6 @@ body{
 
 .Login:hover,
 .register:hover {
-   /* background-color: var(--hoverboton);*/
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
@@ -123,7 +159,7 @@ body{
 }
 
 #user-section {
-    display: flex; /* Changed from none to flex */
+    display: flex;
     align-items: center;
     gap: 10px;
 }
@@ -157,7 +193,7 @@ body{
 /* Main Content */
 .section-subtitle {
     color: var(--accent-mint);
-    font-size: 1.5rem; /* 24px */
+    font-size: 1.5rem;
     margin-top: 130px;
     margin-left: 25px;
     text-align: left;
@@ -364,8 +400,6 @@ form textarea {
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
-
-
 /* Footer */
 .footer {
     background-color: var(--bg-footer);
@@ -429,8 +463,6 @@ form textarea {
     margin-bottom: 0;
 }
 
-
-
 /* Utility Classes */
 .hidden {
     display: none !important;
@@ -440,7 +472,7 @@ form textarea {
     display: flex !important;
 }
 
-/* Responsive Design */
+/* ========== RESPONSIVE DESIGN ========== */
 
 /* Large Tablet */
 @media (max-width: 1024px) {
@@ -495,8 +527,78 @@ form textarea {
     }
 }
 
-/* Tablet */
+/* Tablet - MENÚ HAMBURGUESA */
 @media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+    
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 65px;
+        flex-direction: column;
+        background-color: var(--bg-header);
+        width: 100%;
+        text-align: center;
+        transition: left 0.3s ease;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.5);
+        padding: 20px 0;
+        gap: 15px;
+        max-height: calc(100vh - 65px);
+        overflow-y: auto;
+        border-bottom: 2px solid var(--accent-mint);
+    }
+    
+    .nav-menu.active {
+        left: 0;
+    }
+    
+    .nav-menu > div {
+        margin: 0;
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .nav-menu > div a {
+        display: block;
+        padding: 12px 20px;
+        font-size: 1.1rem;
+        transition: background 0.3s;
+    }
+    
+    .nav-menu > div a:hover {
+        background-color: var(--bg-card);
+    }
+    
+    .user-auth-section {
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        gap: 10px;
+        padding: 10px 20px;
+    }
+    
+    .Login,
+    .register,
+    .auth-link {
+        width: 80%;
+        text-align: center;
+        padding: 10px 20px;
+    }
+    
+    #user-section {
+        flex-direction: column;
+        width: 100%;
+        padding: 10px 20px;
+    }
+    
+    .welcome-text {
+        text-align: center;
+        margin: 0;
+        padding: 5px 0;
+    }
+    
     .header {
         padding: 12px 20px;
         height: 65px;
@@ -590,25 +692,26 @@ form textarea {
     .footer-links a {
         font-size: 0.8rem;
     }
-    
-    .welcome-text {
-        font-size: 0.8rem;
-    }
-    
-    .Login,
-    .register,
-    .auth-link {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-    }
 }
 
 /* Mobile */
 @media (max-width: 480px) {
     .header {
+        justify-content: space-between;
         padding: 10px 15px;
         height: 60px;
         gap: 10px;
+    }
+    
+    .nav-menu {
+        top: 60px;
+        max-height: calc(100vh - 60px);
+    }
+    
+    .Login,
+    .register,
+    .auth-link {
+        width: 90%;
     }
     
     .logo {
@@ -717,23 +820,6 @@ form textarea {
     
     .footer-copy {
         font-size: 0.7rem;
-    }
-    
-    .user-auth-section {
-        gap: 5px;
-    }
-    
-    .welcome-text {
-        font-size: 0.75rem;
-        margin-right: 5px;
-    }
-    
-    .Login,
-    .register,
-    .auth-link {
-        padding: 5px 10px;
-        font-size: 0.75rem;
-        border-radius: 8px;
     }
 }
 

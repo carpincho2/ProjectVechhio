@@ -9,16 +9,11 @@ exports.createService = async (req, res) => {
         const { type, date, vehicleId } = req.body;
         const userId = req.user.id; // Se obtiene del token JWT
 
-        // Log para debug
-        console.log('Solicitud recibida:', { type, date, vehicleId, userId });
-
         if (!type || !date) {
-            console.log('Falta tipo o fecha');
             return res.status(400).json({ error: 'El tipo y la fecha del servicio son obligatorios.' });
         }
         // Validar fecha futura
         if (new Date(date) < new Date()) {
-            console.log('Fecha no es futura:', date);
             return res.status(400).json({ error: 'La fecha debe ser futura.' });
         }
         // Validar tipo de servicio
@@ -30,7 +25,6 @@ exports.createService = async (req, res) => {
             'Reparación General'
         ];
         if (!validTypes.includes(type.trim())) {
-            console.log('Tipo de servicio no válido:', type);
             return res.status(400).json({ error: 'Tipo de servicio no válido.' });
         }
 

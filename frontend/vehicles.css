@@ -1,22 +1,22 @@
 :root {
   /* 🌑 Fondos */
-    --bg-main: #1e1e2f;          /* Fondo global */
-    --bg-header: #252b3b;        /* Header / navbar */
-    --bg-card: #2f3b52;          /* Tarjetas/paneles */
+    --bg-main: #1e1e2f;
+    --bg-header: #252b3b;
+    --bg-card: #2f3b52;
 
   /* 🎨 Acentos Pastel */
-    --accent-blue: #a5b4fc;       /* Azul pastel (botón primario) */
+    --accent-blue: #a5b4fc;
     --accent-blue-hover: #818cf8; 
     --accent-mint: #99f6e4; 
-    --accent-mint-hover: #7eddd4;     /* Verde menta pastel */
-    --accent-lavender: #c4b5fd;   /* Lavanda pastel */
-    --accent-peach: #fcd5ce;      /* Durazno pastel */
-    --accent-rose: #fecdd3;       /* Rosa pastel suave */
+    --accent-mint-hover: #7eddd4;
+    --accent-lavender: #c4b5fd;
+    --accent-peach: #fcd5ce;
+    --accent-rose: #fecdd3;
 
   /* ⚠️ Estados */
-  --alert-error: #fca5a5;       /* Rojo pastel */
-  --alert-success: #bbf7d0;     /* Verde pastel */
-  --alert-warning: #fde68a;     /* Amarillo pastel */
+  --alert-error: #fca5a5;
+  --alert-success: #bbf7d0;
+  --alert-warning: #fde68a;
 
   /* 🌈 Extras */
     --shadow-default: rgba(0,0,0,0.5);
@@ -30,15 +30,119 @@
     font-family: 'Inter', sans-serif;
 }
 
+/* ========== HEADER CON HAMBURGUESA ========== */
+.header{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    background-color: var(--bg-header);
+    border-bottom: 2px solid var(--accent-mint) !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    padding: 15px 30px;
+    gap: 20px;
+}
+
+.header a{
+    text-decoration: none;
+    color: var(--accent-blue);
+}
+
+.logo{
+    height: 40px;
+    width: auto;
+}
+
+/* Hamburger Button */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1001;
+    background: none;
+    border: none;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: var(--accent-mint);
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Navigation Menu */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-auth-section {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 10px;
+}
+
+.Login,
+.register,
+.auth-link {
+    background-color: var(--bg-header);
+    padding: 8px 15px;
+    border-radius: 10px;
+    color: var(--accent-blue);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.Login:hover,
+.register:hover,
+.auth-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.welcome-text {
+    color: var(--accent-lavender);
+    font-weight: 600;
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
+
+#login-section,
+#user-section {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* ========== VEHICLES SECTION ========== */
 .vehicles-section {
     padding: 40px 20px;
     background-color: var(--bg-main);
     color: var(--accent-lavender);
     min-height: calc(100vh - 80px);
-    margin-top: 40px; /* Espacio para header fijo */
+    margin-top: 40px;
 }
-
-/* Botón/enlace Financiar estilizado */
 
 .finance-button {
     display: block;
@@ -56,6 +160,7 @@
     text-align: center;
     transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
+
 .finance-button:hover {
     background: var(--accent-mint-hover);
     color: var(--accent-peach);
@@ -64,14 +169,14 @@
 }
 
 .vehicles-section h1 {
-    font-size: 1.75rem; /* 28px */
+    font-size: 1.75rem;
     margin-bottom: 8px;
     color: var(--accent-mint);
     text-align: center;
 }
 
 .vehicles-section p {
-    font-size: 0.875rem; /* 14px */
+    font-size: 0.875rem;
     color: #a0a0a0;
     margin-bottom: 24px;
     text-align: center;
@@ -97,7 +202,7 @@
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px;
     appearance: none;
-    font-size: 0.875rem; /* 14px */
+    font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s ease;
     min-width: 150px;
@@ -173,22 +278,97 @@ h1{
     line-height: 1.3;
 }
 
-/* Responsive Design */
+/* ========== RESPONSIVE DESIGN ========== */
 
-/* Tablet */
+/* Tablet - MENÚ HAMBURGUESA */
 @media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+    
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 65px;
+        flex-direction: column;
+        background-color: var(--bg-header);
+        width: 100%;
+        text-align: center;
+        transition: left 0.3s ease;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.5);
+        padding: 20px 0;
+        gap: 15px;
+        max-height: calc(100vh - 65px);
+        overflow-y: auto;
+        border-bottom: 2px solid var(--accent-mint);
+    }
+    
+    .nav-menu.active {
+        left: 0;
+    }
+    
+    .nav-menu > div {
+        margin: 0;
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .nav-menu > div a {
+        display: block;
+        padding: 12px 20px;
+        font-size: 1.1rem;
+        transition: background 0.3s;
+    }
+    
+    .nav-menu > div a:hover {
+        background-color: var(--bg-card);
+    }
+    
+    .user-auth-section {
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        gap: 10px;
+        padding: 10px 20px;
+    }
+    
+    .Login,
+    .register,
+    .auth-link {
+        width: 80%;
+        text-align: center;
+        padding: 10px 20px;
+    }
+    
+    #user-section {
+        flex-direction: column;
+        width: 100%;
+        padding: 10px 20px;
+    }
+    
+    .welcome-text {
+        text-align: center;
+        margin: 0;
+        padding: 5px 0;
+    }
+    
+    .header {
+        height: 65px;
+        padding: 12px 20px;
+    }
+    
     .vehicles-section {
         padding: 30px 15px;
         margin-top: 65px;
     }
     
     .vehicles-section h1 {
-        font-size: 1.5rem; /* 24px */
+        font-size: 1.5rem;
         margin-bottom: 6px;
     }
     
     .vehicles-section p {
-        font-size: 0.8125rem; /* 13px */
+        font-size: 0.8125rem;
         margin-bottom: 20px;
         padding: 0 10px;
     }
@@ -201,7 +381,7 @@ h1{
     
     .filters select {
         padding: 8px 12px;
-        font-size: 0.8125rem; /* 13px */
+        font-size: 0.8125rem;
         min-width: 130px;
     }
     
@@ -237,18 +417,35 @@ h1{
 
 /* Mobile */
 @media (max-width: 480px) {
+    .header {
+        height: 60px;
+        padding: 10px 15px;
+        justify-content: space-between;
+    }
+    
+    .nav-menu {
+        top: 60px;
+        max-height: calc(100vh - 60px);
+    }
+    
+    .Login,
+    .register,
+    .auth-link {
+        width: 90%;
+    }
+    
     .vehicles-section {
         padding: 25px 10px;
         margin-top: 60px;
     }
     
     .vehicles-section h1 {
-        font-size: 1.375rem; /* 22px */
+        font-size: 1.375rem;
         margin-bottom: 5px;
     }
     
     .vehicles-section p {
-        font-size: 0.75rem; /* 12px */
+        font-size: 0.75rem;
         margin-bottom: 16px;
         padding: 0 5px;
     }
@@ -263,7 +460,7 @@ h1{
     
     .filters select {
         padding: 8px 12px;
-        font-size: 0.8125rem; /* 13px */
+        font-size: 0.8125rem;
         min-width: 200px;
         width: 90%;
     }
@@ -305,23 +502,28 @@ h1{
 
 /* Mobile Small */
 @media (max-width: 320px) {
+    .header {
+        height: 55px;
+        padding: 8px 10px;
+    }
+    
     .vehicles-section {
         padding: 20px 8px;
         margin-top: 55px;
     }
     
     .vehicles-section h1 {
-        font-size: 1.25rem; /* 20px */
+        font-size: 1.25rem;
     }
     
     .vehicles-section p {
-        font-size: 0.6875rem; /* 11px */
+        font-size: 0.6875rem;
         margin-bottom: 12px;
     }
     
     .filters select {
         padding: 6px 10px;
-        font-size: 0.75rem; /* 12px */
+        font-size: 0.75rem;
         min-width: 180px;
     }
     
@@ -362,11 +564,11 @@ h1{
     }
     
     .vehicles-section h1 {
-        font-size: 2rem; /* 32px */
+        font-size: 2rem;
     }
     
     .vehicles-section p {
-        font-size: 1rem; /* 16px */
+        font-size: 1rem;
         max-width: 700px;
     }
     
@@ -378,7 +580,7 @@ h1{
     
     .filters select {
         padding: 12px 18px;
-        font-size: 1rem; /* 16px */
+        font-size: 1rem;
         min-width: 180px;
     }
     

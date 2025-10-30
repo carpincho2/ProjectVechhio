@@ -80,7 +80,8 @@ const bcrypt = require('bcryptjs');
 app.get('/api/admin/create', async (req, res) => {
     const secret = req.query.secret;
     if (secret !== process.env.ADMIN_CREATION_SECRET) {
-        console.log('ADMIN_CREATION_SECRET:', process.env.ADMIN_CREATION_SECRET); // Log para depuración
+        // No loggeamos el valor del secreto en producción por seguridad
+        console.warn('Intento de creación de admin no autorizado: secret mismatch');
         return res.status(403).json({ message: 'Unauthorized' });
     }
 

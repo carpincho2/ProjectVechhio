@@ -106,15 +106,16 @@ document.addEventListener('DOMContentLoaded', () => {
       else if (t.includes('revision') || t.includes('revisión') || t.includes('frenos')) typeBackend = 'revision';
       else if (t.includes('reparacion') || t.includes('reparación')) typeBackend = 'reparacion';
     }
-    console.log('Tipo enviado al backend:', typeBackend);
+  // debug: tipo de servicio seleccionado (no loguear en prod)
     // Enviar solicitud al backend
     try {
+      const token = localStorage.getItem('jwtToken');
       const res = await fetch('/api/services', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           // Agregar token JWT si está disponible
-          ...(localStorage.token ? { 'Authorization': `Bearer ${localStorage.token}` } : {})
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
         body: JSON.stringify({ type: typeBackend, date, vehicleId })
       });
