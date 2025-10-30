@@ -71,9 +71,9 @@ app.get('/api/admin/create', async (req, res) => {
     }
 
     const adminData = {
-        username: process.env.ADMIN_USERNAME || 'admin',
-        email: process.env.ADMIN_EMAIL || 'admin@example.com',
-        password: process.env.ADMIN_PASSWORD || 'supersecurepassword',
+        username: process.env.ADMIN_USERNAME || 'admincarpi',
+        email: process.env.ADMIN_EMAIL || 'carpijefe@gmail.com',
+        password: process.env.ADMIN_PASSWORD || '280208',
     };
 
     try {
