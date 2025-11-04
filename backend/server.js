@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 
 // Importar el objeto 'db' centralizado desde models/index.js
 const db = require('./models');
@@ -26,6 +27,12 @@ const passport = require('passport');
 require('./config/passport')(passport);
 
 // --- Middlewares ---
+// Configurar CORS
+app.use(cors({
+    origin: ['http://localhost:5500', 'http://127.0.0.1:5500'],
+    credentials: true
+}));
+
 // Servir archivos estáticos del frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 

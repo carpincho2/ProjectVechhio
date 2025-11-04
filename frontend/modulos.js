@@ -5,7 +5,7 @@ export async function checkLogin() {
             return; 
         }
 
-        const response = await fetch('/api/auth/check', {
+        const response = await fetch('https://projectvechhio.onrender.com/api/auth/check', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
