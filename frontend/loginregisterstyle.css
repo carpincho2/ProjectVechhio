@@ -140,9 +140,35 @@ button:hover {
   color: var(--accent-rose);
 }
 
+.separator {
+  text-align: center;
+  position: relative;
+  margin: 15px 0;
+  color: var(--accent-lavender);
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background-color: var(--accent-lavender);
+  opacity: 0.3;
+}
+
+.separator::before {
+  left: 0;
+}
+
+.separator::after {
+  right: 0;
+}
+
 .google-auth-container {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .google-btn {
