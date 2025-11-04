@@ -39,6 +39,23 @@ function updateAuthUI() {
 }
 
 export async function handleAuthInitialization() {
-    await checkLogin();
-    updateAuthUI();
+    const isLoggedIn = await checkLogin();
+    if (isLoggedIn) {
+        updateAuthUI();
+    } else {
+        // Solo limpiamos el localStorage si realmente no está autenticado
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userName');
+        updateAuthUI();
+    }
 }
+
+// Inicializar la verificación de autenticación al cargar la página
+document.addEventListener('DOMContentLoaded', handleAuthInitialization);
+// También verificar cuando la página se hace visible nuevamente
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+        handleAuthInitialization();
+    }
+});

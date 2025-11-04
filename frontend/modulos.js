@@ -2,31 +2,26 @@ export async function checkLogin() {
     try {
         const token = localStorage.getItem('jwtToken');
         if (!token) {
-            return; 
+            return false; 
         }
 
         const response = await fetch('https://projectvechhio.onrender.com/api/auth/check', {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`
-            }
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
         });
         
         if (response.ok) {
             const data = await response.json();
-            if (!data.loggedIn || !data.user) {
-                localStorage.removeItem('jwtToken');
-                localStorage.removeItem('userRole');
-                localStorage.removeItem('userName');
-            }
-        } else {
-            localStorage.removeItem('jwtToken');
-            localStorage.removeItem('userRole');
-            localStorage.removeItem('userName');
+            return data.loggedIn && data.user;
         }
+        return false;
     } catch (error) {
-        localStorage.removeItem('jwtToken');
-        localStorage.removeItem('userRole');
-        localStorage.removeItem('userName');
+        console.warn('Error checking login status:', error);
+        // En caso de error de red, asumimos que el token sigue siendo válido
+        return true;
     }
 }
