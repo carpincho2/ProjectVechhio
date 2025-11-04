@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="vehicles.css">
     <title>Vehicles</title>
+    <script type="module" src="./authLogic.js"></script>
 </head>
 <body>
     <header class="header">
@@ -16,12 +17,16 @@
     <span></span><span></span><span></span>
   </button>
   <nav class="nav-menu" id="nav-menu">
-    <a href="index.html">Inicio</a>
-    <a href="service.html">Servicios</a>
-    <a href="vehicles.html">Vehículos</a>
-    <a href="aboutUs.html">Nosotros</a>
-    <a href="login.html" class="Login">Login</a>
-    <a href="register.html" class="register">Register</a>
+    <div class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="service.html">Servicios</a>
+      <a href="vehicles.html">Vehículos</a>
+      <a href="aboutUs.html">Nosotros</a>
+    </div>
+    <div class="auth-links" id="auth-container">
+      <a href="login.html" class="Login">Login</a>
+      <a href="register.html" class="register">Register</a>
+    </div>
   </nav>
 </header>
     <section class="vehicles-section">
