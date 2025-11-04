@@ -33,16 +33,23 @@ exports.createService = async (req, res) => {
         // Obtener datos del usuario para el mail
         const user = await User.findByPk(userId);
         if (user && user.email) {
-            const subject = 'Confirmación de turno de servicio';
-            const html = `<h2>¡Hola ${user.username}!</h2>
+            try {
+                const subject = 'Confirmación de turno de servicio';
+                const html = `<h2>¡Hola ${user.username}!</h2>
                 <p>Tu turno de <b>${type}</b> ha sido reservado para el día <b>${date}</b>.</p>
                 <p>Si tienes dudas, responde este correo.</p>`;
-            sendEmail(user.email, subject, html);
+                // Intentar enviar el mail sin bloquear la respuesta al cliente
+                sendEmail(user.email, subject, html);
+            } catch (mailErr) {
+                console.error('Error enviando email de confirmación:', mailErr);
+                // No abortamos la operación por fallo de mail
+            }
         }
 
         res.status(201).json(newService);
     } catch (error) {
-        res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('createService error:', error);
+        res.status(500).json({ error: error.message || 'Error interno del servidor' });
     }
 };
 
@@ -70,7 +77,8 @@ exports.getAllServices = async (req, res) => {
             data: services.rows
         });
     } catch (error) {
-        res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('getAllServices error:', error);
+        res.status(500).json({ error: error.message || 'Error interno del servidor' });
     }
 };
 
@@ -95,6 +103,7 @@ exports.updateService = async (req, res) => {
         await service.save();
         res.status(200).json(service);
     } catch (error) {
-        res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('updateService error:', error);
+        res.status(500).json({ error: error.message || 'Error interno del servidor' });
     }
 };

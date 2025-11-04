@@ -78,8 +78,9 @@
 
             const token = localStorage.getItem('jwtToken');
             if (!token) {
-                alert('Debes iniciar sesión para solicitar un servicio.');
-                window.location.href = 'login.html';
+                alert('Debes iniciar sesión para solicitar un servicio. Serás redirigido al login.');
+                const returnUrl = encodeURIComponent(window.location.href);
+                window.location.href = `login.html?next=${returnUrl}`;
                 return;
             }
 
@@ -91,6 +92,9 @@
             const comments = document.getElementById('comments').value;
 
             try {
+                // DEBUG: mostrar token y payload mínimo en consola
+                console.debug('jwtToken present:', !!token);
+
                 const response = await fetch('/api/services', {
                     method: 'POST',
                     headers: {
@@ -100,12 +104,7 @@
                     body: JSON.stringify({
                         type: serviceType,
                         date: serviceDate,
-                        // status will be 'scheduled' by default in backend
-                        // userId will be extracted from token in backend
-                        // vehicleId is optional, not collected in this form
-                        comments: comments,
-                        // Assuming backend can handle additional fields like fullName, email, licensePlate
-                        // If not, these should be removed or handled differently
+                        comments: comments
                     })
                 });
 
