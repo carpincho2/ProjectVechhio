@@ -15,6 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const appointmentDateInput = document.getElementById('appointment-date-input');
     const closeModalButton = document.querySelector('.close-button');
 
+    // Modal de Servicios
+    const serviceModal = document.getElementById('service-modal');
+    const serviceEditForm = document.getElementById('service-edit-form');
+    const serviceIdInput = document.getElementById('service-id-input');
+    const serviceTypeSelect = document.getElementById('service-type-select');
+    const serviceDateInput = document.getElementById('service-date-input');
+    const serviceStatusSelect = document.getElementById('service-status-select');
+    const serviceCloseButton = document.querySelector('.service-close-button');
+
     // Forms
     const addVehicleForm = document.getElementById('add-vehicle-form');
 
@@ -63,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('jwtToken');
     const userRole = localStorage.getItem('userRole');
     let financesData = []; // Cache para los datos de finanzas
+    let servicesData = []; // Cache para servicios
 
     function parseJwt(token) {
         try {
@@ -136,12 +146,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const result = await response.json();
             const services = Array.isArray(result) ? result : (result.data || []);
+            servicesData = services; // guardar en cache
             servicesTableBody.innerHTML = '';
             services.forEach(service => {
                 const row = servicesTableBody.insertRow();
                 row.innerHTML = `
                     <td>${service.type}</td>
-                    <td>${new Date(service.date).toLocaleDateString()}</td>
+                    <td>${new Date(service.date).toLocaleString()}</td>
                     <td>${service.status}</td>
                     <td class="table-actions">
                         <button class="btn btn-view" data-id="${service.id}"><i class="fas fa-eye"></i></button>
@@ -322,6 +333,68 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- LÓGICA DEL MODAL DE SERVICIOS ---
+    function openServiceModal(service) {
+        serviceIdInput.value = service.id;
+        serviceTypeSelect.value = service.type;
+        // fecha en ISO para datetime-local
+        serviceDateInput.value = service.date ? new Date(service.date).toISOString().slice(0,16) : '';
+        serviceStatusSelect.value = service.status || 'scheduled';
+        serviceModal.style.display = 'block';
+    }
+
+    function closeServiceModal() {
+        serviceModal.style.display = 'none';
+    }
+
+    serviceCloseButton.addEventListener('click', closeServiceModal);
+    window.addEventListener('click', (e) => {
+        if (e.target === serviceModal) closeServiceModal();
+    });
+
+    // Actualizar servicio
+    serviceEditForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = serviceIdInput.value;
+        const type = serviceTypeSelect.value;
+        const date = serviceDateInput.value;
+        const status = serviceStatusSelect.value;
+
+        if (!type || !date) {
+            showNotification('Tipo y fecha son obligatorios.', false);
+            return;
+        }
+
+        // Fecha futura validación
+        if (new Date(date) < new Date()) {
+            showNotification('La fecha debe ser futura.', false);
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/services/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ type, date, status })
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.error || `HTTP error ${response.status}`);
+            }
+
+            showNotification('Servicio actualizado correctamente.');
+            closeServiceModal();
+            fetchServices();
+            fetchDashboardCounts();
+        } catch (error) {
+            showNotification(`Error: ${error.message}`, false);
+        }
+    });
+
     // --- MANEJO DE EVENTOS ---
 
     navLinks.forEach(link => {
@@ -413,7 +486,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const itemId = button.dataset.id;
 
         if (action === 'btn-delete') {
-            // Lógica de borrado genérica (si aplica)
+            if (button.closest('#services-table')) {
+                if (confirm('¿Eliminar este servicio?')) {
+                    try {
+                        const response = await fetch(`/api/services/${itemId}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (!response.ok) throw new Error((await response.json()).error || 'Error al eliminar');
+                        showNotification('Servicio eliminado correctamente.');
+                        fetchServices();
+                        fetchDashboardCounts();
+                    } catch (error) {
+                        showNotification(`Error: ${error.message}`, false);
+                    }
+                }
+                return;
+            }
+            // ... lógica de borrado para otros tipos
         } else if (action === 'btn-edit') {
             if (button.closest('#finances-table')) {
                 const financeToEdit = financesData.find(f => f.id == itemId);
@@ -421,6 +511,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     openFinanceModal(financeToEdit);
                 } else {
                     showNotification('No se encontraron datos para esta financiación.', false);
+                }
+                return;
+            }
+
+            if (button.closest('#services-table')) {
+                const serviceToEdit = servicesData.find(s => s.id == itemId);
+                if (serviceToEdit) {
+                    openServiceModal(serviceToEdit);
+                } else {
+                    showNotification('No se encontraron datos para este servicio.', false);
                 }
                 return;
             }

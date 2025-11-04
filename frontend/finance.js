@@ -50,9 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
             messageDiv.textContent = 'Debe iniciar sesión para enviar una solicitud. Redirigiendo...';
             messageDiv.style.color = 'red';
             messageDiv.style.display = 'block';
+            const returnUrl = encodeURIComponent(window.location.href);
             setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 3000);
+                window.location.href = `login.html?next=${returnUrl}`;
+            }, 1000);
             return;
         }
 

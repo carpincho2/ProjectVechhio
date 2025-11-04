@@ -282,6 +282,40 @@
         </div>
     </div>
 
+    <!-- Modal para Editar Servicio -->
+    <div id="service-modal" class="modal">
+        <div class="modal-content">
+            <span class="service-close-button">&times;</span>
+            <h2>Editar Servicio</h2>
+            <form id="service-edit-form">
+                <input type="hidden" id="service-id-input">
+                <div class="form-group">
+                    <label for="service-type-select">Tipo:</label>
+                    <select id="service-type-select" name="type">
+                        <option value="Mantenimiento Preventivo">Mantenimiento Preventivo</option>
+                        <option value="Revisión Completa">Revisión Completa</option>
+                        <option value="Frenos y Suspensión">Frenos y Suspensión</option>
+                        <option value="Cambio de Aceite">Cambio de Aceite</option>
+                        <option value="Reparación General">Reparación General</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="service-date-input">Fecha:</label>
+                    <input type="datetime-local" id="service-date-input" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="service-status-select">Estado:</label>
+                    <select id="service-status-select" name="status">
+                        <option value="scheduled">Scheduled</option>
+                        <option value="completed">Completed</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-save">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
     <script src="panel-control.js"></script>
     <script type="module" src="./main.js" defer></script>
 </body>

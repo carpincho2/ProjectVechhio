@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                                const response = await fetch('https://projectvechhio.onrender.com/api/auth/login', {
+                const response = await fetch('https://projectvechhio.onrender.com/api/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -69,12 +69,37 @@ document.addEventListener('DOMContentLoaded', function() {
                     localStorage.setItem('userRole', data.user.role);
                     localStorage.setItem('userName', data.user.username);
                     
-                    // Redirect based on role
-                    if (data.user.role === 'admin' || data.user.role === 'superadmin') {
-                        window.location.href = '/panel-control.html';
-                    }
-                    else {
-                        window.location.href = '/index.html';
+                    // Redirigir al destino original si existe (next), si no redirigir por rol
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const next = urlParams.get('next');
+                    if (next) {
+                        try {
+                            const decodedNext = decodeURIComponent(next);
+                            // Seguridad básica: solo permitir rutas relativas
+                            if (decodedNext.startsWith('/')) {
+                                window.location.href = decodedNext;
+                            } else {
+                                if (data.user.role === 'admin' || data.user.role === 'superadmin') {
+                                    window.location.href = '/panel-control.html';
+                                } else {
+                                    window.location.href = '/index.html';
+                                }
+                            }
+                        } catch (e) {
+                            if (data.user.role === 'admin' || data.user.role === 'superadmin') {
+                                window.location.href = '/panel-control.html';
+                            } else {
+                                window.location.href = '/index.html';
+                            }
+                        }
+                    } else {
+                        // Redirect based on role
+                        if (data.user.role === 'admin' || data.user.role === 'superadmin') {
+                            window.location.href = '/panel-control.html';
+                        }
+                        else {
+                            window.location.href = '/index.html';
+                        }
                     }
                 } else {
                     displayMessage(errorMessageElement, data.error || 'Error en el login.', 'error');
