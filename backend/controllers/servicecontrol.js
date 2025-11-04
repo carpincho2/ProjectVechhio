@@ -28,10 +28,23 @@ exports.createService = async (req, res) => {
             return res.status(400).json({ error: 'Tipo de servicio no válido.' });
         }
 
+        // Verificar que el usuario del token exista en la base de datos
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(400).json({ error: 'Usuario asociado al token no existe.' });
+        }
+
+        // Si se proporciona vehicleId, verificar que exista para evitar FK constraint
+        if (vehicleId) {
+            const vehicle = await Vehicle.findByPk(vehicleId);
+            if (!vehicle) {
+                return res.status(400).json({ error: 'Vehículo no encontrado.' });
+            }
+        }
+
         const newService = await Service.create({ type, date, vehicleId, userId, status: 'scheduled' });
 
-        // Obtener datos del usuario para el mail
-        const user = await User.findByPk(userId);
+        // Obtener datos del usuario para el mail (ya lo tenemos en `user`)
         if (user && user.email) {
             try {
                 const subject = 'Confirmación de turno de servicio';
