@@ -64,6 +64,7 @@
         <option value="Reparación General">Reparación General</option>
       </select>
       <input type="date" id="serviceDate" required>
+      <input type="time" id="serviceTime" required min="09:00" max="18:00" step="1800">
       <textarea id="comments" placeholder="Comentarios opcionales"></textarea>
       <button type="submit">Pedir Turno</button>
     </form>
@@ -88,10 +89,20 @@
             const email = document.getElementById('email').value;
             const licensePlate = document.getElementById('licensePlate').value;
             const serviceType = document.getElementById('serviceType').value;
-            const serviceDate = document.getElementById('serviceDate').value;
+            const datePart = document.getElementById('serviceDate').value;
+            const timePart = document.getElementById('serviceTime').value || '09:00';
+            const serviceDate = `${datePart}T${timePart}:00`;
             const comments = document.getElementById('comments').value;
 
             try {
+                // Validar que la fecha/hora sea futura
+                const selectedDateTime = new Date(serviceDate);
+                const now = new Date();
+                if (selectedDateTime <= now) {
+                    alert('Por favor, selecciona una fecha y hora futura.');
+                    return;
+                }
+
                 // DEBUG: mostrar token y payload mínimo en consola
                 console.debug('jwtToken present:', !!token);
 

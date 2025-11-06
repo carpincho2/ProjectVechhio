@@ -99,14 +99,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (el) el.classList.remove('input-error');
     });
     // Adaptar el tipo de servicio al formato esperado por el backend
-    let typeBackend = 'mantenimiento'; // Valor seguro por defecto
+    let typeBackend = 'Mantenimiento Preventivo'; // Valor seguro por defecto
     if (type) {
       const t = type.trim().toLowerCase();
-      if (t.includes('mantenimiento') || t.includes('aceite')) typeBackend = 'mantenimiento';
-      else if (t.includes('revision') || t.includes('revisión') || t.includes('frenos')) typeBackend = 'revision';
-      else if (t.includes('reparacion') || t.includes('reparación')) typeBackend = 'reparacion';
+      if (t.includes('mantenimiento')) typeBackend = 'Mantenimiento Preventivo';
+      else if (t.includes('aceite')) typeBackend = 'Cambio de Aceite';
+      else if (t.includes('revision')) typeBackend = 'Revisión Completa';
+      else if (t.includes('frenos')) typeBackend = 'Frenos y Suspensión';
+      else if (t.includes('reparacion') || t.includes('reparación')) typeBackend = 'Reparación General';
     }
-  // debug: tipo de servicio seleccionado (no loguear en prod)
     // Enviar solicitud al backend
     try {
       const token = localStorage.getItem('jwtToken');
