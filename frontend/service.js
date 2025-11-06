@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Enviar solicitud al backend
     try {
       const token = localStorage.getItem('jwtToken');
-      const res = await fetch('/api/services', {
+      const res = await fetch('https://projectvechhio.onrender.com/api/services', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

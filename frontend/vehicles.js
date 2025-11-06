@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchAndDisplayVehicles(queryString = '') {
         try {
-            const response = await fetch(`/api/vehicles?${queryString}`);
+            const response = await fetch(`https://projectvechhio.onrender.com/api/vehicles?${queryString}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             vehicles.forEach(vehicle => {
                 const vehicleCard = document.createElement('div');
                 vehicleCard.classList.add('carbox');
-                const imageUrl = vehicle.image ? `/uploads/${vehicle.image}` : 'https://via.placeholder.com/300x200.png?text=No+Image';
+                const imageUrl = vehicle.image ? `https://projectvechhio.onrender.com/uploads/${vehicle.image}` : 'https://via.placeholder.com/300x200.png?text=No+Image';
 
                 vehicleCard.innerHTML = `
                     <img src="${imageUrl}" alt="${vehicle.brand} ${vehicle.model}" class="car">
