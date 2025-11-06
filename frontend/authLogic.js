@@ -61,20 +61,28 @@ export async function requireAuth() {
     return true;
 }
 
+// Importar las funciones del header
+import { updateHeaderAuth, checkAuthAndUpdate } from './js/header.js';
+
 document.addEventListener('DOMContentLoaded', async () => {
-    // Si estamos en una página protegida, verificar autenticación
-    const protectedPages = ['/panel-control.html', '/profile.html', '/admin-finances.html', '/admin-services.html', '/admin-vehicles.html', '/finance.html'];
-    if (protectedPages.includes(window.location.pathname)) {
-        if (!(await requireAuth())) {
-            return; // No continuar si no está autenticado
-        }
+    // Verificar autenticación
+    const isLoggedIn = await handleAuthInitialization();
+    
+    // Actualizar el header
+    updateHeaderAuth();
+    
+    // Verificar si estamos en una página protegida
+    const protectedPages = ['/panel-control.html', '/profile.html', '/admin-finances.html', 
+                          '/admin-services.html', '/admin-vehicles.html', '/finance.html'];
+    
+    if (protectedPages.includes(window.location.pathname) && !isLoggedIn) {
+        window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.pathname);
     }
-    handleAuthInitialization();
 });
 
-// También verificar cuando la página se hace visible nuevamente
+// Verificar cuando la página se hace visible nuevamente
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-        handleAuthInitialization();
+        checkAuthAndUpdate();
     }
 });

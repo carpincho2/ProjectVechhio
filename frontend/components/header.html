@@ -1,0 +1,26 @@
+<header class="header">
+    <div class="logo-container">
+        <a href="index.html">
+            <img src="logos/logo.png" alt="Logo" class="logo">
+        </a>
+    </div>
+    <button class="hamburger" id="hamburger-btn">
+        <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-menu" id="nav-menu">
+        <a href="index.html">Inicio</a>
+        <a href="service.html">Servicios</a>
+        <a href="vehicles.html">Vehículos</a>
+        <a href="aboutUs.html">Nosotros</a>
+        <!-- Enlaces dinámicos que se mostrarán/ocultarán según el estado de autenticación -->
+        <div id="auth-links">
+            <a href="login.html" id="login-link">Login</a>
+            <a href="register.html" id="register-link">Register</a>
+        </div>
+        <div id="user-links" style="display: none;">
+            <a href="profile.html" id="profile-link">Mi Perfil</a>
+            <a href="#" id="logout-link">Cerrar Sesión</a>
+            <a href="panel-control.html" id="admin-panel-link" style="display: none;">Panel Admin</a>
+        </div>
+    </nav>
+</header>

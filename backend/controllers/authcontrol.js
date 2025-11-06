@@ -1,19 +1,36 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const { User, Sequelize } = require('../models');
+const { successResponse, errorResponse, validateEmail, validatePassword, generateToken, withTransaction } = require('../utils');
+const config = require('../config/config');
 
 // Función de Registro
 exports.register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await User.create({ username, email, password: hashedPassword });
-        res.status(201).json({ message: 'Usuario registrado exitosamente.', userId: newUser.id });
+
+        // Validaciones
+        if (!validateEmail(email)) {
+            return errorResponse(res, 400, 'Email inválido');
+        }
+        if (!validatePassword(password)) {
+            return errorResponse(res, 400, 'La contraseña debe tener al menos 8 caracteres, una letra y un número');
+        }
+
+        // Crear usuario con transacción
+        const newUser = await withTransaction(async (t) => {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            return await User.create(
+                { username, email, password: hashedPassword },
+                { transaction: t }
+            );
+        });
+
+        return successResponse(res, 201, { userId: newUser.id }, 'Usuario registrado exitosamente');
     } catch (error) {
         if (error instanceof Sequelize.UniqueConstraintError) {
-            return res.status(409).json({ error: 'El email o nombre de usuario ya existe.' });
+            return errorResponse(res, 409, 'El email o nombre de usuario ya existe');
         }
-        res.status(500).json({ error: 'Error interno del servidor' });
+        return errorResponse(res, 500, 'Error al registrar usuario');
     }
 };
 
@@ -21,32 +38,42 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { username, password } = req.body;
-        const user = await User.findOne({ 
-            where: { 
-                [Sequelize.Op.or]: [{ username: username }, { email: username }] 
-            }
+
+        // Buscar usuario por username o email
+        const user = await User.findOne({
+            where: {
+                [Sequelize.Op.or]: [{ username }, { email: username }]
+            },
+            attributes: ['id', 'username', 'password', 'role', 'email']
         });
 
         if (!user) {
-            return res.status(401).json({ error: 'Credenciales incorrectas.' });
+            return errorResponse(res, 401, 'Credenciales incorrectas');
         }
 
+        // Verificar contraseña
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).json({ error: 'Credenciales incorrectas.' });
+            return errorResponse(res, 401, 'Credenciales incorrectas');
         }
 
-        const token = jwt.sign({ id: user.id, role: user.role, username: user.username }, process.env.JWT_SECRET || 'miclavesupersecreta', {
-            expiresIn: '24h'
+        // Generar token JWT
+        const token = generateToken({
+            id: user.id,
+            role: user.role,
+            username: user.username
         });
 
-        res.json({ 
-            message: 'Login exitoso', 
-            token, 
-            user: { username: user.username, role: user.role } 
-        });
+        return successResponse(res, 200, {
+            token,
+            user: {
+                username: user.username,
+                role: user.role,
+                email: user.email
+            }
+        }, 'Login exitoso');
     } catch (error) {
-        res.status(500).json({ error: 'Error interno del servidor' });
+        return errorResponse(res, 500, 'Error al iniciar sesión');
     }
 };
 

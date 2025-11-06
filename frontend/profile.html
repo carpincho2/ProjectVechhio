@@ -6,23 +6,11 @@
     <title>Mi Perfil</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="profile.css">
 </head>
 <body>
-    <header class="header">
-  <a href="index.html"><img src="logo.png" class="logo"></a>
-  <button class="hamburger" id="hamburger-btn">
-    <span></span><span></span><span></span>
-  </button>
-  <nav class="nav-menu" id="nav-menu">
-    <a href="index.html">Inicio</a>
-    <a href="service.html">Servicios</a>
-    <a href="vehicles.html">Vehículos</a>
-    <a href="aboutUs.html">Nosotros</a>
-    <a href="login.html" class="Login">Login</a>
-    <a href="register.html" class="register">Register</a>
-  </nav>
-</header>
+    <!-- El header se cargará dinámicamente aquí -->
 
     <main class="profile-container">
         <div class="profile-card">
@@ -96,16 +84,9 @@
         </div>
     </main>
 
-    <script src="profile.js"></script>
-    <script type="module" src="./main.js" defer></script>
-    <script>
-const hamburger = document.getElementById('hamburger-btn');
-const navMenu = document.getElementById('nav-menu');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('active');
-  navMenu.classList.toggle('active');
-});
-</script>
+    <script type="module" src="js/header.js"></script>
+    <script type="module" src="profile.js"></script>
+    <script type="module" src="main.js"></script>
 
 </body>
 </html>
