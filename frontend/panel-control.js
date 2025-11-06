@@ -54,6 +54,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const sectionToShow = document.getElementById(sectionId);
         if (sectionToShow) {
             sectionToShow.classList.add('active');
+            
+            // Inicializar sección específica si es necesario
+            if (sectionId === 'finances') {
+                initializeFinanceSection();
+            }
         }
 
         // Activar el enlace correspondiente
@@ -70,7 +75,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function verifyAuth() {
         try {
             const token = localStorage.getItem('jwtToken');
-            if (!token) return false;
+            const userRole = localStorage.getItem('userRole');
+            
+            if (!token || !userRole) {
+                throw new Error('No authentication data found');
+            }
 
             const response = await fetch('https://projectvechhio.onrender.com/api/auth/check', {
                 method: 'GET',
@@ -81,15 +90,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                 credentials: 'include'
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                return data.loggedIn && data.user;
+            if (!response.ok) {
+                throw new Error('Authentication check failed');
             }
 
-            localStorage.clear();
-            return false;
-        } catch {
-            localStorage.clear();
+            const data = await response.json();
+            
+            if (!data.loggedIn || !data.user) {
+                throw new Error('User not authenticated');
+            }
+
+            // Actualizar datos del usuario si es necesario
+            if (data.user.role) {
+                localStorage.setItem('userRole', data.user.role);
+            }
+            
+            return true;
+        } catch (error) {
+            console.error('Auth error:', error);
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userName');
             return false;
         }
     }
@@ -142,6 +163,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.href = 'index.html';
             return;
         }
+
+        // Verificar autenticación al cambiar de sección
+        window.addEventListener('hashchange', async () => {
+            const stillAuthenticated = await verifyAuth();
+            if (!stillAuthenticated || !isAdmin()) {
+                window.location.href = 'index.html';
+                return;
+            }
+        });
 
         const hash = window.location.hash.substring(1);
         showSection(hash || 'dashboard');
@@ -243,6 +273,38 @@ document.addEventListener('DOMContentLoaded', async () => {
             setTimeout(() => {
                 notification.style.display = 'none';
             }, 3000);
+        }
+    }
+
+    async function initializeFinanceSection() {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            showNotification('Por favor, inicie sesión para acceder a las finanzas', 'error');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        try {
+            const response = await fetch('https://projectvechhio.onrender.com/api/finances', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al cargar datos de finanzas');
+            }
+
+            // Resto del código para cargar los datos de finanzas...
+        } catch (error) {
+            console.error('Error:', error);
+            if (error.message.includes('401') || error.message.includes('403')) {
+                showNotification('Sesión expirada. Por favor, vuelva a iniciar sesión', 'error');
+                localStorage.clear();
+                window.location.href = 'login.html';
+            }
         }
     }
 
