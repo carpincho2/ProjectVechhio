@@ -1,5 +1,16 @@
 import { checkAdminAccess } from './modulos.js';
 
+const carModels = {
+    Toyota: ['Corolla', 'Camry', 'RAV4', 'Hilux', 'Yaris', 'Land Cruiser', 'Prius'],
+    Mercedes: ['Clase A', 'Clase C', 'Clase E', 'Clase S', 'GLA', 'GLC', 'AMG GT'],
+    Lexus: ['IS', 'ES', 'LS', 'UX', 'NX', 'RX', 'LX'],
+    Ford: ['Fiesta', 'Focus', 'Mustang', 'Explorer', 'F-150', 'Ranger', 'Escape'],
+    Honda: ['Civic', 'Accord', 'CR-V', 'HR-V', 'Pilot', 'Fit', 'Odyssey'],
+    Mclaren: ['720S', '570S', 'GT', 'Artura', 'P1', '765LT', '600LT'],
+    Peugeot: ['208', '2008', '308', '3008', '5008', '508', 'Partner'],
+    Fiat: ['500', 'Panda', 'Tipo', 'Argo', 'Cronos', 'Toro', 'Strada']
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     const navLinks = document.querySelectorAll('.nav-link');
     const navUsersLi = document.getElementById('nav-users-li');
@@ -159,6 +170,81 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.hash = target;
         });
     });
+
+    // Manejador para el selector de marca
+    const brandSelect = document.getElementById('brand');
+    const modelSelect = document.getElementById('model');
+
+    if (brandSelect && modelSelect) {
+        brandSelect.addEventListener('change', function() {
+            const selectedBrand = this.value;
+            // Limpiar el selector de modelos
+            modelSelect.innerHTML = '<option value="">Seleccione un modelo</option>';
+            
+            if (selectedBrand && carModels[selectedBrand]) {
+                // Agregar los modelos correspondientes a la marca seleccionada
+                carModels[selectedBrand].forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    modelSelect.appendChild(option);
+                });
+                modelSelect.disabled = false;
+            } else {
+                modelSelect.disabled = true;
+            }
+        });
+    }
+
+    // Inicializar el formulario de vehículos
+    const vehicleForm = document.getElementById('add-vehicle-form');
+    if (vehicleForm) {
+        vehicleForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                const formData = new FormData(this);
+                const token = localStorage.getItem('jwtToken');
+                
+                const response = await fetch('https://projectvechhio.onrender.com/api/vehicles', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    // Mostrar notificación de éxito
+                    showNotification('Vehículo agregado exitosamente');
+                    // Limpiar el formulario
+                    vehicleForm.reset();
+                    // Recargar la lista de vehículos
+                    loadVehicles();
+                } else {
+                    throw new Error('Error al agregar el vehículo');
+                }
+            } catch (error) {
+                showNotification('Error al agregar el vehículo: ' + error.message, 'error');
+            }
+        });
+    }
+
+    // Función para mostrar notificaciones
+    function showNotification(message, type = 'success') {
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+        
+        if (notification && notificationText) {
+            notificationText.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    }
 
     initialize();
     checkAdminAccessWrapper();
