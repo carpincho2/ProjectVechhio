@@ -42,12 +42,14 @@ export async function handleAuthInitialization() {
     const isLoggedIn = await checkLogin();
     if (isLoggedIn) {
         updateAuthUI();
+        return true;
     } else {
         // Solo limpiamos el localStorage si realmente no está autenticado
         localStorage.removeItem('jwtToken');
         localStorage.removeItem('userRole');
         localStorage.removeItem('userName');
         updateAuthUI();
+        return false;
     }
 }
 

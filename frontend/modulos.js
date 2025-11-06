@@ -22,8 +22,17 @@ export async function checkLogin() {
                 if (data.token) {
                     localStorage.setItem('jwtToken', data.token);
                 }
+
+                // Verificar que el rol sea válido para la página actual
+                const currentPage = window.location.pathname;
+                if (currentPage.includes('panel-control.html')) {
+                    if (data.user.role !== 'admin' && data.user.role !== 'superadmin') {
+                        localStorage.clear();
+                        return false;
+                    }
+                }
+                
                 return true;
-            }
         }
         // Si la respuesta no es ok o el usuario no está logueado, limpiar localStorage
         localStorage.removeItem('jwtToken');

@@ -107,9 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             } else {
                                 // Si la URL no es válida, redirigir según el rol
                                 if (data.user.role === 'admin' || data.user.role === 'superadmin') {
-                                    window.location.href = '/panel-control.html';
+                                    window.location.href = 'panel-control.html';
                                 } else {
-                                    window.location.href = '/index.html';
+                                    window.location.href = 'index.html';
                                 }
                             }
                         } catch (e) {
@@ -122,10 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         // Redirect based on role
                         if (data.user.role === 'admin' || data.user.role === 'superadmin') {
-                            window.location.href = '/panel-control.html';
+                            window.location.href = 'panel-control.html';
                         }
                         else {
-                            window.location.href = '/index.html';
+                            window.location.href = 'index.html';
                         }
                     }
                 } else {

@@ -1,4 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+import { checkAdminAccess } from './authGuard.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // Verificar acceso de administrador
+    const hasAccess = await checkAdminAccess();
+    if (!hasAccess) return;
     // --- ELEMENTOS DEL DOM ---
     const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('.section');
@@ -531,14 +536,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- INICIALIZACIÓN ---
-    function initialize() {
-        if (!token) {
-            window.location.href = 'login.html';
+    async function initialize() {
+        // Importar handleAuthInitialization dinámicamente
+        const { handleAuthInitialization } = await import('./authLogic.js');
+        
+        // Verificar la autenticación
+        const isAuthenticated = await handleAuthInitialization();
+        
+        if (!isAuthenticated || !token || (userRole !== 'admin' && userRole !== 'superadmin')) {
+            window.location.href = 'login.html?error=' + encodeURIComponent('Acceso no autorizado');
             return;
         }
+
         if (userRole === 'superadmin') {
             navUsersLi.style.display = 'list-item';
         }
+        
         const initialSection = window.location.hash ? window.location.hash.substring(1) : 'dashboard';
         showSection(initialSection);
         fetchDashboardCounts();
