@@ -1,5 +1,7 @@
 const { Vehicle } = require('../models');
 const { Op } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
 
 // @desc    Obtener todos los vehículos con filtros
 // @route   GET /api/vehicles
@@ -73,9 +75,14 @@ const createVehicle = async (req, res) => {
             });
         }
 
-        // Procesar la imagen si existe
-        const image = req.file ? req.file.filename : null;
-        console.log('Imagen procesada:', image);
+        let imageUrl = null;
+
+        // Si hay un archivo subido, guardar su ruta
+        if (req.file) {
+            // En producción, las imágenes se guardarán en /tmp temporalmente
+            imageUrl = req.file.filename; // Solo guardamos el nombre del archivo
+            console.log('Archivo guardado:', imageUrl);
+        }
 
         // Crear el vehículo
         const newVehicle = await Vehicle.create({ 
@@ -86,7 +93,7 @@ const createVehicle = async (req, res) => {
             condition, 
             mileage: mileage ? parseFloat(mileage) : null, 
             description,
-            image 
+            image: imageUrl 
         });
 
         console.log('Vehículo creado exitosamente:', newVehicle.id);
@@ -107,17 +114,44 @@ const createVehicle = async (req, res) => {
 const updateVehicle = async (req, res) => {
     try {
         const { brand, model, year, price, condition, mileage, description } = req.body;
-        const image = req.file ? req.file.filename : null;
         const vehicle = await Vehicle.findByPk(req.params.id);
 
         if (!vehicle) {
             return res.status(404).json({ error: 'Vehículo no encontrado' });
         }
 
-        const updatedData = { brand, model, year, price, condition, mileage, description };
-        if (image) {
-            updatedData.image = image;
+        let imageUrl = vehicle.image; // Mantener la imagen existente por defecto
+
+        // Si hay un nuevo archivo subido
+        if (req.file) {
+            // Si había una imagen anterior y no estamos en producción, intentar eliminarla
+            if (vehicle.image && process.env.NODE_ENV !== 'production') {
+                const oldImagePath = path.join(process.cwd(), 'uploads', vehicle.image);
+                try {
+                    if (fs.existsSync(oldImagePath)) {
+                        fs.unlinkSync(oldImagePath);
+                        console.log('Imagen anterior eliminada:', oldImagePath);
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar imagen anterior:', error);
+                }
+            }
+            
+            // Actualizar con el nombre del nuevo archivo
+            imageUrl = req.file.filename;
+            console.log('Nueva imagen guardada:', imageUrl);
         }
+
+        const updatedData = { 
+            brand, 
+            model, 
+            year, 
+            price, 
+            condition, 
+            mileage, 
+            description,
+            image: imageUrl 
+        };
 
         await vehicle.update(updatedData);
         res.status(200).json(vehicle);

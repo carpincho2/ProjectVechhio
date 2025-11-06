@@ -40,8 +40,8 @@ app.use(cors({
 // Servir archivos estáticos del frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Servir archivos estáticos de la carpeta de subidas
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Servir archivos estáticos de la carpeta de subidas (en desarrollo) o /tmp (en producción)
+app.use('/uploads', express.static(process.env.NODE_ENV === 'production' ? '/tmp' : path.join(__dirname, 'uploads')));
 
 // Parsear JSON y datos de formularios
 app.use(express.json());

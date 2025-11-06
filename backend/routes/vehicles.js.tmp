@@ -1,0 +1,51 @@
+const express = require('express');
+const router = express.Router();
+const vehicleController = require('../controllers/vehiclescontrol.js');
+const { verifyJWT, isAdmin } = require('../middlewares/authmiddleware.js');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const cloudinary = require('../config/cloudinary');
+
+// Configuración de Multer para almacenamiento temporal
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const tempDir = path.join(process.cwd(), 'temp');
+        if (!fs.existsSync(tempDir)) {
+            fs.mkdirSync(tempDir, { recursive: true });
+        }
+        cb(null, tempDir);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+// Filtro para validar tipos de archivo
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+        cb(null, true);
+    } else {
+        cb(new Error('Solo se permiten imágenes'), false);
+    }
+};
+
+const upload = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB
+    }
+});
+
+// Rutas públicas
+router.get('/', vehicleController.getAllVehicles);
+router.get('/:id', vehicleController.getVehicleById);
+
+// Rutas de administrador
+router.post('/', verifyJWT, isAdmin, upload.single('image'), vehicleController.createVehicle);
+router.put('/:id', verifyJWT, isAdmin, upload.single('image'), vehicleController.updateVehicle);
+router.delete('/:id', verifyJWT, isAdmin, vehicleController.deleteVehicle);
+
+module.exports = router;

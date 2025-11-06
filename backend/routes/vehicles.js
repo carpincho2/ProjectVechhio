@@ -4,50 +4,44 @@ const vehicleController = require('../controllers/vehiclescontrol.js');
 const { verifyJWT, isAdmin } = require('../middlewares/authmiddleware.js');
 const multer = require('multer');
 const path = require('path');
-
-// Configuración de Multer para la subida de archivos
-// Crear el directorio de uploads si no existe
 const fs = require('fs');
-const uploadDir = path.join(__dirname, '../uploads');
 
-try {
-    if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { 
-            recursive: true,
-            mode: 0o777 // Esto establece permisos completos de lectura/escritura
-        });
-        console.log('✅ Directorio de uploads creado en:', uploadDir);
-    }
-    
-    // Verificar permisos de escritura
-    fs.access(uploadDir, fs.constants.W_OK, (err) => {
-        if (err) {
-            console.error('❌ No hay permisos de escritura en el directorio uploads:', err);
-            // Intentar corregir los permisos
-            fs.chmod(uploadDir, 0o777, (chmodErr) => {
-                if (chmodErr) {
-                    console.error('❌ No se pudieron modificar los permisos:', chmodErr);
-                } else {
-                    console.log('✅ Permisos de escritura establecidos correctamente');
-                }
-            });
-        } else {
-            console.log('✅ Permisos de escritura verificados correctamente');
+// Determinar el directorio de uploads basado en el entorno
+const uploadDir = process.env.NODE_ENV === 'production' ? '/tmp' : path.join(process.cwd(), 'uploads');
+
+console.log('📁 Configurando directorio de uploads en:', uploadDir);
+
+// En desarrollo, crear el directorio si no existe
+if (process.env.NODE_ENV !== 'production') {
+    try {
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+            console.log('✅ Directorio de uploads creado exitosamente');
         }
-    });
-} catch (error) {
-    console.error('❌ Error al configurar el directorio de uploads:', error);
+    } catch (error) {
+        console.error('❌ Error al configurar el directorio de uploads:', error);
+    }
 }
 
 // Configuración de Multer para la subida de archivos
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
+        // En producción usar /tmp, en desarrollo verificar/crear el directorio
+        if (process.env.NODE_ENV !== 'production') {
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir, { recursive: true });
+                console.log('📁 Directorio de uploads creado durante la subida');
+            }
+        }
+        console.log('📁 Guardando archivo en:', uploadDir);
         cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
         // Generar un nombre de archivo único para evitar colisiones
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
+        const filename = uniqueSuffix + path.extname(file.originalname);
+        console.log('📄 Nombre de archivo generado:', filename);
+        cb(null, filename);
     }
 });
 
