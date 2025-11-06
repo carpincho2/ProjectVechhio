@@ -12,16 +12,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const sectionId = link.getAttribute('href').substring(1);
-            
-            // Update active class
-            navLinks.forEach(nav => nav.classList.remove('active'));
-            link.classList.add('active');
-            
             showSection(sectionId);
-            
             // Update URL hash without scrolling
             history.pushState(null, null, `#${sectionId}`);
         });
+    });
+
+    // Handle initial page load and browser back/forward
+    window.addEventListener('hashchange', () => {
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+            showSection(hash);
+        }
     });
 
     if (userDisplay && userName) {
@@ -29,12 +31,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function showSection(sectionId) {
+        // Remover la clase active de todas las secciones
         const sections = document.querySelectorAll('.section');
-        sections.forEach(section => section.classList.add('hidden'));
+        sections.forEach(section => section.classList.remove('active'));
 
+        // Remover la clase active de todos los enlaces
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => link.classList.remove('active'));
+
+        // Activar la sección seleccionada
         const sectionToShow = document.getElementById(sectionId);
         if (sectionToShow) {
-            sectionToShow.classList.remove('hidden');
+            sectionToShow.classList.add('active');
+        }
+
+        // Activar el enlace correspondiente
+        const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
         }
     }
 

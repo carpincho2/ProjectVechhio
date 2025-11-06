@@ -147,12 +147,15 @@ body {
 }
 
 .section {
-    display: none;
-    animation: fadeIn 0.5s ease;
+    display: none;  /* Ocultar todas las secciones por defecto */
+    padding: 20px;
+    margin: 20px;
+    background-color: var(--bg-card);
+    border-radius: 8px;
 }
 
 .section.active {
-    display: block;
+    display: block;  /* Mostrar solo la sección activa */
 }
 
 @keyframes fadeIn {
