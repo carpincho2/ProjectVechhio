@@ -2,7 +2,7 @@ const { Resend } = require('resend');
 require('dotenv').config();
 
 // Crear instancia de Resend con la API key
-´const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Verificar que tenemos la API key configurada
 const verifyConfiguration = () => {
