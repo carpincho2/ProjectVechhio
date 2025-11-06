@@ -61,15 +61,9 @@ export async function requireAuth() {
     return true;
 }
 
-// Importar las funciones del header
-import { updateHeaderAuth, checkAuthAndUpdate } from './js/header.js';
-
 document.addEventListener('DOMContentLoaded', async () => {
-    // Verificar autenticación
+    // Verificar autenticación y actualizar UI
     const isLoggedIn = await handleAuthInitialization();
-    
-    // Actualizar el header
-    updateHeaderAuth();
     
     // Verificar si estamos en una página protegida
     const protectedPages = ['/panel-control.html', '/profile.html', '/admin-finances.html', 
@@ -83,6 +77,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Verificar cuando la página se hace visible nuevamente
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-        checkAuthAndUpdate();
+        handleAuthInitialization();
     }
 });
