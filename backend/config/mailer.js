@@ -27,20 +27,52 @@ const sendEmail = async (to, subject, html) => {
     }
 
     try {
+        // Log de los datos que se están enviando
+        console.log('Enviando email con los siguientes datos:');
+        console.log('From:', process.env.EMAIL_FROM);
+        console.log('To:', to);
+        console.log('Subject:', subject);
+
         const response = await resend.emails.send({
             from: process.env.EMAIL_FROM,
             to,
             subject,
-            html
+            html,
+            // Agregamos cabeceras para tracking
+            headers: {
+                'X-Entity-Ref-ID': new Date().getTime().toString()
+            }
         });
 
-        console.info('Email sent successfully:', response.id);
-        return { success: true, info: response };
+        // Log completo de la respuesta
+        console.log('Respuesta completa de Resend:', JSON.stringify(response, null, 2));
+
+        if (!response || !response.data) {
+            throw new Error('Respuesta inválida de Resend');
+        }
+
+        const emailId = response.data ? response.data.id : 'ID no disponible';
+        console.info('Email enviado exitosamente. ID:', emailId);
+        
+        return { 
+            success: true, 
+            info: {
+                id: emailId,
+                to: to,
+                timestamp: new Date().toISOString()
+            }
+        };
     } catch (error) {
-        console.error('Resend error:', error);
+        console.error('Error detallado al enviar email:', {
+            message: error.message,
+            stack: error.stack,
+            details: error.response ? error.response.data : null
+        });
+        
         return { 
             success: false, 
-            error: error.message || 'Error al enviar el correo'
+            error: error.message || 'Error al enviar el correo',
+            details: error.response ? error.response.data : null
         };
     }
 };
