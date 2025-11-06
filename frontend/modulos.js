@@ -16,9 +16,12 @@ export async function checkLogin() {
         if (response.ok) {
             const data = await response.json();
             if (data.loggedIn && data.user) {
-                // Actualizar la información del usuario en localStorage
+                // Actualizar la información del usuario y el token en localStorage
                 localStorage.setItem('userName', data.user.username);
                 localStorage.setItem('userRole', data.user.role);
+                if (data.token) {
+                    localStorage.setItem('jwtToken', data.token);
+                }
                 return true;
             }
         }

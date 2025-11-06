@@ -84,8 +84,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                     
-                    if (!verifyResponse.ok) {
+                    const verifyData = await verifyResponse.json();
+                    if (!verifyResponse.ok || !verifyData.loggedIn) {
+                        localStorage.removeItem('jwtToken');
+                        localStorage.removeItem('userRole');
+                        localStorage.removeItem('userName');
                         throw new Error('Error al verificar la autenticación');
+                    }
+                    
+                    // Actualizar el token si recibimos uno nuevo
+                    if (verifyData.token) {
+                        localStorage.setItem('jwtToken', verifyData.token);
                     }
 
                     // Redirigir al destino original si existe, si no redirigir por rol

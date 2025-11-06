@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { User, Sequelize } = require('../models');
 const { successResponse, errorResponse, validateEmail, validatePassword, generateToken, withTransaction } = require('../utils');
 const config = require('../config/config');
