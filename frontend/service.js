@@ -117,7 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
           // Agregar token JWT si está disponible
           ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
-        body: JSON.stringify({ type: typeBackend, date, vehicleId })
+        body: JSON.stringify({ 
+          fullName,
+          email,
+          type: typeBackend, 
+          date, 
+          vehicleId 
+        })
       });
       const data = await res.json();
       if (res.ok) {
