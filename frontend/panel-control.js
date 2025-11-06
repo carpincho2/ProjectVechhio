@@ -359,88 +359,227 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Inicializar el formulario de vehículos
-    const vehicleForm = document.getElementById('add-vehicle-form');
-    if (vehicleForm) {
-        vehicleForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            try {
-                const formData = new FormData(this);
-                const token = localStorage.getItem('jwtToken');
-                
-                const response = await fetch('https://projectvechhio.onrender.com/api/vehicles', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: formData
-                });
-
-                if (response.ok) {
-                    // Mostrar notificación de éxito
-                    showNotification('Vehículo agregado exitosamente');
-                    // Limpiar el formulario
-                    vehicleForm.reset();
-                    // Recargar la lista de vehículos
-                    loadVehicles();
-                } else {
-                    throw new Error('Error al agregar el vehículo');
-                }
-            } catch (error) {
-                showNotification('Error al agregar el vehículo: ' + error.message, 'error');
-            }
-        });
-    }
-
-    // Función para mostrar notificaciones
-    function showNotification(message, type = 'success') {
-        const notification = document.getElementById('notification');
-        const notificationText = document.getElementById('notification-text');
-        
-        if (notification && notificationText) {
-            notificationText.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-    }
-
-    async function initializeFinanceSection() {
+    // Función para cargar vehículos
+async function loadVehicles() {
+    try {
         const token = localStorage.getItem('jwtToken');
-        if (!token) {
-            showNotification('Por favor, inicie sesión para acceder a las finanzas', 'error');
-            window.location.href = 'login.html';
-            return;
+        const response = await fetch('https://projectvechhio.onrender.com/api/vehicles', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al cargar vehículos');
         }
 
+        const vehicles = await response.json();
+        updateVehiclesTable(vehicles);
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('Error al cargar los vehículos', 'error');
+    }
+}
+
+// Función para actualizar la tabla de vehículos
+function updateVehiclesTable(vehicles) {
+    const tbody = document.querySelector('#vehicles-table tbody');
+    tbody.innerHTML = '';
+
+    vehicles.forEach(vehicle => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${vehicle.brand}</td>
+            <td>${vehicle.model}</td>
+            <td>${vehicle.year}</td>
+            <td>$${vehicle.price.toLocaleString()}</td>
+            <td class="table-actions">
+                <button class="btn btn-view" data-id="${vehicle._id}"><i class="fas fa-eye"></i></button>
+                <button class="btn btn-edit" data-id="${vehicle._id}"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-delete" data-id="${vehicle._id}"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Función para cargar servicios
+async function loadServices() {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch('https://projectvechhio.onrender.com/api/services', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al cargar servicios');
+        }
+
+        const services = await response.json();
+        updateServicesTable(services);
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('Error al cargar los servicios', 'error');
+    }
+}
+
+// Función para actualizar la tabla de servicios
+function updateServicesTable(services) {
+    const tbody = document.querySelector('#services-table tbody');
+    tbody.innerHTML = '';
+
+    services.forEach(service => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${service.type}</td>
+            <td>${service.description}</td>
+            <td class="table-actions">
+                <button class="btn btn-view" data-id="${service._id}"><i class="fas fa-eye"></i></button>
+                <button class="btn btn-edit" data-id="${service._id}"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-delete" data-id="${service._id}"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Inicializar el formulario de vehículos
+const vehicleForm = document.getElementById('add-vehicle-form');
+if (vehicleForm) {
+    vehicleForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
         try {
-            const response = await fetch('https://projectvechhio.onrender.com/api/finances', {
+            const formData = new FormData(this);
+            
+            // Validar que todos los campos requeridos estén llenos
+            const brand = formData.get('brand');
+            const model = formData.get('model');
+            const year = formData.get('year');
+            const price = formData.get('price');
+            const condition = formData.get('condition');
+
+            if (!brand || !model || !year || !price || !condition) {
+                showNotification('Por favor complete todos los campos requeridos', 'error');
+                return;
+            }
+
+            const token = localStorage.getItem('jwtToken');
+            
+            const response = await fetch('https://projectvechhio.onrender.com/api/vehicles', {
+                method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    'Authorization': `Bearer ${token}`
                 },
+                body: formData,
                 credentials: 'include'
             });
 
             if (!response.ok) {
-                throw new Error('Error al cargar datos de finanzas');
+                throw new Error('Error al agregar el vehículo');
             }
 
-            // Resto del código para cargar los datos de finanzas...
+            showNotification('Vehículo agregado exitosamente');
+            this.reset();
+            loadVehicles(); // Recargar la lista de vehículos
         } catch (error) {
             console.error('Error:', error);
-            if (error.message.includes('401') || error.message.includes('403')) {
-                showNotification('Sesión expirada. Por favor, vuelva a iniciar sesión', 'error');
-                localStorage.clear();
-                window.location.href = 'login.html';
-            }
+            showNotification('Error al agregar el vehículo: ' + error.message, 'error');
+        }
+    });
+}
+
+// Función para mostrar notificaciones
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    const notificationText = document.getElementById('notification-text');
+    
+    if (notification && notificationText) {
+        notificationText.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.style.display = 'block';
+        
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+}
+
+async function initializeFinanceSection() {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+        showNotification('Por favor, inicie sesión para acceder a las finanzas', 'error');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('https://projectvechhio.onrender.com/api/finances', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al cargar datos de finanzas');
+        }
+
+        // Resto del código para cargar los datos de finanzas...
+    } catch (error) {
+        console.error('Error:', error);
+        if (error.message.includes('401') || error.message.includes('403')) {
+            showNotification('Sesión expirada. Por favor, vuelva a iniciar sesión', 'error');
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    }
+}
+
+// Cargar datos cuando se muestra una sección
+function showSection(sectionId) {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => section.classList.remove('active'));
+
+    const sectionToShow = document.getElementById(sectionId);
+    if (sectionToShow) {
+        sectionToShow.classList.add('active');
+        
+        // Cargar datos específicos de la sección
+        switch(sectionId) {
+            case 'vehicles':
+                loadVehicles();
+                break;
+            case 'services':
+                loadServices();
+                break;
+            case 'finances':
+                loadFinances();
+                break;
+            case 'dashboard':
+                loadDashboardStats();
+                break;
         }
     }
 
-    initialize();
-    checkAdminAccessWrapper();
+    // Actualizar enlaces de navegación
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        if (link.getAttribute('href') === `#${sectionId}`) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
+
+initialize();
+checkAdminAccessWrapper();
 });
