@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function fetchDashboardCounts() {
         try {
             const token = localStorage.getItem('jwtToken');
-            const response = await fetch('https://projectvechhio.onrender.com/api/dashboard/counts', {
+            const response = await fetch('G:\\2025\\Pane-concesionaria\\backend\\routes\\statistics.js', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
