@@ -80,24 +80,60 @@ exports.login = async (req, res) => {
 // Funciones de check y logout
 exports.checkAuth = async (req, res) => {
     try {
-        const user = await User.findByPk(req.user.id, {
-            attributes: ['id', 'username', 'role'] // No incluir datos sensibles
+        // Obtener el token del header
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ 
+                loggedIn: false,
+                message: 'No token provided'
+            });
+        }
+
+        const token = authHeader.split(' ')[1];
+        
+        // Verificar el token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'miclavesupersecreta');
+        
+        // Buscar el usuario
+        const user = await User.findByPk(decoded.id, {
+            attributes: ['id', 'username', 'role', 'email']
         });
         
         if (!user) {
-            return res.status(401).json({ loggedIn: false });
+            return res.status(401).json({ 
+                loggedIn: false,
+                message: 'User not found'
+            });
         }
+
+        // Generar un nuevo token para renovar la sesión
+        const newToken = generateToken({
+            id: user.id,
+            role: user.role,
+            username: user.username
+        });
 
         res.json({ 
             loggedIn: true, 
             user: {
                 id: user.id,
                 username: user.username,
-                role: user.role
-            }
+                role: user.role,
+                email: user.email
+            },
+            token: newToken
         });
     } catch (error) {
-        res.status(500).json({ error: 'Error al verificar la autenticación' });
+        if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+            return res.status(401).json({ 
+                loggedIn: false,
+                message: 'Invalid or expired token'
+            });
+        }
+        res.status(500).json({ 
+            loggedIn: false,
+            error: 'Error verifying authentication'
+        });
     }
 };
 

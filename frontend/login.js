@@ -53,12 +53,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
+                // Limpiar cualquier token anterior
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('userName');
+
                 const response = await fetch('https://projectvechhio.onrender.com/api/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    credentials: 'include',
                     body: JSON.stringify({ username, password })
                 });
 
@@ -69,16 +73,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     localStorage.setItem('userRole', data.user.role);
                     localStorage.setItem('userName', data.user.username);
                     
-                    // Redirigir al destino original si existe (next), si no redirigir por rol
+                    // Verificar que el login fue exitoso antes de continuar
                     const urlParams = new URLSearchParams(window.location.search);
-                    const next = urlParams.get('next');
-                    if (next) {
+                    const redirect = urlParams.get('redirect');
+                    
+                    // Verificar autenticación inmediatamente después de login
+                    const verifyResponse = await fetch('https://projectvechhio.onrender.com/api/auth/check', {
+                        headers: {
+                            'Authorization': `Bearer ${data.token}`
+                        }
+                    });
+                    
+                    if (!verifyResponse.ok) {
+                        throw new Error('Error al verificar la autenticación');
+                    }
+
+                    // Redirigir al destino original si existe, si no redirigir por rol
+                    if (redirect) {
                         try {
-                            const decodedNext = decodeURIComponent(next);
-                            // Seguridad básica: solo permitir rutas relativas
-                            if (decodedNext.startsWith('/')) {
-                                window.location.href = decodedNext;
+                            const decodedRedirect = decodeURIComponent(redirect);
+                            // Verificar que la URL de redirección es válida
+                            if (decodedRedirect.startsWith('/') && !decodedRedirect.includes('//')) {
+                                window.location.href = decodedRedirect;
                             } else {
+                                // Si la URL no es válida, redirigir según el rol
                                 if (data.user.role === 'admin' || data.user.role === 'superadmin') {
                                     window.location.href = '/panel-control.html';
                                 } else {
