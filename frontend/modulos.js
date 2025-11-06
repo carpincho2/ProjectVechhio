@@ -1,12 +1,7 @@
 export async function checkLogin() {
     try {
         const token = localStorage.getItem('jwtToken');
-        if (!token) {
-            console.log('No token found');
-            return false; 
-        }
-
-        console.log('Token:', token);
+        if (!token) return false;
 
         const response = await fetch('https://projectvechhio.onrender.com/api/auth/check', {
             method: 'GET',
@@ -19,7 +14,6 @@ export async function checkLogin() {
 
         if (response.ok) {
             const data = await response.json();
-            console.log('Auth check response:', data);
 
             if (data.loggedIn && data.user) {
                 localStorage.setItem('userName', data.user.username);
@@ -33,30 +27,32 @@ export async function checkLogin() {
                         return false;
                     }
                 }
-
                 return true;
             }
         }
 
-        localStorage.removeItem('jwtToken');
-        localStorage.removeItem('userName');
-        localStorage.removeItem('userRole');
+        localStorage.clear();
         return false;
 
     } catch (error) {
-        console.warn('Error checking login status:', error);
         const token = localStorage.getItem('jwtToken');
         if (token) {
             try {
                 const payload = JSON.parse(atob(token.split('.')[1]));
-                if (payload.exp * 1000 > Date.now()) {
-                    return true;
-                }
-            } catch (e) {}
+                if (payload.exp * 1000 > Date.now()) return true;
+            } catch {}
         }
-        localStorage.removeItem('jwtToken');
-        localStorage.removeItem('userName');
-        localStorage.removeItem('userRole');
+        localStorage.clear();
         return false;
     }
+}
+
+export async function checkAdminAccess() {
+    const loggedIn = await checkLogin();
+    const role = localStorage.getItem('userRole');
+    if (!loggedIn || (role !== 'admin' && role !== 'superadmin')) {
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
 }
