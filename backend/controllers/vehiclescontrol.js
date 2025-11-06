@@ -58,12 +58,46 @@ const getVehicleById = async (req, res) => {
 // @access  Private (Admin)
 const createVehicle = async (req, res) => {
     try {
+        console.log('Iniciando creación de vehículo');
+        console.log('Body:', req.body);
+        console.log('File:', req.file);
+
         const { brand, model, year, price, condition, mileage, description } = req.body;
+        
+        // Validaciones
+        if (!brand || !model || !year || !price || !condition) {
+            return res.status(400).json({ 
+                error: 'Faltan campos requeridos',
+                required: ['brand', 'model', 'year', 'price', 'condition'],
+                received: { brand, model, year, price, condition }
+            });
+        }
+
+        // Procesar la imagen si existe
         const image = req.file ? req.file.filename : null;
-        const newVehicle = await Vehicle.create({ brand, model, year, price, condition, mileage, description, image });
+        console.log('Imagen procesada:', image);
+
+        // Crear el vehículo
+        const newVehicle = await Vehicle.create({ 
+            brand, 
+            model, 
+            year: parseInt(year), 
+            price: parseFloat(price), 
+            condition, 
+            mileage: mileage ? parseFloat(mileage) : null, 
+            description,
+            image 
+        });
+
+        console.log('Vehículo creado exitosamente:', newVehicle.id);
         res.status(201).json(newVehicle);
     } catch (error) {
-        res.status(500).json({ error: 'Error al crear el vehículo: ' + error.message });
+        console.error('Error detallado al crear vehículo:', error);
+        res.status(500).json({ 
+            error: 'Error al crear el vehículo',
+            details: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
     }
 };
 
