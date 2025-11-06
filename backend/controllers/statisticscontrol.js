@@ -1,5 +1,28 @@
 const db = require('../models');
 
+// Controlador para obtener estadísticas del dashboard
+const getDashboardStats = async (req, res) => {
+    try {
+        const [usersCount, vehiclesCount, financesCount, servicesCount] = await Promise.all([
+            db.User.count(),
+            db.Vehicle.count(),
+            db.Finance.count(),
+            db.Service.count()
+        ]);
+
+        res.status(200).json({
+            users: usersCount,
+            vehicles: vehiclesCount,
+            finances: financesCount,
+            services: servicesCount
+        });
+
+    } catch (error) {
+        console.error('Error obteniendo estadísticas del dashboard:', error);
+        res.status(500).json({ error: 'Error interno del servidor al obtener estadísticas.' });
+    }
+};
+
 // Controlador para obtener estadísticas de financiación
 const getFinanceStats = async (req, res) => {
     try {
@@ -65,6 +88,7 @@ const getServiceStats = async (req, res) => {
 };
 
 module.exports = {
+    getDashboardStats,
     getFinanceStats,
     getVehicleStats,
     getServiceStats
