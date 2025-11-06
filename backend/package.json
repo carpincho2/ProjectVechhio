@@ -25,6 +25,7 @@
     "querystring": "^0.2.1",
     "resend": "^6.4.1",
     "sequelize": "^6.37.7",
+    "sib-api-v3-sdk": "^8.5.0",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {

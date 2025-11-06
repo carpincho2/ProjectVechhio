@@ -2,7 +2,7 @@ const { Resend } = require('resend');
 require('dotenv').config();
 
 // Crear instancia de Resend con la API key
-const resend = new Resend(process.env.RESEND_API_KEY);
+´const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Verificar que tenemos la API key configurada
 const verifyConfiguration = () => {
@@ -27,17 +27,28 @@ const sendEmail = async (to, subject, html) => {
     }
 
     try {
+        // En modo de prueba, redirigir todos los emails a la dirección verificada
+        const testEmail = 'carpijefe@gmail.com';
+        const originalTo = to;
+
         // Log de los datos que se están enviando
         console.log('Enviando email con los siguientes datos:');
         console.log('From:', process.env.EMAIL_FROM);
-        console.log('To:', to);
+        console.log('Email original:', originalTo);
+        console.log('Redirigido a:', testEmail);
         console.log('Subject:', subject);
+
+        // Agregar nota sobre el email original
+        const testingNote = `
+        <div style="background-color: #f8f9fa; padding: 10px; margin-bottom: 20px; border-radius: 5px;">
+            <p style="margin: 0;"><strong>Nota de prueba:</strong> Este email estaba destinado originalmente a: ${originalTo}</p>
+        </div>`;
 
         const response = await resend.emails.send({
             from: process.env.EMAIL_FROM,
-            to,
-            subject,
-            html,
+            to: testEmail,
+            subject: `[PRUEBA] ${subject}`,
+            html: testingNote + html,
             // Agregamos cabeceras para tracking
             headers: {
                 'X-Entity-Ref-ID': new Date().getTime().toString()
