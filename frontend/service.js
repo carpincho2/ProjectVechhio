@@ -119,11 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
           ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
         body: JSON.stringify({ 
-          fullName,
-          email,
           type: typeBackend, 
           date, 
-          vehicleId 
+          vehicleId: vehicleId || undefined 
         })
       });
       const data = await res.json();
