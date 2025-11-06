@@ -2,19 +2,25 @@ export async function checkLogin() {
     try {
         const token = localStorage.getItem('jwtToken');
         if (!token) {
+            console.log('No token found');
             return false; 
         }
+
+        console.log('Token:', token); // Debug log
 
         const response = await fetch('https://projectvechhio.onrender.com/api/auth/check', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
-            }
+            },
+            credentials: 'include'
         });
         
         if (response.ok) {
             const data = await response.json();
+            console.log('Auth check response:', data); // Debug log
+            
             if (data.loggedIn && data.user) {
                 // Actualizar la información del usuario y el token en localStorage
                 localStorage.setItem('userName', data.user.username);

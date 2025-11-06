@@ -1,4 +1,4 @@
-import { checkAdminAccess } from './authGuard.js';
+import { verifyAuth, isAdmin } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Verificar acceso de administrador
@@ -537,13 +537,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- INICIALIZACIÓN ---
     async function initialize() {
-        // Importar handleAuthInitialization dinámicamente
-        const { handleAuthInitialization } = await import('./authLogic.js');
+        const isAuthenticated = await verifyAuth();
         
-        // Verificar la autenticación
-        const isAuthenticated = await handleAuthInitialization();
-        
-        if (!isAuthenticated || !token || (userRole !== 'admin' && userRole !== 'superadmin')) {
+        if (!isAuthenticated || !isAdmin()) {
             window.location.href = 'login.html?error=' + encodeURIComponent('Acceso no autorizado');
             return;
         }

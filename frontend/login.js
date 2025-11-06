@@ -1,3 +1,5 @@
+import { clearAuth, setToken, setUserInfo, verifyAuth } from './auth.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     const errorMessageElement = document.getElementById('errorMessage');
     const successMessageElement = document.getElementById('successMessage');
@@ -53,10 +55,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                // Limpiar cualquier token anterior
-                localStorage.removeItem('jwtToken');
-                localStorage.removeItem('userRole');
-                localStorage.removeItem('userName');
+                // Limpiar autenticación anterior
+                clearAuth();
 
                 const response = await fetch('https://projectvechhio.onrender.com/api/auth/login', {
                     method: 'POST',
@@ -69,9 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await response.json();
 
                 if (response.ok) {
-                    localStorage.setItem('jwtToken', data.token);
-                    localStorage.setItem('userRole', data.user.role);
-                    localStorage.setItem('userName', data.user.username);
+                    setToken(data.token);
+                    setUserInfo(data.user);
                     
                     // Verificar que el login fue exitoso antes de continuar
                     const urlParams = new URLSearchParams(window.location.search);
