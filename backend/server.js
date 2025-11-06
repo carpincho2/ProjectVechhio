@@ -20,7 +20,7 @@ const app = express();
 // Si la app se ejecuta detrás de un proxy (Render, Heroku, etc.),
 // habilitamos trust proxy para que Express conozca el protocolo original (https)
 app.set('trust proxy', 1);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 // Configuración de Passport
 const passport = require('passport');
@@ -45,16 +45,23 @@ app.use(express.urlencoded({ extended: true }));
 
 // Configuración de Sesión para Passport
 const session = require('express-session');
-// Ajuste de cookies para producción: si estamos en producción (HTTPS detrás de proxy)
-// marcamos la cookie como secure para que solo se transmita por HTTPS.
-// También setea sameSite='lax' que funciona bien con OAuth flows.
+// En producción, usar Redis o similar. Para desarrollo, usar MemoryStore
+let sessionStore;
+if (process.env.NODE_ENV === 'production') {
+    // Advertir sobre el uso de MemoryStore en producción
+    console.warn('WARNING: Using MemoryStore in production is not recommended.');
+    // TODO: Implementar Redis u otro store para producción
+}
+
 app.use(session({
     secret: process.env.SESSION_SECRET || 'tu_secreto_de_sesion',
     resave: false,
     saveUninitialized: false,
+    store: sessionStore,
     cookie: {
         secure: (process.env.NODE_ENV === 'production'),
-        sameSite: 'lax'
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000 // 24 horas
     }
 }));
 
