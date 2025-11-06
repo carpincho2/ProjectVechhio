@@ -1,5 +1,129 @@
 import { checkAdminAccess } from './modulos.js';
 
+// Configuración de la API
+const API_URL = 'https://projectvechhio.onrender.com/api';
+
+// Función para actualizar la UI de autenticación
+function updateAuthUI() {
+    const token = localStorage.getItem('jwtToken');
+    const userName = localStorage.getItem('userName');
+    const authContainer = document.getElementById('auth-container');
+
+    if (token && userName) {
+        if (authContainer) {
+            authContainer.innerHTML = `
+                <div class="user-info">
+                    <span>Bienvenido, ${userName}</span>
+                    <button id="logout-btn" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+            `;
+
+            // Agregar evento al botón de logout
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', handleLogout);
+            }
+        }
+    } else {
+        if (authContainer) {
+            authContainer.innerHTML = `
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn-login">Iniciar Sesión</a>
+                    <a href="register.html" class="btn-register">Registrarse</a>
+                </div>
+            `;
+        }
+    }
+}
+
+// Función para actualizar el header
+function updateHeader(userName) {
+    const authContainer = document.getElementById('auth-container');
+    if (authContainer) {
+        authContainer.innerHTML = `
+            <div class="user-auth-section">
+                <span class="welcome-text">Bienvenido, ${userName}</span>
+                <button id="logout-btn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        `;
+
+        // Agregar evento de logout
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', handleLogout);
+        }
+    }
+}
+
+// Función para manejar el logout
+async function handleLogout() {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch('https://projectvechhio.onrender.com/api/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    } catch (error) {
+        console.error('Error during logout:', error);
+        localStorage.clear();
+        window.location.href = 'login.html';
+    }
+}
+
+// Función para cargar las estadísticas del dashboard
+async function loadDashboardStats() {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch('https://projectvechhio.onrender.com/api/statistics/dashboard', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            updateDashboardStats(data);
+        }
+    } catch (error) {
+        console.error('Error loading dashboard stats:', error);
+        showNotification('Error al cargar las estadísticas', 'error');
+    }
+}
+
+// Función para actualizar las estadísticas en el dashboard
+function updateDashboardStats(data) {
+    // Actualizar estadísticas de vehículos
+    document.getElementById('totalVehicles').textContent = data.vehicles?.total || 0;
+    document.getElementById('newVehicles').textContent = data.vehicles?.new || 0;
+    document.getElementById('usedVehicles').textContent = data.vehicles?.used || 0;
+
+    // Actualizar estadísticas de servicios
+    document.getElementById('scheduledServices').textContent = data.services?.scheduled || 0;
+    document.getElementById('completedServices').textContent = data.services?.completed || 0;
+    document.getElementById('pendingServices').textContent = data.services?.pending || 0;
+
+    // Actualizar estadísticas de finanzas
+    document.getElementById('totalFinanceRequests').textContent = data.finances?.total || 0;
+    document.getElementById('approvedFinances').textContent = data.finances?.approved || 0;
+    document.getElementById('pendingFinances').textContent = data.finances?.pending || 0;
+    document.getElementById('rejectedFinances').textContent = data.finances?.rejected || 0;
+}
+
 const carModels = {
     Toyota: ['Corolla', 'Camry', 'RAV4', 'Hilux', 'Yaris', 'Land Cruiser', 'Prius'],
     Mercedes: ['Clase A', 'Clase C', 'Clase E', 'Clase S', 'GLA', 'GLC', 'AMG GT'],
@@ -12,11 +136,30 @@ const carModels = {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const navLinks = document.querySelectorAll('.nav-link');
-    const navUsersLi = document.getElementById('nav-users-li');
+    // Verificar autenticación primero
+    const isAuthenticated = await verifyAuth();
+    if (!isAuthenticated) {
+        window.location.href = 'login.html';
+        return;
+    }
+
     const userRole = localStorage.getItem('userRole');
     const userName = localStorage.getItem('userName');
-    const userDisplay = document.getElementById('userDisplay');
+
+    // Actualizar el header con la información del usuario
+    updateHeader(userName);
+
+    // Configurar la navegación
+    const navLinks = document.querySelectorAll('.nav-link');
+    const navUsersLi = document.getElementById('nav-users-li');
+
+    // Solo mostrar la sección de usuarios para superadmin
+    if (userRole === 'superadmin') {
+        navUsersLi.style.display = 'block';
+    }
+
+    // Inicializar las estadísticas del dashboard
+    loadDashboardStats();
 
     // Add click event listeners to navigation links
     navLinks.forEach(link => {
@@ -75,10 +218,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function verifyAuth() {
         try {
             const token = localStorage.getItem('jwtToken');
-            const userRole = localStorage.getItem('userRole');
-            
-            if (!token || !userRole) {
-                throw new Error('No authentication data found');
+            if (!token) {
+                throw new Error('No token found');
             }
 
             const response = await fetch('https://projectvechhio.onrender.com/api/auth/check', {
@@ -91,26 +232,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (!response.ok) {
-                throw new Error('Authentication check failed');
+                throw new Error('Auth check failed');
             }
 
             const data = await response.json();
-            
-            if (!data.loggedIn || !data.user) {
-                throw new Error('User not authenticated');
+            if (!data.loggedIn || !data.user || !['admin', 'superadmin'].includes(data.user.role)) {
+                throw new Error('Not authorized');
             }
 
-            // Actualizar datos del usuario si es necesario
-            if (data.user.role) {
-                localStorage.setItem('userRole', data.user.role);
-            }
-            
             return true;
         } catch (error) {
             console.error('Auth error:', error);
-            localStorage.removeItem('jwtToken');
-            localStorage.removeItem('userRole');
-            localStorage.removeItem('userName');
+            localStorage.clear();
             return false;
         }
     }
