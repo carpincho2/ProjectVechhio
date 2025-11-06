@@ -68,9 +68,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const data = await response.json();
 
-                if (response.ok) {
-                    setToken(data.token);
-                    setUserInfo(data.user);
+                if (response.ok && data.success) {
+                    console.log('Login exitoso:', data);
+                    // La respuesta tiene una estructura anidada
+                    setToken(data.data.token);
+                    setUserInfo(data.data.user);
                     
                     // Verificar que el login fue exitoso antes de continuar
                     const urlParams = new URLSearchParams(window.location.search);

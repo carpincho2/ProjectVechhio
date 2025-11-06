@@ -4,6 +4,7 @@ export function getToken() {
 }
 
 export function setToken(token) {
+    console.log('Setting token:', token);
     if (token) {
         localStorage.setItem('jwtToken', token);
     }
@@ -16,6 +17,7 @@ export function clearAuth() {
 }
 
 export function setUserInfo(user) {
+    console.log('Setting user info:', user);
     if (user) {
         localStorage.setItem('userName', user.username);
         localStorage.setItem('userRole', user.role);
