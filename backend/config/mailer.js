@@ -1,74 +1,47 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 require('dotenv').config();
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // true for 465
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false,
-        minVersion: 'TLSv1.2'
-    },
-    debug: true,
-    pool: true,
-    maxConnections: 3,
-    maxMessages: 10,
-    rateDelta: 30000,
-    rateLimit: 3,
-    timeout: 30000
-});
+// Crear instancia de Resend con la API key
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Verificar la conexión al iniciar con reintentos
-const verifyConnection = async (retries = 3) => {
-    for (let i = 0; i < retries; i++) {
-        try {
-            await new Promise((resolve, reject) => {
-                transporter.verify((error, success) => {
-                    if (error) {
-                        console.error(`Intento ${i + 1}/${retries} - Error al verificar el mailer:`, error);
-                        reject(error);
-                    } else {
-                        console.log('Servidor de correo listo para enviar mensajes');
-                        resolve(success);
-                    }
-                });
-            });
-            return true; // Si llegamos aquí, la verificación fue exitosa
-        } catch (error) {
-            if (i === retries - 1) {
-                console.error('Todos los intentos de conexión al mailer fallaron');
-                return false;
-            }
-            // Esperar 5 segundos antes del siguiente intento
-            await new Promise(resolve => setTimeout(resolve, 5000));
-        }
+// Verificar que tenemos la API key configurada
+const verifyConfiguration = () => {
+    if (!process.env.RESEND_API_KEY) {
+        console.error('⚠️ RESEND_API_KEY no está configurada en las variables de entorno');
+        return false;
     }
+    if (!process.env.EMAIL_FROM) {
+        console.error('⚠️ EMAIL_FROM no está configurada en las variables de entorno');
+        return false;
+    }
+    console.log('✅ Configuración de Resend cargada correctamente');
+    return true;
 };
 
 // Iniciar verificación
-verifyConnection();
+verifyConfiguration();
 
 const sendEmail = async (to, subject, html) => {
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to,
-        subject,
-        html
-    };
+    if (!verifyConfiguration()) {
+        return { success: false, error: 'Resend no está configurado correctamente' };
+    }
 
     try {
-        const info = await transporter.sendMail(mailOptions);
-        console.info('Email sent:', info.response);
-        return { success: true, info };
+        const response = await resend.emails.send({
+            from: process.env.EMAIL_FROM,
+            to,
+            subject,
+            html
+        });
+
+        console.info('Email sent successfully:', response.id);
+        return { success: true, info: response };
     } catch (error) {
-        console.error('Mailer error:', error);
-        // No dejar que el error del mailer detenga la aplicación
-        return { success: false, error: error.message };
+        console.error('Resend error:', error);
+        return { 
+            success: false, 
+            error: error.message || 'Error al enviar el correo'
+        };
     }
 };
 
