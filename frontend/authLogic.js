@@ -52,7 +52,26 @@ export async function handleAuthInitialization() {
 }
 
 // Inicializar la verificación de autenticación al cargar la página
-document.addEventListener('DOMContentLoaded', handleAuthInitialization);
+export async function requireAuth() {
+    const isLoggedIn = await checkLogin();
+    if (!isLoggedIn) {
+        window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+        return false;
+    }
+    return true;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // Si estamos en una página protegida, verificar autenticación
+    const protectedPages = ['/panel-control.html', '/profile.html', '/admin-finances.html', '/admin-services.html', '/admin-vehicles.html', '/finance.html'];
+    if (protectedPages.includes(window.location.pathname)) {
+        if (!(await requireAuth())) {
+            return; // No continuar si no está autenticado
+        }
+    }
+    handleAuthInitialization();
+});
+
 // También verificar cuando la página se hace visible nuevamente
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {

@@ -51,10 +51,30 @@ exports.login = async (req, res) => {
 };
 
 // Funciones de check y logout
-exports.checkAuth = (req, res) => {
-    res.json({ loggedIn: true, user: req.user });
+exports.checkAuth = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id, {
+            attributes: ['id', 'username', 'role'] // No incluir datos sensibles
+        });
+        
+        if (!user) {
+            return res.status(401).json({ loggedIn: false });
+        }
+
+        res.json({ 
+            loggedIn: true, 
+            user: {
+                id: user.id,
+                username: user.username,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al verificar la autenticación' });
+    }
 };
 
 exports.logout = (req, res) => {
+    // En el futuro, aquí podríamos agregar el token a una lista negra
     res.json({ message: 'Logout exitoso.' });
 };
