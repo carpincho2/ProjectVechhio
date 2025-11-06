@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - ProjectVechhio</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body class="auth-body">
+    <main class="auth-container">
+        <div class="auth-card">
+            <h1>Iniciar Sesión</h1>
+            
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="username">Usuario o Correo</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div id="error-message" class="error-message"></div>
+
+                <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+            </form>
+
+            <div class="auth-links">
+                <p>¿No tienes cuenta? <a href="register.html">Regístrate</a></p>
+                <p><a href="forgot-password.html">¿Olvidaste tu contraseña?</a></p>
+            </div>
+
+            <div class="separator">
+                <span>O</span>
+            </div>
+
+            <button class="btn btn-google">
+                <img src="../assets/google-icon.svg" alt="Google">
+                Iniciar sesión con Google
+            </button>
+        </div>
+    </main>
+    <script type="module" src="../js/auth/login.js"></script>
+</body>
+</html>

@@ -11,9 +11,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const token = localStorage.getItem('jwtToken');
     if (!token) {
-        window.location.href = 'login.html';
+        window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
         return;
     }
+
+    // Verificar token válido
+    const checkAuth = async () => {
+        try {
+            const response = await fetch('https://projectvechhio.onrender.com/api/auth/check', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (!response.ok) {
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userRole');
+                window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
+                return false;
+            }
+            return true;
+        } catch (error) {
+            console.error('Error verificando autenticación:', error);
+            return false;
+        }
+    };
+
+    // Verificar autenticación antes de continuar
+    checkAuth();
 
     // Refresh buttons
     if (refreshFinancesBtn) {
@@ -33,9 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para cargar los datos del perfil del usuario
     const fetchUserProfile = async () => {
         try {
-            const response = await fetch('/api/profile', {
+            const response = await fetch('https://projectvechhio.onrender.com/api/profile', {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
@@ -69,9 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const fetchFinanceHistory = async () => {
         try {
             if (refreshFinancesBtn) refreshFinancesBtn.classList.add('rotating');
-            const response = await fetch('/api/profile/finances', {
+            const response = await fetch('https://projectvechhio.onrender.com/api/profile/finances', {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
@@ -114,9 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const fetchServiceHistory = async () => {
         try {
             if (refreshServicesBtn) refreshServicesBtn.classList.add('rotating');
-            const response = await fetch('/api/profile/services', {
+            const response = await fetch('https://projectvechhio.onrender.com/api/profile/services', {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
@@ -170,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             try {
-                const response = await fetch('/api/profile/email', {
+                const response = await fetch('https://projectvechhio.onrender.com/api/profile/email', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
