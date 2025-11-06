@@ -2,10 +2,27 @@ import { checkAdminAccess } from './modulos.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const navLinks = document.querySelectorAll('.nav-link');
-    const navUsersLi = document.getElementById('nav-users');
+    const navUsersLi = document.getElementById('nav-users-li');
     const userRole = localStorage.getItem('userRole');
     const userName = localStorage.getItem('userName');
     const userDisplay = document.getElementById('userDisplay');
+
+    // Add click event listeners to navigation links
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const sectionId = link.getAttribute('href').substring(1);
+            
+            // Update active class
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            link.classList.add('active');
+            
+            showSection(sectionId);
+            
+            // Update URL hash without scrolling
+            history.pushState(null, null, `#${sectionId}`);
+        });
+    });
 
     if (userDisplay && userName) {
         userDisplay.textContent = userName;
@@ -55,20 +72,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function fetchDashboardCounts() {
         try {
             const token = localStorage.getItem('jwtToken');
-           const response = await fetch('https://projectvechhio.onrender.com/api/statistics/dashboard', {
+            const response = await fetch('https://projectvechhio.onrender.com/api/statistics/dashboard', {
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
             });
-            if (response.ok) {
-                const data = await response.json();
-                const usersCount = document.getElementById('usersCount');
-                const vehiclesCount = document.getElementById('vehiclesCount');
-                if (usersCount) usersCount.textContent = data.users || 0;
-                if (vehiclesCount) vehiclesCount.textContent = data.vehicles || 0;
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
+            const data = await response.json();
+            const usersCount = document.getElementById('usersCount');
+            const vehiclesCount = document.getElementById('vehiclesCount');
+            const servicesCount = document.getElementById('servicesCount');
+            const financesCount = document.getElementById('financesCount');
+            
+            if (usersCount) usersCount.textContent = data.users || 0;
+            if (vehiclesCount) vehiclesCount.textContent = data.vehicles || 0;
+            if (servicesCount) servicesCount.textContent = data.services || 0;
+            if (financesCount) financesCount.textContent = data.finances || 0;
+            
         } catch (error) {
             console.error('Error cargando los datos del dashboard:', error);
+            // Show error message to user
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = 'Error al cargar los datos del dashboard. Por favor, intente nuevamente.';
+            const dashboard = document.getElementById('dashboard');
+            if (dashboard) {
+                dashboard.insertBefore(errorDiv, dashboard.firstChild);
+                // Remove error message after 5 seconds
+                setTimeout(() => errorDiv.remove(), 5000);
+            }
         }
     }
 
