@@ -179,37 +179,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             showSection(hash);
         }
     });
-
+     const userDisplay = document.getElementById('user-display');
     if (userDisplay && userName) {
         userDisplay.textContent = userName;
     }
 
-    function showSection(sectionId) {
-        // Remover la clase active de todas las secciones
-        const sections = document.querySelectorAll('.section');
-        sections.forEach(section => section.classList.remove('active'));
-
-        // Remover la clase active de todos los enlaces
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => link.classList.remove('active'));
-
-        // Activar la sección seleccionada
-        const sectionToShow = document.getElementById(sectionId);
-        if (sectionToShow) {
-            sectionToShow.classList.add('active');
-            
-            // Inicializar sección específica si es necesario
-            if (sectionId === 'finances') {
-                initializeFinanceSection();
-            }
-        }
-
-        // Activar el enlace correspondiente
-        const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
-        if (activeLink) {
-            activeLink.classList.add('active');
-        }
-    }
+    
 
     function isAdmin() {
         return userRole === 'admin' || userRole === 'superadmin';
@@ -561,7 +536,7 @@ function showSection(sectionId) {
                 loadServices();
                 break;
             case 'finances':
-                loadFinances();
+                initializeFinanceSection();
                 break;
             case 'dashboard':
                 loadDashboardStats();
