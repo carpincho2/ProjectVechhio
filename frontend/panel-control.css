@@ -40,7 +40,7 @@ body {
 }
 
 .sidebar {
-    width: 250px;
+    max-width: 25%;
     background: linear-gradient(var(--bg-header), var(--bg-card));
     color: var(--accent-lavender);
     padding: 20px;
@@ -55,7 +55,6 @@ body {
 
 .sidebar h2 {
     text-align: center;
-    margin-bottom: 40px;
     color: var(--accent-mint);
     font-size: 1.8em;
     padding-bottom: 15px;
@@ -100,6 +99,7 @@ body {
     flex-direction: column;
     margin-left: 250px;
     width: calc(100% - 250px);
+    padding: 0;
 }
 
 .header {
@@ -480,7 +480,7 @@ table tr:nth-child(even) {
 /* Basic Responsiveness */
 @media (max-width: 968px) {
     .sidebar {
-        width: 100%;
+        width: 50%;
         height: auto;
         position: relative;
         padding: 15px;
@@ -489,12 +489,12 @@ table tr:nth-child(even) {
     .main-container {
         margin-left: 0;
         width: 100%;
+        padding: 0;
     }
     
     .sidebar ul {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-direction: column;
         gap: 10px;
     }
     
@@ -512,7 +512,7 @@ table tr:nth-child(even) {
     }
     
     .main-content {
-        padding: 15px;
+        padding: 0;
     }
     
     .card-container {
