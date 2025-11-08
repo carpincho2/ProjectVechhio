@@ -114,7 +114,6 @@ body{
 .nav-links {
     display: flex;
     gap: 20px;
-    flex-direction: column;
 }
 
 .auth-links {
@@ -563,7 +562,10 @@ form textarea {
         overflow-y: auto;
         border-bottom: 2px solid var(--accent-mint);
     }
-    
+    .nav-links{
+        flex-direction: column;
+        gap: 0;
+    }
     .nav-menu.active {
         left: 0;
     }
@@ -722,6 +724,11 @@ form textarea {
         max-height: calc(100vh - 60px);
     }
     
+    .nav-links{
+        flex-direction: column;
+        gap: 0;
+    }
+    
     .Login,
     .register,
     .auth-link {
@@ -844,6 +851,10 @@ form textarea {
         height: 55px;
     }
     
+    .nav-links{
+        flex-direction: column;
+        gap: 0;
+    }
     .logo {
         height: 24px;
     }
