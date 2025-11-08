@@ -114,6 +114,7 @@ body{
 .nav-links {
     display: flex;
     gap: 20px;
+    flex-direction: column;
 }
 
 .auth-links {
