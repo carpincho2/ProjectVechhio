@@ -537,7 +537,33 @@ table tr:nth-child(even) {
         flex-direction: column;
     }
 }
-
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    
+    .main-container {
+        margin-left: 0;
+        width: 100%;
+        padding: 0;
+    }
+    
+    .header {
+        padding: 10px 15px;
+    }
+}
+@media (max-width: 360px) {
+    .header a {
+        font-size: 0.9em;
+    }
+    
+    .btn-logout {
+        padding: 6px 10px;
+        font-size: 0.9em;
+    }
+}
 /* Modal Styles */
 .modal {
     display: none; /* Hidden by default */
