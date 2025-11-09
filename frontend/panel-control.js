@@ -396,8 +396,9 @@ async function loadServices() {
             throw new Error('Error al cargar servicios');
         }
 
-        const services = await response.json();
-        updateServicesTable(services);
+        const data = await response.json()
+const services = Array.isArray(data) ? data : data.services || []
+updateServicesTable(services)
     } catch (error) {
         console.error('Error:', error);
         showNotification('Error al cargar los servicios', 'error');
