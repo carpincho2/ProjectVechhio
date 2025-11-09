@@ -15,9 +15,8 @@ const getAllVehicles = async (req, res) => {
         if (model) where.model = model;
         if (year) where.year = year;
         if (condition) {
-            // Filtro insensible a mayúsculas/minúsculas y espacios
-            where.condition = { [Op.iLike]: condition.trim() };
-        }
+    where.condition = { [Op.like]: condition.trim().toLowerCase() };
+}
 
         if (price) {
             const [minPrice, maxPrice] = price.split('-').map(Number);
