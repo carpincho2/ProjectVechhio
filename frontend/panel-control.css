@@ -438,6 +438,11 @@ table tr:nth-child(even) {
     font-weight: bold;
 }
 
+.status-rejected {
+    color: var(--alert-error);
+    font-weight: bold;
+}
+
 .notification {
     position: fixed;
     top: 20px;
@@ -478,90 +483,417 @@ table tr:nth-child(even) {
     font-weight: bold;
 }
 /* Basic Responsiveness */
-@media (max-width: 968px) {
+@media (max-width: 1200px) {
     .sidebar {
-        width: 50%;
-        height: auto;
-        position: relative;
-        padding: 15px;
+        max-width: 20%;
+    }
+    
+    .main-container {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+    }
+}
+
+@media (max-width: 968px) {
+    :root {
+        font-size: 14px;
+    }
+    
+    .sidebar {
+        position: fixed;
+        left: -250px;
+        width: 250px;
+        height: 100vh;
+        transition: left 0.3s ease;
+        z-index: 1000;
+    }
+
+    .sidebar.active {
+        left: 0;
     }
     
     .main-container {
         margin-left: 0;
         width: 100%;
-        padding: 0;
     }
     
-    .sidebar ul {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+    .main-content {
+        padding: 20px;
     }
     
-    .sidebar ul li {
-        margin: 0;
+    .card-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    table {
+        font-size: 0.9em;
+    }
+
+    table th, table td {
+        padding: 8px;
+    }
+
+    .table-actions {
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 6px 10px;
+        font-size: 0.85em;
     }
 }
 
 @media (max-width: 768px) {
+    :root {
+        font-size: 13px;
+    }
+
     .header {
-        padding: 15px 20px;
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
+        padding: 12px 15px;
+        flex-direction: row;
+        gap: 10px;
     }
     
     .main-content {
-        padding: 0;
+        padding: 15px;
+    }
+
+    .main-content h1 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+
+    .main-content h2 {
+        font-size: 1.2em;
+        margin-top: 15px;
+        margin-bottom: 10px;
     }
     
     .card-container {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .card {
+        padding: 12px;
+    }
+
+    .card h3 {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+    }
+
+    .card p {
+        font-size: 0.95em;
+    }
+
+    .stats {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .stat-value {
+        font-size: 1.4em;
     }
     
     form {
         max-width: 100%;
+        padding: 15px;
     }
-    
+
+    .form-group {
+        gap: 5px;
+    }
+
+    form input,
+    form textarea,
+    form select {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    form button {
+        padding: 10px 15px;
+        font-size: 0.95em;
+    }
+
     table {
         display: block;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
-    
+
+    table thead {
+        display: none;
+    }
+
+    table tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid var(--accent-mint);
+        border-radius: 8px;
+        padding: 10px;
+        background-color: rgba(46,62,78,0.9);
+    }
+
+    table td {
+        display: block;
+        padding: 8px;
+        text-align: left;
+        border: none;
+        position: relative;
+        padding-left: 40%;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        font-weight: bold;
+        width: 35%;
+        color: var(--accent-lavender);
+    }
+
+    .table-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .btn {
+        padding: 5px 8px;
+        font-size: 0.8em;
+        flex: 1;
+        min-width: 60px;
+    }
+
     .user-info {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
     }
-    
-    .table-actions {
-        flex-direction: column;
+
+    .welcome-text {
+        margin-right: 0;
+        font-size: 0.9rem;
+    }
+
+    .btn-logout {
+        padding: 6px 12px;
+        font-size: 0.85em;
+    }
+
+    .modal-content {
+        width: 90%;
+        margin: 30% auto;
+        padding: 20px;
+    }
+
+    .sidebar h2 {
+        font-size: 1.4em;
+        padding-bottom: 10px;
+    }
+
+    .sidebar ul li a {
+        padding: 10px 12px;
+        font-size: 0.95em;
     }
 }
-@media (max-width: 480px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
+
+@media (max-width: 600px) {
+    :root {
+        font-size: 12px;
     }
-    
-    .main-container {
-        margin-left: 0;
-        width: 100%;
-        padding: 0;
-    }
-    
+
     .header {
-        padding: 10px 15px;
+        padding: 10px 12px;
     }
-}
-@media (max-width: 360px) {
+
     .header a {
         font-size: 0.9em;
     }
+
+    .main-content {
+        padding: 12px;
+    }
+
+    .main-content h1 {
+        font-size: 1.3em;
+        margin-bottom: 12px;
+    }
+
+    .main-content h2 {
+        font-size: 1.1em;
+    }
+
+    .main-content p {
+        font-size: 0.95em;
+    }
+
+    .card-container {
+        gap: 10px;
+    }
+
+    .card {
+        padding: 10px;
+    }
+
+    .card h3 {
+        font-size: 1em;
+    }
+
+    .stats {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .stat-value {
+        font-size: 1.3em;
+    }
+
+    form {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    form input,
+    form textarea,
+    form select {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    form button {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    table td {
+        padding: 6px;
+        padding-left: 50%;
+    }
+
+    table td::before {
+        width: 45%;
+    }
+
+    .btn {
+        padding: 4px 6px;
+        font-size: 0.75em;
+    }
+
+    .btn-logout {
+        padding: 5px 10px;
+        font-size: 0.8em;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 50% auto;
+        padding: 15px;
+    }
+
+    .close-button {
+        font-size: 24px;
+        right: 15px;
+    }
+
+    .sidebar {
+        width: 80vw;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        font-size: 11px;
+    }
+
+    .header {
+        padding: 8px 10px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .header a {
+        font-size: 0.8em;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+
+    .main-content h1 {
+        font-size: 1.2em;
+    }
+
+    .card h3 {
+        font-size: 0.95em;
+    }
+
+    table td {
+        padding: 5px;
+        padding-left: 45%;
+    }
+
+    table td::before {
+        font-size: 0.85em;
+    }
+
+    .btn {
+        padding: 3px 5px;
+        font-size: 0.7em;
+    }
+
+    form {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    form input,
+    form textarea,
+    form select {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    form button {
+        padding: 6px 10px;
+    }
+
+    .modal-content {
+        width: 98%;
+        margin: 60% auto;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 360px) {
+    .header a {
+        font-size: 0.75em;
+    }
     
     .btn-logout {
-        padding: 6px 10px;
+        padding: 4px 8px;
+        font-size: 0.75em;
+    }
+
+    .card h3 {
         font-size: 0.9em;
+    }
+
+    table td {
+        padding: 4px;
+        font-size: 0.8em;
+    }
+
+    .btn {
+        padding: 2px 4px;
+        font-size: 0.65em;
     }
 }
 /* Modal Styles */

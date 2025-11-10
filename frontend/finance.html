@@ -9,20 +9,9 @@
     <link rel="shortcut icon" href="/logos/favicon_io/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <header class="header">
-  <a href="index.html"><img src="logo.png" class="logo"></a>
-  <button class="hamburger" id="hamburger-btn">
-    <span></span><span></span><span></span>
-  </button>
-  <nav class="nav-menu" id="nav-menu">
-    <a href="index.html">Inicio</a>
-    <a href="service.html">Servicios</a>
-    <a href="vehicles.html">Vehículos</a>
-    <a href="aboutUs.html">Nosotros</a>
-    <a href="login.html" class="Login">Login</a>
-    <a href="register.html" class="register">Register</a>
-  </nav>
-</header>
+    <!-- Header dinámico: se carga desde /components/header.html por medio de js/header.js -->
+    <!-- Esto evita duplicar enlaces estáticos y permite que los enlaces de login se oculten cuando el usuario está autenticado -->
+    <script type="module" src="js/header.js" defer></script>
 
     <section class="finance-hero">
       <h1>Opciones de Financiación</h1>
