@@ -1,10 +1,9 @@
-// auth.js
+// auth.js - Manejo centralizado de autenticación
 export function getToken() {
     return localStorage.getItem('jwtToken');
 }
 
 export function setToken(token) {
-    console.log('Setting token:', token);
     if (token) {
         localStorage.setItem('jwtToken', token);
     }
@@ -17,7 +16,6 @@ export function clearAuth() {
 }
 
 export function setUserInfo(user) {
-    console.log('Setting user info:', user);
     if (user) {
         localStorage.setItem('userName', user.username);
         localStorage.setItem('userRole', user.role);
@@ -28,7 +26,6 @@ export async function verifyAuth() {
     const token = getToken();
     
     if (!token) {
-        console.log('No token found');
         return false;
     }
 
@@ -55,7 +52,6 @@ export async function verifyAuth() {
         clearAuth();
         return false;
     } catch (error) {
-        console.error('Auth verification error:', error);
         clearAuth();
         return false;
     }

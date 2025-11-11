@@ -98,7 +98,6 @@ function attachServiceActions() {
     document.querySelectorAll('[data-action="view-service"]').forEach(btn => {
         btn.addEventListener('click', function() {
             const serviceId = this.getAttribute('data-id');
-            console.log('Ver servicio:', serviceId);
             showNotification('Funcionalidad de visualización en desarrollo');
         });
     });
@@ -248,7 +247,6 @@ function attachFinanceActions() {
     document.querySelectorAll('[data-action="view-finance"]').forEach(btn => {
         btn.addEventListener('click', function() {
             const financeId = this.getAttribute('data-id');
-            console.log('Ver finanza:', financeId);
             showNotification('Funcionalidad de visualización en desarrollo');
         });
     });

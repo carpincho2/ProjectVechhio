@@ -2,32 +2,29 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const session = require('express-session');
+const passport = require('passport');
+const bcrypt = require('bcryptjs');
 
-// Importar el objeto 'db' centralizado desde models/index.js
+// Importar base de datos y rutas
 const db = require('./models');
+require('./config/passport')(passport);
 
-// Importar rutas
 const authRoutes = require('./routes/auth');
-const financeRoutes = require('./routes/finances'); // Descomentar cuando se implementen
-const serviceRoutes = require('./routes/service');   // Descomentar cuando se implementen
-const vehicleRoutes = require('./routes/vehicles'); // Descomentar cuando se implementen
+const financeRoutes = require('./routes/finances');
+const serviceRoutes = require('./routes/service');
+const vehicleRoutes = require('./routes/vehicles');
 const profileRoutes = require('./routes/profile');
 const userRoutes = require('./routes/users');
 const statisticsRoutes = require('./routes/statistics');
 const contactRoutes = require('./routes/contact');
 
 const app = express();
-// Si la app se ejecuta detrás de un proxy (Render, Heroku, etc.),
-// habilitamos trust proxy para que Express conozca el protocolo original (https)
 app.set('trust proxy', 1);
 const PORT = process.env.PORT || 10000;
 
-// Configuración de Passport
-const passport = require('passport');
-require('./config/passport')(passport);
-
 // --- Middlewares ---
-// Configurar CORS
+// CORS
 app.use(cors({
     origin: [
         'http://localhost:5500', 
@@ -37,51 +34,31 @@ app.use(cors({
     credentials: true
 }));
 
-// Servir archivos estáticos del frontend
+// Archivos estáticos
 app.use(express.static(path.join(__dirname, '../frontend')));
-
-// Servir archivos estáticos de la carpeta de subidas (en desarrollo) o /tmp (en producción)
 app.use('/uploads', express.static(process.env.NODE_ENV === 'production' ? '/tmp' : path.join(__dirname, 'uploads')));
 
-// Parsear JSON y datos de formularios
+// Parsear JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configuración de Sesión para Passport
-const session = require('express-session');
-// En producción, usar Redis o similar. Para desarrollo, usar MemoryStore
-let sessionStore;
-if (process.env.NODE_ENV === 'production') {
-    // Advertir sobre el uso de MemoryStore en producción
-    console.warn('WARNING: Using MemoryStore in production is not recommended.');
-    // TODO: Implementar Redis u otro store para producción
-}
-
+// Sesiones
 app.use(session({
     secret: process.env.SESSION_SECRET || 'tu_secreto_de_sesion',
     resave: false,
     saveUninitialized: false,
-    store: sessionStore,
     cookie: {
         secure: (process.env.NODE_ENV === 'production'),
         sameSite: 'lax',
-        maxAge: 24 * 60 * 60 * 1000 // 24 horas
+        maxAge: 24 * 60 * 60 * 1000
     }
 }));
 
-// Inicialización de Passport
+// Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Middleware de debug para sessions (opcional, útil para desarrollo)
-app.use((req, res, next) => {
-  // console.log('Session ID:', req.sessionID);
-  // console.log('Session data:', req.session);
-  next();
-});
-
-
-// --- Rutas de la API ---
+// --- Rutas ---
 app.use('/api/auth', authRoutes);
 app.use('/api/finances', financeRoutes);
 app.use('/api/services', serviceRoutes);
@@ -91,15 +68,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/statistics', statisticsRoutes);
 app.use('/api/contact', contactRoutes);
 
-// Endpoint temporal para crear un superadmin
-// Ajuste: Hashear la contraseña antes de guardar el superadmin
-const bcrypt = require('bcryptjs');
-
+// Endpoint para crear superadmin (protegido con secret)
 app.get('/api/admin/create', async (req, res) => {
     const secret = req.query.secret;
     if (secret !== process.env.ADMIN_CREATION_SECRET) {
-        // No loggeamos el valor del secreto en producción por seguridad
-        console.warn('Intento de creación de admin no autorizado: secret mismatch');
         return res.status(403).json({ message: 'Unauthorized' });
     }
 
@@ -115,54 +87,53 @@ app.get('/api/admin/create', async (req, res) => {
             return res.status(400).json({ message: 'Admin already exists' });
         }
 
-        // Hashear la contraseña
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(adminData.password, salt);
         adminData.password = hashedPassword;
+        adminData.role = 'superadmin';
 
         const newAdmin = await db.User.create(adminData);
-        res.status(201).json({ message: 'Superadmin created', admin: newAdmin });
+        res.status(201).json({ message: 'Superadmin created', admin: { id: newAdmin.id, username: newAdmin.username } });
     } catch (error) {
-        res.status(500).json({ message: 'Error creating superadmin', error });
+        res.status(500).json({ message: 'Error creating superadmin', error: error.message });
     }
 });
 
+// Ruta para panel-control
 app.get('/panel-control', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/panel-control.html'));
 });
 
-// Ruta simple de estado
+// Endpoint de estado
 app.get('/api/status', (req, res) => {
     res.json({ status: 'OK', message: 'Servidor funcionando', timestamp: new Date() });
 });
 
-
 // --- Inicio del Servidor ---
 async function startServer() {
     try {
-        // Autenticar la conexión
+        // Autenticar con la base de datos
         await db.sequelize.authenticate();
-        console.log('✅ Base de datos conectada y autenticada.');
+        console.log('✅ Base de datos conectada.');
 
-        // Sincronizar modelos antes de operar sobre las tablas
-        await db.sequelize.sync(); // Forzar actualización del esquema
-        console.log('✅ Modelos sincronizados con la base de datos.');
+        // Sincronizar modelos
+        await db.sequelize.sync();
+        console.log('✅ Modelos sincronizados.');
 
-        // Intentar truncar la tabla de backup solo si existe (evitar crash si no existe)
+        // Limpiar tabla de backup si existe
         if (db.UserBackup) {
             try {
                 await db.UserBackup.destroy({ truncate: true });
                 console.log('✅ Tabla users_backup truncada.');
             } catch (err) {
-                console.warn('⚠️ No se pudo truncar users_backup (probablemente no existe aún). Se continúa con el inicio.');
+                // Tabla no existe aún, no hay problema
             }
         }
 
-        // Crear un usuario admin demo si no existe (útil para el profe)
+        // Crear superadmin demo si no existe
         try {
             const adminExists = await db.User.findOne({ where: { role: 'superadmin' } });
             if (!adminExists) {
-                const bcrypt = require('bcryptjs');
                 const salt = await bcrypt.genSalt(10);
                 const hashed = await bcrypt.hash(process.env.ADMIN_PASSWORD || '280208', salt);
                 await db.User.create({
@@ -171,10 +142,10 @@ async function startServer() {
                     password: hashed,
                     role: 'superadmin'
                 });
-                console.log('✅ Usuario admin demo creado.');
+                console.log('✅ Superadmin demo creado.');
             }
         } catch (err) {
-            console.warn('⚠️ No se pudo crear el admin demo:', err.message || err);
+            console.warn('⚠️ No se pudo crear el admin demo');
         }
 
         app.listen(PORT, '0.0.0.0', () => {
@@ -182,7 +153,7 @@ async function startServer() {
         });
         
     } catch (error) {
-        console.error('❌ Error al iniciar el servidor:', error);
+        console.error('❌ Error al iniciar:', error.message);
         process.exit(1);
     }
 }

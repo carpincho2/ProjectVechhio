@@ -4,21 +4,20 @@ require('dotenv').config();
 // Crear instancia de Resend con la API key
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Verificar que tenemos la API key configurada
+// Verificar que la configuración de Resend está correcta
 const verifyConfiguration = () => {
     if (!process.env.RESEND_API_KEY) {
-        console.error('⚠️ RESEND_API_KEY no está configurada en las variables de entorno');
+        console.error('⚠️ RESEND_API_KEY no está configurada');
         return false;
     }
     if (!process.env.EMAIL_FROM) {
-        console.error('⚠️ EMAIL_FROM no está configurada en las variables de entorno');
+        console.error('⚠️ EMAIL_FROM no está configurada');
         return false;
     }
-    console.log('✅ Configuración de Resend cargada correctamente');
     return true;
 };
 
-// Iniciar verificación
+// Iniciar verificación al cargar el módulo
 verifyConfiguration();
 
 const sendEmail = async (to, subject, html) => {
@@ -27,63 +26,43 @@ const sendEmail = async (to, subject, html) => {
     }
 
     try {
-        // En modo de prueba, redirigir todos los emails a la dirección verificada
-        const testEmail = 'carpijefe@gmail.com';
-        const originalTo = to;
+        // En desarrollo, redirigir emails a dirección verificada
+        const testEmail = process.env.NODE_ENV === 'production' ? to : 'carpijefe@gmail.com';
+        const isTestMode = process.env.NODE_ENV !== 'production';
 
-        // Log de los datos que se están enviando
-        console.log('Enviando email con los siguientes datos:');
-        console.log('From:', process.env.EMAIL_FROM);
-        console.log('Email original:', originalTo);
-        console.log('Redirigido a:', testEmail);
-        console.log('Subject:', subject);
-
-        // Agregar nota sobre el email original
-        const testingNote = `
+        // Agregar nota si está en modo de prueba
+        const testingNote = isTestMode ? `
         <div style="background-color: #f8f9fa; padding: 10px; margin-bottom: 20px; border-radius: 5px;">
-            <p style="margin: 0;"><strong>Nota de prueba:</strong> Este email estaba destinado originalmente a: ${originalTo}</p>
-        </div>`;
+            <p style="margin: 0; font-size: 12px;"><strong>Nota de prueba:</strong> Email destinado a: ${to}</p>
+        </div>` : '';
 
         const response = await resend.emails.send({
             from: process.env.EMAIL_FROM,
             to: testEmail,
-            subject: `[PRUEBA] ${subject}`,
+            subject: isTestMode ? `[PRUEBA] ${subject}` : subject,
             html: testingNote + html,
-            // Agregamos cabeceras para tracking
             headers: {
                 'X-Entity-Ref-ID': new Date().getTime().toString()
             }
         });
 
-        // Log completo de la respuesta
-        console.log('Respuesta completa de Resend:', JSON.stringify(response, null, 2));
-
         if (!response || !response.data) {
             throw new Error('Respuesta inválida de Resend');
         }
 
-        const emailId = response.data ? response.data.id : 'ID no disponible';
-        console.info('Email enviado exitosamente. ID:', emailId);
-        
         return { 
             success: true, 
             info: {
-                id: emailId,
+                id: response.data.id,
                 to: to,
                 timestamp: new Date().toISOString()
             }
         };
     } catch (error) {
-        console.error('Error detallado al enviar email:', {
-            message: error.message,
-            stack: error.stack,
-            details: error.response ? error.response.data : null
-        });
-        
+        console.error('Error al enviar email:', error.message);
         return { 
             success: false, 
-            error: error.message || 'Error al enviar el correo',
-            details: error.response ? error.response.data : null
+            error: error.message || 'Error al enviar el correo'
         };
     }
 };
