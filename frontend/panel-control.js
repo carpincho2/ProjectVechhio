@@ -65,7 +65,7 @@ async function loadServices() {
         }
 
         const data = await response.json();
-        const services = Array.isArray(data) ? data : data.services || [];
+        const services = Array.isArray(data) ? data : data.data || data.services || [];
         updateServicesTable(services);
     } catch (error) {
         console.error('Error:', error);
@@ -83,9 +83,9 @@ function updateServicesTable(services) {
             <td data-label="Nombre">${service.type}</td>
             <td data-label="Descripción">${service.description}</td>
             <td data-label="Acciones" class="table-actions">
-                <button class="btn btn-view" data-id="${service._id}" data-action="view-service"><i class="fas fa-eye"></i></button>
-                <button class="btn btn-edit" data-id="${service._id}" data-action="edit-service"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-delete" data-id="${service._id}" data-action="delete-service"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-view" data-id="${service.id}" data-action="view-service"><i class="fas fa-eye"></i></button>
+                <button class="btn btn-edit" data-id="${service.id}" data-action="edit-service"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-delete" data-id="${service.id}" data-action="delete-service"><i class="fas fa-trash"></i></button>
             </td>
         `;
         tbody.appendChild(row);
@@ -138,7 +138,7 @@ async function openServiceModal(serviceId) {
         const service = await response.json();
         
         // Rellenar el formulario con los datos del servicio
-        document.getElementById('service-id-input').value = service._id;
+        document.getElementById('service-id-input').value = service.id;
         document.getElementById('service-type-select').value = service.type;
         
         // Convertir la fecha a formato datetime-local si existe
