@@ -484,18 +484,18 @@ async function loadDashboardStats() {
 }
 
 function updateDashboardStats(data) {
-    document.getElementById('totalVehicles').textContent = data.vehicles?.total || 0;
-    document.getElementById('newVehicles').textContent = data.vehicles?.new || 0;
-    document.getElementById('usedVehicles').textContent = data.vehicles?.used || 0;
+    document.getElementById('totalVehicles').textContent = data.vehicles || data.newVehicles + data.usedVehicles || 0;
+    document.getElementById('newVehicles').textContent = data.newVehicles || 0;
+    document.getElementById('usedVehicles').textContent = data.usedVehicles || 0;
 
-    document.getElementById('scheduledServices').textContent = data.services?.scheduled || 0;
-    document.getElementById('completedServices').textContent = data.services?.completed || 0;
-    document.getElementById('pendingServices').textContent = data.services?.pending || 0;
+    document.getElementById('scheduledServices').textContent = data.scheduledServices || 0;
+    document.getElementById('completedServices').textContent = data.completedServices || 0;
+    document.getElementById('pendingServices').textContent = data.pendingServices || 0;
 
-    document.getElementById('totalFinanceRequests').textContent = data.finances?.total || 0;
-    document.getElementById('approvedFinances').textContent = data.finances?.approved || 0;
-    document.getElementById('pendingFinances').textContent = data.finances?.pending || 0;
-    document.getElementById('rejectedFinances').textContent = data.finances?.rejected || 0;
+    document.getElementById('totalFinanceRequests').textContent = data.finances || 0;
+    document.getElementById('approvedFinances').textContent = data.approvedFinances || 0;
+    document.getElementById('pendingFinances').textContent = data.pendingFinances || 0;
+    document.getElementById('rejectedFinances').textContent = data.rejectedFinances || 0;
 }
 
 // ============ Funciones de Navegación ============

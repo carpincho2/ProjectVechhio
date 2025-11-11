@@ -95,6 +95,30 @@ exports.getAllServices = async (req, res) => {
     }
 };
 
+// @desc    Obtener un servicio específico por ID
+// @route   GET /api/services/:id
+// @access  Private (Admin)
+exports.getService = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const service = await Service.findByPk(id, {
+            include: [
+                { model: User, attributes: ['id', 'username', 'email'] },
+                { model: Vehicle, attributes: ['id', 'brand', 'model', 'year'] }
+            ]
+        });
+
+        if (!service) {
+            return res.status(404).json({ error: 'Servicio no encontrado' });
+        }
+
+        res.status(200).json(service);
+    } catch (error) {
+        console.error('getService error:', error);
+        res.status(500).json({ error: error.message || 'Error interno del servidor' });
+    }
+};
+
 // @desc    Actualizar un servicio
 // @route   PUT /api/services/:id
 // @access  Private (Admin)
@@ -117,6 +141,26 @@ exports.updateService = async (req, res) => {
         res.status(200).json(service);
     } catch (error) {
         console.error('updateService error:', error);
+        res.status(500).json({ error: error.message || 'Error interno del servidor' });
+    }
+};
+
+// @desc    Eliminar un servicio
+// @route   DELETE /api/services/:id
+// @access  Private (Admin)
+exports.deleteService = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const service = await Service.findByPk(id);
+
+        if (!service) {
+            return res.status(404).json({ error: 'Servicio no encontrado' });
+        }
+
+        await service.destroy();
+        res.status(200).json({ message: 'Servicio eliminado correctamente' });
+    } catch (error) {
+        console.error('deleteService error:', error);
         res.status(500).json({ error: error.message || 'Error interno del servidor' });
     }
 };

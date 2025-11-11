@@ -3,18 +3,34 @@ const db = require('../models');
 // Controlador para obtener estadísticas del dashboard
 const getDashboardStats = async (req, res) => {
     try {
-        const [usersCount, vehiclesCount, financesCount, servicesCount] = await Promise.all([
+        const [usersCount, vehiclesCount, newVehicles, usedVehicles, financesCount, approvedFinances, pendingFinances, rejectedFinances, servicesCount, scheduledServices, completedServices, pendingServices] = await Promise.all([
             db.User.count(),
             db.Vehicle.count(),
+            db.Vehicle.count({ where: { condition: 'Nuevo' } }),
+            db.Vehicle.count({ where: { condition: 'Usado' } }),
             db.Finance.count(),
-            db.Service.count()
+            db.Finance.count({ where: { status: 'approved' } }),
+            db.Finance.count({ where: { status: 'pending' } }),
+            db.Finance.count({ where: { status: 'rejected' } }),
+            db.Service.count(),
+            db.Service.count({ where: { status: 'scheduled' } }),
+            db.Service.count({ where: { status: 'completed' } }),
+            db.Service.count({ where: { status: 'pending' } })
         ]);
 
         res.status(200).json({
             users: usersCount,
             vehicles: vehiclesCount,
+            newVehicles: newVehicles,
+            usedVehicles: usedVehicles,
             finances: financesCount,
-            services: servicesCount
+            approvedFinances: approvedFinances,
+            pendingFinances: pendingFinances,
+            rejectedFinances: rejectedFinances,
+            services: servicesCount,
+            scheduledServices: scheduledServices,
+            completedServices: completedServices,
+            pendingServices: pendingServices
         });
 
     } catch (error) {
