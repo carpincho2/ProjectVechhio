@@ -50,11 +50,15 @@
     <script src="vehicles.js" defer></script>
     <script type="module" src="./main.js" defer></script>
     <script>
-const hamburger = document.getElementById('hamburger-btn');
-const navMenu = document.getElementById('nav-menu');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('active');
-  navMenu.classList.toggle('active');
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.getElementById('hamburger-btn');
+    const navMenu = document.getElementById('nav-menu');
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    }
 });
 </script>
 
