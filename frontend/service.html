@@ -63,9 +63,10 @@
         <option value="Cambio de Aceite">Cambio de Aceite</option>
         <option value="Reparación General">Reparación General</option>
       </select>
+      <label for="serviceDate"><strong>Fecha preferida (sin hora):</strong></label>
       <input type="date" id="serviceDate" required>
-      <input type="time" id="serviceTime" required min="09:00" max="18:00" step="1800">
-      <textarea id="comments" placeholder="Comentarios opcionales"></textarea>
+      <p style="font-size: 0.9em; color: #999; margin: -10px 0 10px 0;">* El horario será confirmado por el administrador</p>
+      <textarea id="comments" placeholder="Comentarios opcionales (ej: ¿Cuándo prefieres que sea?)"></textarea>
       <button type="submit">Pedir Turno</button>
     </form>
   </div>
@@ -89,21 +90,20 @@
             const email = document.getElementById('email').value;
             const licensePlate = document.getElementById('licensePlate').value;
             const serviceType = document.getElementById('serviceType').value;
-            const datePart = document.getElementById('serviceDate').value;
-            const timePart = document.getElementById('serviceTime').value || '09:00';
-            const serviceDate = `${datePart}T${timePart}:00`;
+            const serviceDate = document.getElementById('serviceDate').value; // Solo fecha, sin hora
             const comments = document.getElementById('comments').value;
 
             try {
-                // Validar que la fecha/hora sea futura
-                const selectedDateTime = new Date(serviceDate);
-                const now = new Date();
-                if (selectedDateTime <= now) {
-                    alert('Por favor, selecciona una fecha y hora futura.');
+                // Validar que la fecha sea futura
+                const selectedDate = new Date(serviceDate);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (selectedDate < today) {
+                    alert('Por favor, selecciona una fecha futura.');
                     return;
                 }
 
-                // DEBUG: mostrar token y payload mínimo en consola
                 console.debug('jwtToken present:', !!token);
 
                 const response = await fetch('/api/services', {
@@ -114,15 +114,15 @@
                     },
                     body: JSON.stringify({
                         type: serviceType,
-                        date: serviceDate,
-                        comments: comments
+                        date: serviceDate, // Solo fecha (YYYY-MM-DD)
+                        description: comments
                     })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert('Servicio solicitado con éxito!');
+                    alert('Servicio solicitado con éxito! El administrador te contactará para confirmar la hora.');
                     serviceForm.reset();
                 } else {
                     alert(`Error al solicitar servicio: ${data.error || data.message || 'Error desconocido'}`);

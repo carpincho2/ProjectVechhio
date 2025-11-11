@@ -83,13 +83,107 @@ function updateServicesTable(services) {
             <td data-label="Nombre">${service.type}</td>
             <td data-label="Descripción">${service.description}</td>
             <td data-label="Acciones" class="table-actions">
-                <button class="btn btn-view" data-id="${service._id}"><i class="fas fa-eye"></i></button>
-                <button class="btn btn-edit" data-id="${service._id}"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-delete" data-id="${service._id}"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-view" data-id="${service._id}" data-action="view-service"><i class="fas fa-eye"></i></button>
+                <button class="btn btn-edit" data-id="${service._id}" data-action="edit-service"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-delete" data-id="${service._id}" data-action="delete-service"><i class="fas fa-trash"></i></button>
             </td>
         `;
         tbody.appendChild(row);
     });
+
+    attachServiceActions();
+}
+
+function attachServiceActions() {
+    document.querySelectorAll('[data-action="view-service"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const serviceId = this.getAttribute('data-id');
+            console.log('Ver servicio:', serviceId);
+            showNotification('Funcionalidad de visualización en desarrollo');
+        });
+    });
+
+    document.querySelectorAll('[data-action="edit-service"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const serviceId = this.getAttribute('data-id');
+            openServiceModal(serviceId);
+        });
+    });
+
+    document.querySelectorAll('[data-action="delete-service"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const serviceId = this.getAttribute('data-id');
+            if (confirm('¿Estás seguro de que deseas eliminar este servicio?')) {
+                deleteService(serviceId);
+            }
+        });
+    });
+}
+
+async function openServiceModal(serviceId) {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch(`${API_URL}/services/${serviceId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al cargar el servicio');
+        }
+
+        const service = await response.json();
+        
+        // Rellenar el formulario con los datos del servicio
+        document.getElementById('service-id-input').value = service._id;
+        document.getElementById('service-type-select').value = service.type;
+        
+        // Convertir la fecha a formato datetime-local si existe
+        if (service.date) {
+            const date = new Date(service.date);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            document.getElementById('service-date-input').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+        
+        document.getElementById('service-status-select').value = service.status || 'pending';
+        
+        // Mostrar el modal
+        document.getElementById('service-modal').style.display = 'block';
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('Error al cargar el servicio', 'error');
+    }
+}
+
+async function deleteService(serviceId) {
+    try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await fetch(`${API_URL}/services/${serviceId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al eliminar el servicio');
+        }
+
+        showNotification('Servicio eliminado correctamente', 'success');
+        loadServices();
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('Error al eliminar el servicio', 'error');
+    }
 }
 
 // ============ Funciones para Cargar Finanzas ============
@@ -220,6 +314,7 @@ async function deleteFinance(financeId) {
         if (response.ok) {
             showNotification('Finanza eliminada exitosamente');
             loadFinances();
+            loadDashboardStats(); // Recargar estadísticas
         } else {
             throw new Error('Error al eliminar finanza');
         }
@@ -619,6 +714,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 showNotification('Vehículo agregado exitosamente');
                 this.reset();
                 loadVehicles();
+                loadDashboardStats(); // Recargar estadísticas después de agregar
             } catch (error) {
                 console.error('Error:', error);
                 showNotification('Error al agregar el vehículo: ' + error.message, 'error');
@@ -680,12 +776,67 @@ document.addEventListener('DOMContentLoaded', async () => {
                     showNotification('Estado de finanza actualizado exitosamente');
                     financeModal.style.display = 'none';
                     loadFinances();
+                    loadDashboardStats(); // Recargar estadísticas después de actualizar
                 } else {
                     throw new Error('Error al actualizar estado');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 showNotification('Error al actualizar el estado de la finanza', 'error');
+            }
+        });
+    }
+
+    // Configurar modal de servicios
+    const serviceModal = document.getElementById('service-modal');
+    const serviceCloseBtn = document.querySelector('.service-close-button');
+    const serviceForm = document.getElementById('service-edit-form');
+
+    if (serviceCloseBtn) {
+        serviceCloseBtn.addEventListener('click', () => {
+            serviceModal.style.display = 'none';
+        });
+    }
+
+    if (serviceForm) {
+        serviceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const serviceId = document.getElementById('service-id-input').value;
+            const type = document.getElementById('service-type-select').value;
+            const date = document.getElementById('service-date-input').value;
+            const status = document.getElementById('service-status-select').value;
+
+            if (!date) {
+                alert('Por favor ingrese una fecha y hora para el servicio');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('jwtToken');
+                const response = await fetch(`${API_URL}/services/${serviceId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: type,
+                        date: date,
+                        status: status
+                    }),
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    showNotification('Servicio actualizado exitosamente');
+                    serviceModal.style.display = 'none';
+                    loadServices();
+                } else {
+                    throw new Error('Error al actualizar servicio');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error al actualizar el servicio', 'error');
             }
         });
     }
