@@ -1,6 +1,6 @@
 const path = require('path');
 
-// Si existe DATABASE_URL, usa Postgres en producción
+// Si existe DATABASE_URL, usa Postgres en producción (Render)
 if (process.env.DATABASE_URL) {
     module.exports = {
         url: process.env.DATABASE_URL,
@@ -11,6 +11,12 @@ if (process.env.DATABASE_URL) {
                 require: true,
                 rejectUnauthorized: false
             }
+        },
+        pool: {
+            max: 5,
+            min: 0,
+            acquire: 30000,
+            idle: 10000
         },
         logging: false,
         define: {
