@@ -137,8 +137,9 @@ async function startServer() {
             }
         }
 
-        // Sincronizar modelos
-        await db.sequelize.sync({ alter: false });
+        // Sincronizar modelos - usar force: true solo en primera inicialización
+        const isFirstRun = process.env.FIRST_RUN === 'true';
+        await db.sequelize.sync({ force: isFirstRun, alter: !isFirstRun });
         console.log('✅ Modelos sincronizados.');
 
         // Limpiar tabla de backup si existe
