@@ -1,8 +1,10 @@
 require('dotenv').config();
 const path = require('path');
 
-if (process.env.DATABASE_URL) {
-    module.exports = {
+const isProduction = !!process.env.DATABASE_URL;
+
+module.exports = isProduction
+    ? {
         url: process.env.DATABASE_URL,
         dialect: 'postgres',
         dialectOptions: {
@@ -27,15 +29,13 @@ if (process.env.DATABASE_URL) {
             timestamps: true,
             underscored: true
         }
-    };
-} else {
-    module.exports = {
+    }
+    : {
         dialect: 'sqlite',
-        storage: path.join(__dirname, '../../database/consecionaria.db'),
+        storage: path.join(__dirname, '../../database/concesionaria.db'),
         logging: false,
         define: {
             timestamps: true,
             underscored: true
         }
     };
-}

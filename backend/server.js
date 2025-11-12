@@ -24,25 +24,21 @@ app.set('trust proxy', 1);
 const PORT = process.env.PORT || 10000;
 
 // --- Middlewares ---
-// CORS
 app.use(cors({
     origin: [
-        'http://localhost:5500', 
+        'http://localhost:5500',
         'http://127.0.0.1:5500',
         'https://projectvechhio.onrender.com'
     ],
     credentials: true
 }));
 
-// Archivos estáticos
 app.use(express.static(path.join(__dirname, '../frontend')));
 app.use('/uploads', express.static(process.env.NODE_ENV === 'production' ? '/tmp' : path.join(__dirname, 'uploads')));
 
-// Parsear JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Sesiones
 app.use(session({
     secret: process.env.SESSION_SECRET || 'tu_secreto_de_sesion',
     resave: false,
@@ -54,7 +50,6 @@ app.use(session({
     }
 }));
 
-// Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -68,7 +63,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/statistics', statisticsRoutes);
 app.use('/api/contact', contactRoutes);
 
-// Endpoint para crear superadmin (protegido con secret)
+// Crear superadmin manual
 app.get('/api/admin/create', async (req, res) => {
     const secret = req.query.secret;
     if (secret !== process.env.ADMIN_CREATION_SECRET) {
@@ -99,12 +94,12 @@ app.get('/api/admin/create', async (req, res) => {
     }
 });
 
-// Ruta para panel-control
+// Panel control
 app.get('/panel-control', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/panel-control.html'));
 });
 
-// Endpoint de estado
+// Estado
 app.get('/api/status', (req, res) => {
     res.json({ status: 'OK', message: 'Servidor funcionando', timestamp: new Date() });
 });
@@ -114,12 +109,11 @@ async function startServer() {
     try {
         console.log('🔍 Iniciando servidor...');
         console.log('DATABASE_URL configurado:', !!process.env.DATABASE_URL);
-        
-        // Autenticar con la base de datos (con reintentos)
+
         let connected = false;
         let attempts = 0;
         const maxAttempts = 5;
-        
+
         while (!connected && attempts < maxAttempts) {
             try {
                 attempts++;
@@ -137,43 +131,34 @@ async function startServer() {
             }
         }
 
-        // Sincronizar modelos - forzar creación en Render
-        const isProduction = !!process.env.DATABASE_URL;
-        await db.sequelize.sync({ force: isProduction, alter: !isProduction });
-        console.log('✅ Modelos sincronizados.');
+        const forceSync = process.env.FIRST_RUN === 'true';
+        await db.sequelize.sync({ force: forceSync, alter: !forceSync });
+        console.log(`✅ Modelos sincronizados (force: ${forceSync}).`);
 
-        // Limpiar tabla de backup si existe
         if (db.UserBackup) {
             try {
                 await db.UserBackup.destroy({ truncate: true });
                 console.log('✅ Tabla users_backup truncada.');
-            } catch (err) {
-                // Tabla no existe aún, no hay problema
-            }
+            } catch {}
         }
 
-        // Crear superadmin demo si no existe
-        try {
-            const adminExists = await db.User.findOne({ where: { role: 'superadmin' } });
-            if (!adminExists) {
-                const salt = await bcrypt.genSalt(10);
-                const hashed = await bcrypt.hash(process.env.ADMIN_PASSWORD || '280208', salt);
-                await db.User.create({
-                    username: process.env.ADMIN_USERNAME || 'admincarpi',
-                    email: process.env.ADMIN_EMAIL || 'carpijefe@gmail.com',
-                    password: hashed,
-                    role: 'superadmin'
-                });
-                console.log('✅ Superadmin demo creado.');
-            }
-        } catch (err) {
-            console.warn('⚠️ No se pudo crear el admin demo:', err.message);
+        const adminExists = await db.User.findOne({ where: { role: 'superadmin' } });
+        if (!adminExists) {
+            const salt = await bcrypt.genSalt(10);
+            const hashed = await bcrypt.hash(process.env.ADMIN_PASSWORD || '280208', salt);
+            await db.User.create({
+                username: process.env.ADMIN_USERNAME || 'admincarpi',
+                email: process.env.ADMIN_EMAIL || 'carpijefe@gmail.com',
+                password: hashed,
+                role: 'superadmin'
+            });
+            console.log('✅ Superadmin demo creado.');
         }
 
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
         });
-        
+
     } catch (error) {
         console.error('❌ Error al iniciar:', error.message);
         console.error('Stack completo:', error.stack);
