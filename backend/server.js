@@ -137,10 +137,20 @@ async function startServer() {
             }
         }
 
-        // Sincronizar modelos - usar force: true solo en primera inicialización
-        const isFirstRun = process.env.FIRST_RUN === 'true';
-        await db.sequelize.sync({ force: isFirstRun, alter: !isFirstRun });
-        console.log('✅ Modelos sincronizados.');
+        // Sincronizar modelos - crear tablas si no existen
+        try {
+            await db.sequelize.sync({ force: false, alter: true });
+            console.log('✅ Modelos sincronizados.');
+        } catch (syncError) {
+            // Si falla por tablas que no existen, intentar con force: true
+            if (syncError.message.includes('does not exist')) {
+                console.warn('⚠️ Tablas no existen, recreando...');
+                await db.sequelize.sync({ force: true });
+                console.log('✅ Modelos creados desde cero.');
+            } else {
+                throw syncError;
+            }
+        }
 
         // Limpiar tabla de backup si existe
         if (db.UserBackup) {
