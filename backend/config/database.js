@@ -1,6 +1,5 @@
 const path = require('path');
 
-// Si existe DATABASE_URL, usa Postgres en producción (Render)
 if (process.env.DATABASE_URL) {
     module.exports = {
         url: process.env.DATABASE_URL,
@@ -16,7 +15,18 @@ if (process.env.DATABASE_URL) {
             max: 5,
             min: 0,
             acquire: 30000,
-            idle: 10000
+            idle: 10000,
+            handleDisconnects: true
+        },
+        retry: {
+            max: 5,
+            timeout: 5000,
+            match: [
+                /Sequelize connection error/i,
+                /connect ECONNREFUSED/i,
+                /connect ETIMEDOUT/i,
+                /no pg_hba.conf entry/i
+            ]
         },
         logging: false,
         define: {
@@ -25,7 +35,6 @@ if (process.env.DATABASE_URL) {
         }
     };
 } else {
-    // Configuración para SQLite (desarrollo local)
     module.exports = {
         dialect: 'sqlite',
         storage: path.join(__dirname, '../../database/consecionaria.db'),

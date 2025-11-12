@@ -115,9 +115,27 @@ async function startServer() {
         console.log('🔍 Iniciando servidor...');
         console.log('DATABASE_URL configurado:', !!process.env.DATABASE_URL);
         
-        // Autenticar con la base de datos
-        await db.sequelize.authenticate();
-        console.log('✅ Base de datos conectada.');
+        // Autenticar con la base de datos (con reintentos)
+        let connected = false;
+        let attempts = 0;
+        const maxAttempts = 5;
+        
+        while (!connected && attempts < maxAttempts) {
+            try {
+                attempts++;
+                console.log(`🔄 Intento de conexión a BD ${attempts}/${maxAttempts}...`);
+                await db.sequelize.authenticate();
+                connected = true;
+                console.log('✅ Base de datos conectada.');
+            } catch (err) {
+                if (attempts < maxAttempts) {
+                    console.warn(`⚠️ Intento ${attempts} falló, esperando 3 segundos...`);
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                } else {
+                    throw err;
+                }
+            }
+        }
 
         // Sincronizar modelos
         await db.sequelize.sync();
