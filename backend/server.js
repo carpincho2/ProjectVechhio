@@ -112,6 +112,9 @@ app.get('/api/status', (req, res) => {
 // --- Inicio del Servidor ---
 async function startServer() {
     try {
+        console.log('🔍 Iniciando servidor...');
+        console.log('DATABASE_URL configurado:', !!process.env.DATABASE_URL);
+        
         // Autenticar con la base de datos
         await db.sequelize.authenticate();
         console.log('✅ Base de datos conectada.');
@@ -145,7 +148,7 @@ async function startServer() {
                 console.log('✅ Superadmin demo creado.');
             }
         } catch (err) {
-            console.warn('⚠️ No se pudo crear el admin demo');
+            console.warn('⚠️ No se pudo crear el admin demo:', err.message);
         }
 
         app.listen(PORT, '0.0.0.0', () => {
@@ -154,6 +157,7 @@ async function startServer() {
         
     } catch (error) {
         console.error('❌ Error al iniciar:', error.message);
+        console.error('Stack completo:', error.stack);
         process.exit(1);
     }
 }
