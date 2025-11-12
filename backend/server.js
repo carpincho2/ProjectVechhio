@@ -143,8 +143,9 @@ async function startServer() {
             console.log('✅ Modelos sincronizados.');
         } catch (syncError) {
             // Si falla por tablas que no existen, intentar con force: true
-            if (syncError.message.includes('does not exist')) {
-                console.warn('⚠️ Tablas no existen, recreando...');
+            const errorMsg = syncError.message || '';
+            if (errorMsg.includes('does not exist') || errorMsg.includes('relation') || syncError.name === 'SequelizeDatabaseError') {
+                console.warn('⚠️ Tablas no existen o error en BD, recreando...', errorMsg);
                 await db.sequelize.sync({ force: true });
                 console.log('✅ Modelos creados desde cero.');
             } else {
