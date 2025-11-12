@@ -138,7 +138,7 @@ async function startServer() {
         }
 
         // Sincronizar modelos
-        await db.sequelize.sync();
+        await db.sequelize.sync({ alter: false });
         console.log('✅ Modelos sincronizados.');
 
         // Limpiar tabla de backup si existe
