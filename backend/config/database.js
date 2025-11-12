@@ -1,17 +1,6 @@
 const path = require('path');
 
-// Configuración por defecto para SQLite (local)
-const sqliteConfig = {
-    dialect: 'sqlite',
-    storage: path.join(__dirname, '../../database/consecionaria.db'),
-    logging: false,
-    define: {
-        timestamps: true,
-        underscored: true
-    }
-};
-
-// Si existe DATABASE_URL, asumimos Postgres en producción
+// Si existe DATABASE_URL, usa Postgres en producción
 if (process.env.DATABASE_URL) {
     module.exports = {
         url: process.env.DATABASE_URL,
@@ -30,5 +19,14 @@ if (process.env.DATABASE_URL) {
         }
     };
 } else {
-    module.exports = sqliteConfig;
+    // Configuración para SQLite (desarrollo local)
+    module.exports = {
+        dialect: 'sqlite',
+        storage: path.join(__dirname, '../../database/consecionaria.db'),
+        logging: false,
+        define: {
+            timestamps: true,
+            underscored: true
+        }
+    };
 }

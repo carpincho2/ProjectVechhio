@@ -10,10 +10,7 @@ const db = {};
 const config = require('../config/database');
 
 // Crear la instancia de Sequelize
-const sequelize = new Sequelize({
-  ...config,
-  storage: path.join(__dirname, '../../database/consecionaria.db') // Ruta corregida y centralizada
-});
+const sequelize = new Sequelize(config);
 
 // Leer todos los archivos del directorio actual (models)
 fs
