@@ -1,10 +1,10 @@
+require('dotenv').config();
 const path = require('path');
 
 if (process.env.DATABASE_URL) {
     module.exports = {
         url: process.env.DATABASE_URL,
         dialect: 'postgres',
-        protocol: 'postgres',
         dialectOptions: {
             ssl: {
                 require: true,
@@ -20,13 +20,7 @@ if (process.env.DATABASE_URL) {
         },
         retry: {
             max: 5,
-            timeout: 5000,
-            match: [
-                /Sequelize connection error/i,
-                /connect ECONNREFUSED/i,
-                /connect ETIMEDOUT/i,
-                /no pg_hba.conf entry/i
-            ]
+            timeout: 5000
         },
         logging: false,
         define: {

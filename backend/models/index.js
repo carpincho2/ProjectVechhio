@@ -10,7 +10,7 @@ const db = {};
 const config = require('../config/database');
 
 // Crear la instancia de Sequelize
-const sequelize = new Sequelize(config);
+const sequelize = new Sequelize(config.url || config, config);
 
 // Leer todos los archivos del directorio actual (models)
 fs
