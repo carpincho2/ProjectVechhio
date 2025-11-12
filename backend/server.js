@@ -137,21 +137,10 @@ async function startServer() {
             }
         }
 
-        // Sincronizar modelos - crear tablas si no existen
-        try {
-            await db.sequelize.sync({ force: false, alter: true });
-            console.log('✅ Modelos sincronizados.');
-        } catch (syncError) {
-            // Si falla por tablas que no existen, intentar con force: true
-            const errorMsg = syncError.message || '';
-            if (errorMsg.includes('does not exist') || errorMsg.includes('relation') || syncError.name === 'SequelizeDatabaseError') {
-                console.warn('⚠️ Tablas no existen o error en BD, recreando...', errorMsg);
-                await db.sequelize.sync({ force: true });
-                console.log('✅ Modelos creados desde cero.');
-            } else {
-                throw syncError;
-            }
-        }
+        // Sincronizar modelos - forzar creación en Render
+        const isProduction = !!process.env.DATABASE_URL;
+        await db.sequelize.sync({ force: isProduction, alter: !isProduction });
+        console.log('✅ Modelos sincronizados.');
 
         // Limpiar tabla de backup si existe
         if (db.UserBackup) {
