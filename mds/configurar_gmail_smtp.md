@@ -68,12 +68,11 @@ Deberías ver en la consola:
 
 ## 🎯 Cómo Funciona
 
-El sistema ahora tiene **dos métodos de envío**:
+El sistema usa **únicamente Gmail SMTP** para el envío de emails.
 
-1. **Gmail SMTP** (si está configurado `GMAIL_USER` y `GMAIL_APP_PASSWORD`) - **SIEMPRE se prioriza** ⭐
-2. **Resend** (si está configurado `RESEND_API_KEY`) - Solo se usa si Gmail NO está configurado
-
-**Gmail siempre tiene prioridad** - Si tienes Gmail configurado, se usará Gmail aunque también tengas Resend configurado.
+- Solo necesitas configurar `GMAIL_USER` y `GMAIL_APP_PASSWORD`
+- Es completamente gratuito
+- Simple y directo, sin dependencias externas
 
 ## 📊 Límites de Gmail
 
