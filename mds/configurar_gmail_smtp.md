@@ -113,6 +113,27 @@ Puedes probar el envío de emails usando el endpoint de contacto o cualquier fun
 - Gmail limita a 500 emails/día en cuentas gratuitas
 - Espera 24 horas o usa otra cuenta de Gmail
 
+### Error: "Connection timeout" o "Timeout"
+Este error puede ocurrir por varias razones:
+
+1. **Problemas de red/firewall**:
+   - Verifica que el puerto 587 no esté bloqueado
+   - Si estás en un servidor (como Render, Heroku, etc.), verifica que permitan conexiones SMTP salientes
+   - Algunos servidores bloquean conexiones SMTP por seguridad
+
+2. **Configuración de Gmail**:
+   - Asegúrate de usar la **contraseña de aplicación** correcta (no tu contraseña normal)
+   - Verifica que la verificación en 2 pasos esté activada
+   - Intenta generar una nueva contraseña de aplicación
+
+3. **Solución temporal**:
+   - El código ahora tiene timeouts configurados (10 segundos para conexión, 30 segundos para envío)
+   - Si el problema persiste, verifica los logs del servidor para más detalles
+
+4. **Si estás en Render/Heroku**:
+   - Algunos servicios gratuitos pueden tener restricciones de red
+   - Considera usar un servicio de email dedicado o verificar las políticas de red del hosting
+
 ## 📚 Referencias
 
 - [Contraseñas de aplicaciones de Google](https://support.google.com/accounts/answer/185833)

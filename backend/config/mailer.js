@@ -15,10 +15,23 @@ const verifyConfiguration = () => {
     if (!gmailTransporter) {
         gmailTransporter = nodemailer.createTransport({
             service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // true para 465, false para otros puertos
             auth: {
                 user: process.env.GMAIL_USER,
                 pass: process.env.GMAIL_APP_PASSWORD // Contraseña de aplicación de Gmail
-            }
+            },
+            tls: {
+                rejectUnauthorized: false
+            },
+            connectionTimeout: 10000, // 10 segundos
+            greetingTimeout: 10000, // 10 segundos
+            socketTimeout: 10000, // 10 segundos
+            // Reintentar en caso de error
+            pool: true,
+            maxConnections: 1,
+            maxMessages: 3
         });
         console.log('✅ Gmail SMTP configurado correctamente');
     }
@@ -52,7 +65,13 @@ const sendEmail = async (to, subject, html) => {
             html: testingNote + html
         };
 
-        const info = await gmailTransporter.sendMail(mailOptions);
+        // Enviar con timeout personalizado
+        const info = await Promise.race([
+            gmailTransporter.sendMail(mailOptions),
+            new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Timeout: El envío tardó más de 30 segundos')), 30000)
+            )
+        ]);
 
         return { 
             success: true, 
@@ -65,9 +84,22 @@ const sendEmail = async (to, subject, html) => {
         };
     } catch (error) {
         console.error('Error al enviar email:', error.message);
+        console.error('Detalles del error:', error);
+        
+        // Mensajes de error más descriptivos
+        let errorMessage = error.message || 'Error al enviar el correo';
+        
+        if (error.message.includes('timeout') || error.message.includes('Timeout')) {
+            errorMessage = 'Timeout de conexión. Verifica tu conexión a internet y la configuración de Gmail.';
+        } else if (error.message.includes('Invalid login') || error.message.includes('authentication')) {
+            errorMessage = 'Error de autenticación. Verifica GMAIL_USER y GMAIL_APP_PASSWORD en tu archivo .env';
+        } else if (error.message.includes('ECONNREFUSED') || error.message.includes('ENOTFOUND')) {
+            errorMessage = 'No se pudo conectar al servidor de Gmail. Verifica tu conexión a internet.';
+        }
+        
         return { 
             success: false, 
-            error: error.message || 'Error al enviar el correo'
+            error: errorMessage
         };
     }
 };

@@ -77,11 +77,36 @@ function updateServicesTable(services) {
     const tbody = document.querySelector('#services-table tbody');
     tbody.innerHTML = '';
 
+    if (!services || services.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--accent-mint);">No hay servicios registrados</td></tr>';
+        return;
+    }
+
     services.forEach(service => {
         const row = document.createElement('tr');
+        
+        // Obtener el nombre del cliente desde la relación User
+        const clientName = service.User?.username || 'N/A';
+        
+        // Obtener información del vehículo
+        const vehicleInfo = service.Vehicle 
+            ? `${service.Vehicle.brand} ${service.Vehicle.model} ${service.Vehicle.year || ''}`.trim()
+            : 'N/A';
+        
+        // Traducir y formatear el estado
+        const statusClass = service.status === 'completed' ? 'status-approved' : 
+                          service.status === 'cancelled' ? 'status-rejected' : 'status-pending';
+        
+        const statusText = service.status === 'completed' ? 'Completado' : 
+                         service.status === 'cancelled' ? 'Cancelado' : 
+                         service.status === 'scheduled' ? 'Programado' : 
+                         service.status || 'Pendiente';
+        
         row.innerHTML = `
-            <td data-label="Nombre">${service.type}</td>
-            <td data-label="Descripción">${service.description}</td>
+            <td data-label="ID">#SER-${String(service.id).padStart(3, '0')}</td>
+            <td data-label="Cliente">${clientName}</td>
+            <td data-label="Vehículo">${vehicleInfo}</td>
+            <td data-label="Estado"><span class="${statusClass}">${statusText}</span></td>
             <td data-label="Acciones" class="table-actions">
                 <button class="btn btn-view" data-id="${service.id}" data-action="view-service"><i class="fas fa-eye"></i></button>
                 <button class="btn btn-edit" data-id="${service.id}" data-action="edit-service"><i class="fas fa-edit"></i></button>
