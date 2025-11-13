@@ -1,50 +1,27 @@
-const nodemailer = require('nodemailer');
+const axios = require('axios');
 require('dotenv').config();
 
-// Crear transporter de Gmail
-let gmailTransporter = null;
-
-// Verificar y configurar Gmail SMTP
+// Verificar configuración de ElasticEmail
 const verifyConfiguration = () => {
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-        console.error('⚠️ Gmail SMTP no está configurado. Configura GMAIL_USER y GMAIL_APP_PASSWORD en tu archivo .env');
+    if (!process.env.ELASTICEMAIL_API_KEY) {
+        console.error('⚠️ ElasticEmail no está configurado. Configura ELASTICEMAIL_API_KEY en tu archivo .env');
         return false;
     }
-
-    // Crear transporter si no existe
-    if (!gmailTransporter) {
-        gmailTransporter = nodemailer.createTransport({
-            service: 'gmail',
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false, // true para 465, false para otros puertos
-            auth: {
-                user: process.env.GMAIL_USER,
-                pass: process.env.GMAIL_APP_PASSWORD // Contraseña de aplicación de Gmail
-            },
-            tls: {
-                rejectUnauthorized: false
-            },
-            connectionTimeout: 10000, // 10 segundos
-            greetingTimeout: 10000, // 10 segundos
-            socketTimeout: 10000, // 10 segundos
-            // Reintentar en caso de error
-            pool: true,
-            maxConnections: 1,
-            maxMessages: 3
-        });
-        console.log('✅ Gmail SMTP configurado correctamente');
+    if (!process.env.ELASTICEMAIL_FROM_EMAIL) {
+        console.error('⚠️ ElasticEmail FROM no está configurado. Configura ELASTICEMAIL_FROM_EMAIL en tu archivo .env');
+        return false;
     }
-
     return true;
 };
 
 // Iniciar verificación al cargar el módulo
-verifyConfiguration();
+if (verifyConfiguration()) {
+    console.log('✅ ElasticEmail configurado correctamente');
+}
 
 const sendEmail = async (to, subject, html) => {
     if (!verifyConfiguration()) {
-        return { success: false, error: 'Gmail SMTP no está configurado correctamente' };
+        return { success: false, error: 'ElasticEmail no está configurado correctamente' };
     }
 
     const isTestMode = process.env.NODE_ENV !== 'production';
@@ -57,44 +34,58 @@ const sendEmail = async (to, subject, html) => {
     </div>` : '';
 
     try {
-        const fromEmail = process.env.GMAIL_USER;
-        const mailOptions = {
-            from: `"${process.env.EMAIL_FROM_NAME || 'ProjectVechhio'}" <${fromEmail}>`,
+        const fromEmail = process.env.ELASTICEMAIL_FROM_EMAIL;
+        const fromName = process.env.EMAIL_FROM_NAME || 'ProjectVechhio';
+        
+        // ElasticEmail API endpoint
+        const apiUrl = 'https://api.elasticemail.com/v2/email/send';
+        
+        // Parámetros para ElasticEmail API
+        const params = new URLSearchParams({
+            apikey: process.env.ELASTICEMAIL_API_KEY,
+            from: `${fromName} <${fromEmail}>`,
             to: testEmail,
             subject: isTestMode ? `[PRUEBA] ${subject}` : subject,
-            html: testingNote + html
-        };
+            bodyHtml: testingNote + html,
+            isTransactional: 'true'
+        });
 
-        // Enviar con timeout personalizado
-        const info = await Promise.race([
-            gmailTransporter.sendMail(mailOptions),
-            new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('Timeout: El envío tardó más de 30 segundos')), 30000)
-            )
-        ]);
+        // Enviar email usando ElasticEmail API
+        const response = await axios.post(apiUrl, params.toString(), {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            timeout: 30000 // 30 segundos timeout
+        });
 
-        return { 
-            success: true, 
-            info: {
-                id: info.messageId,
-                to: to,
-                method: 'gmail',
-                timestamp: new Date().toISOString()
-            }
-        };
+        if (response.data && response.data.success) {
+            return { 
+                success: true, 
+                info: {
+                    id: response.data.data?.TransactionID || 'N/A',
+                    to: to,
+                    method: 'elasticemail',
+                    timestamp: new Date().toISOString()
+                }
+            };
+        } else {
+            throw new Error(response.data?.error || 'Error desconocido de ElasticEmail');
+        }
     } catch (error) {
         console.error('Error al enviar email:', error.message);
-        console.error('Detalles del error:', error);
+        console.error('Detalles del error:', error.response?.data || error);
         
         // Mensajes de error más descriptivos
         let errorMessage = error.message || 'Error al enviar el correo';
         
-        if (error.message.includes('timeout') || error.message.includes('Timeout')) {
-            errorMessage = 'Timeout de conexión. Verifica tu conexión a internet y la configuración de Gmail.';
-        } else if (error.message.includes('Invalid login') || error.message.includes('authentication')) {
-            errorMessage = 'Error de autenticación. Verifica GMAIL_USER y GMAIL_APP_PASSWORD en tu archivo .env';
-        } else if (error.message.includes('ECONNREFUSED') || error.message.includes('ENOTFOUND')) {
-            errorMessage = 'No se pudo conectar al servidor de Gmail. Verifica tu conexión a internet.';
+        if (error.response?.data?.error) {
+            errorMessage = `ElasticEmail: ${error.response.data.error}`;
+        } else if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+            errorMessage = 'Timeout de conexión. Verifica tu conexión a internet.';
+        } else if (error.response?.status === 401) {
+            errorMessage = 'Error de autenticación. Verifica ELASTICEMAIL_API_KEY en tu archivo .env';
+        } else if (error.response?.status === 400) {
+            errorMessage = `Error de validación: ${error.response.data?.error || 'Verifica los parámetros del email'}`;
         }
         
         return { 
