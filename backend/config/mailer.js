@@ -44,10 +44,12 @@ const sendEmail = async (to, subject, html) => {
         const params = new URLSearchParams({
             apikey: process.env.ELASTICEMAIL_API_KEY,
             from: `${fromName} <${fromEmail}>`,
-            to: testEmail,
+            fromName: fromName,
+            msgTo: testEmail,
             subject: isTestMode ? `[PRUEBA] ${subject}` : subject,
             bodyHtml: testingNote + html,
-            isTransactional: 'true'
+            isTransactional: 'true',
+            channel: 'API' // Especificar que viene de la API
         });
 
         // Enviar email usando ElasticEmail API

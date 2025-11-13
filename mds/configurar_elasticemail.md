@@ -26,8 +26,21 @@ Esta guía te explica cómo configurar ElasticEmail para enviar emails desde tu 
 
 ### 3. Verificar tu dominio o usar el email de prueba
 
-- **Opción 1 (Recomendado)**: Verifica tu dominio en ElasticEmail
-- **Opción 2**: Usa el email de prueba que ElasticEmail te proporciona (suele ser algo como `noreply@elasticemail.com`)
+**IMPORTANTE**: Para poder enviar a cualquier dominio (no solo Gmail), necesitas verificar tu dominio o usar un email verificado.
+
+**Opción 1 (Recomendado)**: Verifica tu dominio
+1. Ve a **Settings** → **Domains**
+2. Haz clic en **Add Domain**
+3. Ingresa tu dominio (ej: `tudominio.com`)
+4. Agrega los registros DNS que ElasticEmail te proporciona
+5. Espera a que se verifique (puede tardar unas horas)
+6. Una vez verificado, puedes usar cualquier email de ese dominio (ej: `noreply@tudominio.com`)
+
+**Opción 2**: Usa el email de prueba de ElasticEmail
+- ElasticEmail te da un email verificado automáticamente
+- Suele ser algo como `noreply@elasticemail.com` o similar
+- **Limitación**: Con el plan gratuito, este email puede tener restricciones
+- **Solución**: Verifica tu propio dominio para enviar sin restricciones
 
 ### 4. Configurar Variables de Entorno
 
@@ -114,6 +127,16 @@ Puedes probar el envío de emails usando el endpoint de contacto o cualquier fun
 - Verifica tu email en ElasticEmail
 - O usa el email de prueba que ElasticEmail te proporciona
 - Ve a **Settings** → **Domains** para verificar tu dominio
+
+### Solo puedo enviar de Gmail a Gmail
+Este problema ocurre cuando:
+1. **No has verificado tu dominio**: ElasticEmail restringe los envíos si el dominio "from" no está verificado
+2. **Estás usando un email de Gmail como "from"**: No puedes usar `@gmail.com` como remitente en ElasticEmail
+
+**Solución**:
+1. **Verifica tu propio dominio** en ElasticEmail (Settings → Domains)
+2. O usa el email verificado que ElasticEmail te proporciona (suele terminar en `@elasticemail.com`)
+3. Una vez verificado tu dominio, podrás enviar a cualquier dominio (Gmail, Outlook, Yahoo, etc.)
 
 ### Error: "Rate limit exceeded"
 - Has alcanzado el límite de 100 emails/día del plan gratuito

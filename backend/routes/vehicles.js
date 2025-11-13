@@ -25,25 +25,25 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Configuración de Multer para la subida de archivos
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        // En producción usar /tmp, en desarrollo verificar/crear el directorio
-        if (process.env.NODE_ENV !== 'production') {
-            if (!fs.existsSync(uploadDir)) {
-                fs.mkdirSync(uploadDir, { recursive: true });
-                console.log('📁 Directorio de uploads creado durante la subida');
+        destination: function (req, file, cb) {
+            // En producción usar /tmp, en desarrollo verificar/crear el directorio
+            if (process.env.NODE_ENV !== 'production') {
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                    console.log('📁 Directorio de uploads creado durante la subida');
+                }
             }
+            console.log('📁 Guardando archivo en:', uploadDir);
+            cb(null, uploadDir);
+        },
+        filename: function (req, file, cb) {
+            // Generar un nombre de archivo único para evitar colisiones
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const filename = uniqueSuffix + path.extname(file.originalname);
+            console.log('📄 Nombre de archivo generado:', filename);
+            cb(null, filename);
         }
-        console.log('📁 Guardando archivo en:', uploadDir);
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        // Generar un nombre de archivo único para evitar colisiones
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const filename = uniqueSuffix + path.extname(file.originalname);
-        console.log('📄 Nombre de archivo generado:', filename);
-        cb(null, filename);
-    }
-});
+    });
 
 // Filtro para validar tipos de archivo
 const fileFilter = (req, file, cb) => {
@@ -102,7 +102,7 @@ router.get('/:id', vehicleController.getVehicleById);
 // Rutas de administrador
 // Se añade upload.single('image') para procesar la subida de una imagen del campo 'image'
 router.post('/', verifyJWT, isAdmin, upload.single('image'), vehicleController.createVehicle);
-router.put('/:id', verifyJWT, isAdmin, vehicleController.updateVehicle);
+router.put('/:id', verifyJWT, isAdmin, upload.single('image'), vehicleController.updateVehicle);
 router.delete('/:id', verifyJWT, isAdmin, vehicleController.deleteVehicle);
 
 module.exports = router;
