@@ -608,7 +608,7 @@ const carModels = {
     Lexus: ['IS', 'ES', 'LS', 'UX', 'NX', 'RX', 'LX'],
     Ford: ['Fiesta', 'Focus', 'Mustang', 'Explorer', 'F-150', 'Ranger', 'Escape'],
     Honda: ['Civic', 'Accord', 'CR-V', 'HR-V', 'Pilot', 'Fit', 'Odyssey'],
-    Mclaren: ['720S', '570S', 'GT', 'Artura', 'P1', '765LT', '600LT'],
+    McLaren: ['720S', '570S', 'GT', 'Artura', 'P1', '765LT', '600LT'],
     Peugeot: ['208', '2008', '308', '3008', '5008', '508', 'Partner'],
     Fiat: ['500', 'Panda', 'Tipo', 'Argo', 'Cronos', 'Toro', 'Strada']
 };

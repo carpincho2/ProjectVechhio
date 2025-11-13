@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Lexus: ["CT", "ES", "LBX", "LM", "LS", "NX", "RX", "RZ", "UX"],
         Ford: ["Bronco", "Capri", "Explorer", "Focus", "Kuga", "Mustang", "Mustang Mach-E", "Puma", "Tourneo Custom", "Fiesta", "Mondeo", "EcoSport", "Edge"],
         Honda: ["Accord", "Civic", "CR-V", "e:Ny1", "HR-V", "Jazz", "ZR-V", "City", "Civic Type R"],
-        Mclaren: ["540C", "570S", "600LT", "650S", "720S", "750S", "765LT", "Artura", "Solus GT"],
+        McLaren: ["540C", "570S", "600LT", "650S", "720S", "750S", "765LT", "Artura", "Solus GT"],
         Peugeot: ["208", "308", "2008", "3008", "5008"],
         Fiat: ["500", "600", "Panda", "Tipo", "Topolino", "Doblò", "Ducato", "Scudo"]
     };
